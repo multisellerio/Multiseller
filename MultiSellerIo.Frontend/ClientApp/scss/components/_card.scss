@@ -1,0 +1,100 @@
+//
+// Card
+// --------------------------------------------------
+
+.card {
+  border-radius: $border-radius-lg;
+  border-color: $border-color;
+  .google-map {
+    border-top-left-radius: $border-radius-lg;
+    border-top-right-radius: $border-radius-lg;
+  }
+}
+.card-header {
+  border-bottom-color: $border-color;
+  h1, .h1, h2, .h2, h3, .h3,
+  h4, .h4, h5, .h5, h6, .h6 { margin-bottom: 0; }
+  &:first-child {
+    border-radius: $border-radius-lg $border-radius-lg 0 0;
+  }
+}
+.card-header,
+.card-footer { background-color: $gray-lighter; }
+.card-footer {
+  border-top-color: $border-color;
+  &:last-child {
+    border-radius: 0 0 $border-radius-lg $border-radius-lg;
+  }
+}
+.card-block {
+  p, ol, ul {
+    &:last-child { margin-bottom: 0; }
+  }
+  .tab-content {
+    padding: 0;
+    border: 0;
+  }
+}
+
+// Background variants
+.card-primary {
+  border-color: $brand-primary;
+  background-color: $brand-primary;
+}
+.card-success {
+  border-color: $brand-success;
+  background-color: $brand-success;
+}
+.card-info {
+  border-color: $brand-info;
+  background-color: $brand-info;
+}
+.card-warning {
+  border-color: $brand-warning;
+  background-color: $brand-warning;
+}
+.card-danger {
+  border-color: $brand-danger;
+  background-color: $brand-danger;
+}
+
+// Outline variants
+.card-outline-primary { border-color: $brand-primary; }
+.card-outline-success { border-color: $brand-success; }
+.card-outline-info { border-color: $brand-info; }
+.card-outline-warning { border-color: $brand-warning; }
+.card-outline-danger { border-color: $brand-danger; }
+
+// Card Group
+.card-group .card {
+  .card-footer { border-radius: 0; }
+  &:first-child .card-footer { border-bottom-left-radius: $border-radius-lg; }
+  &:last-child .card-footer { border-bottom-right-radius: $border-radius-lg; }
+}
+
+// Card Tiled Image
+.card-img-tiles {
+  display: block;
+  border-bottom: 1px solid $border-color;
+  > .inner {
+    display: table;
+    width: 100%;
+  }
+  .main-img,
+  .thumblist {
+    display: table-cell;
+    width: 65%;
+    padding: 15px;
+    vertical-align: middle;
+    > img {
+      display: block;
+      width: 100%;
+      margin-bottom: 6px;
+      &:last-child { margin-bottom: 0; }
+    }
+  }
+  .thumblist {
+    width: 35%;
+    border-left: 1px solid $border-color;
+  }
+}

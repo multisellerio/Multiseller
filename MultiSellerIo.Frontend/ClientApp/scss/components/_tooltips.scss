@@ -1,0 +1,62 @@
+//
+// Tooltips and Popovers
+// --------------------------------------------------
+
+// Tooltip
+.tooltip {
+  font-family: $font-family-base;
+  &.tooltip-top,
+  &.bs-tether-element-attached-bottom {
+    .tooltip-inner::before { border-top-color: $tooltip-arrow-color; }
+  }
+  &.tooltip-right,
+  &.bs-tether-element-attached-left {
+    .tooltip-inner::before { border-right-color: $tooltip-arrow-color; }
+  }
+  &.tooltip-bottom,
+  &.bs-tether-element-attached-top {
+    .tooltip-inner::before { border-bottom-color: $tooltip-arrow-color; }
+  }
+  &.tooltip-left,
+  &.bs-tether-element-attached-right {
+    .tooltip-inner::before { border-left-color: $tooltip-arrow-color; }
+  }
+  &.show { opacity: $tooltip-opacity; }
+}
+.tooltip-inner {
+  border-radius: $border-radius-sm;
+  background-color: $tooltip-bg;
+  color: $tooltip-color;
+  font-size: $font-size-xs;
+}
+
+// Popover
+.popover {
+  border-radius: $border-radius-lg;
+  border-color: $border-color;
+  font-family: $font-family-base;
+  &.bs-tether-element-attached-bottom::before,
+  &.popover-top::before { border-top-color: darken($border-color, 4%); }
+  &.bs-tether-element-attached-left::before,
+  &.popover-right::before { border-right-color: darken($border-color, 4%); }
+  &.bs-tether-element-attached-top::before,
+  &.popover-bottom::before { border-bottom-color: darken($border-color, 4%); }
+  &.bs-tether-element-attached-right::before,
+  &.popover-left::before { border-left-color: darken($border-color, 4%); }
+}
+.popover-title { font-family: $font-family-headings; }
+
+// For demo purpose only. TODO: remove on production
+.example-tooltip .tooltip {
+  display: inline-block;
+  position: relative;
+  margin: 10px 20px;
+  opacity: 1;
+}
+.example-popover .popover {
+  display: block;
+  position: relative;
+  width: 260px;
+  margin: 1.25rem;
+  float: left;
+}

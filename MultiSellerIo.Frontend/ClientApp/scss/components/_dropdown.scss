@@ -1,0 +1,55 @@
+//
+// Dropdown
+// --------------------------------------------------
+
+.dropdown-menu {
+  border: {
+    color: $border-color;
+    radius: $border-radius-base;
+  }
+  font-size: $nav-link-font-size;
+  .dropdown-item {
+    padding: {
+      right: 20px;
+      left: 20px;
+    }
+    transition: color .3s;
+    color: $nav-link-color;
+    text-decoration: none;
+    &:hover, &.active, &:focus, &:active { background: 0; }
+    &:hover { color: $nav-link-hover-color; }
+    &.active { color: $nav-link-active-color; }
+  }
+  a.dropdown-item { font-weight: $nav-link-font-weight; }
+}
+.dropdown-toggle::after { margin-top: 1px; }
+
+// Inside Button Group
+.btn.dropdown-toggle::after { margin-top: -2px; }
+
+// Show Animation
+.show .dropdown-menu {
+  -webkit-animation: dropdown-show .3s cubic-bezier(.68, -.55, .265, 1.55);
+  animation: dropdown-show .3s cubic-bezier(.68, -.55, .265, 1.55);
+}
+
+@-webkit-keyframes dropdown-show {
+  from {
+    -webkit-transform: scale(.9);
+    opacity: 0;
+  }
+  to {
+    -webkit-transform: scale(1);
+    opacity: 1;
+  }
+}
+@-webkit-keyframes dropdown-show {
+  from {
+    -webkit-transform: scale(.85);
+    opacity: 0;
+  }
+  to {
+    -webkit-transform: scale(1);
+    opacity: 1;
+  }
+}

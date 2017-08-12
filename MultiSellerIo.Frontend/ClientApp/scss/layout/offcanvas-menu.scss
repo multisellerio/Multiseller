@@ -1,0 +1,114 @@
+//
+// Off-Canvas Menu
+// --------------------------------------------------
+.offcanvas-wrapper {
+  position: relative;
+  min-height: 100vh;
+  background-color: $body-bg;
+  z-index: 10;
+}
+.offcanvas-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: $offcanvas-width;
+  height: 100%;
+  background-color: $gray-darker;
+  box-shadow: inset -4px 0 17px 0 rgba(0, 0, 0, .35);
+  visibility: hidden;
+  z-index: 1;
+  overflow-y: auto;
+  &.active { visibility: visible; }
+}
+.offcanvas-header {
+  padding: 28px 20px;
+  border-bottom: 1px solid $border-light-color;
+  .offcanvas-title {
+    margin-bottom: 0;
+    color: rgba($white-color, .5);
+    font: {
+      size: $font-size-base;
+      weight: $font-weight-headings;
+    }
+  }
+}
+.account-link {
+  display: block;
+  padding: 28px 20px;
+  transition: background-color .3s;
+  border-bottom: 1px solid $border-light-color;
+  background-color: darken($gray-darker, 3%);
+  color: $white-color !important;
+  font: {
+    size: $font-size-base;
+    weight: $nav-link-font-weight;
+  }
+  text-decoration: none;
+  > span { font-weight: normal; }
+  > i {
+    display: inline-block;
+    margin: {
+      top: -2px;
+      right: 8px;
+    }
+    vertical-align: middle;
+  }
+  &:hover { background-color: lighten($gray-darker, 1%); }
+}
+.offcanvas-menu {
+  @extend %offcanvas-menu;
+}
+
+// Site Backdrop
+.site-backdrop {
+  @include overlay-block(9980, $white-color, 0);
+  position: fixed;
+  transition: opacity .35s, visibility .35s;
+  cursor: pointer;
+  visibility: hidden;
+}
+
+// Off-Canvas open
+.no-csstransforms3d {
+  .offcanvas-wrapper,
+  .navbar, .topbar {
+    -webkit-transition: left .4s ease-in-out;
+    transition: left .4s ease-in-out;
+  }
+  .site-backdrop {
+    -webkit-transition: left .4s ease-in-out, opacity .35s, visibility .35s;
+    transition: left .4s ease-in-out, opacity .35s, visibility .35s;
+  }
+  .offcanvas-open {
+    .offcanvas-wrapper,
+    .site-backdrop,
+    .navbar, .topbar { left: 290px; }
+    .site-backdrop {
+      opacity: .28;
+      visibility: visible;
+    }
+  }
+}
+.csstransforms3d {
+  .offcanvas-wrapper,
+  .navbar, .topbar {
+    -webkit-transition: -webkit-transform .4s ease-in-out;
+    transition: transform .4s ease-in-out;
+  }
+  .site-backdrop {
+    -webkit-transition: -webkit-transform .4s ease-in-out, opacity .35s, visibility .35s;
+    transition: transform .4s ease-in-out, opacity .35s, visibility .35s;
+  }
+  .offcanvas-open {
+    .offcanvas-wrapper,
+    .site-backdrop,
+    .navbar, .topbar {
+      -webkit-transform: translate3d(290px, 0, 0);
+      transform: translate3d(290px, 0, 0);
+    }
+    .site-backdrop {
+      opacity: .22;
+      visibility: visible;
+    }
+  }
+}
