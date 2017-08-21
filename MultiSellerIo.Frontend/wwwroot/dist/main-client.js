@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "6a0566606b3deb4c6d16"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "5676395fc94bdb8ba180"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -3560,7 +3560,7 @@ exports.routes = React.createElement(layout_1.default, null,
     React.createElement(react_router_dom_1.Route, { path: '/account/register', component: register_1.default }));
 
 
- ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\routes.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\routes.tsx"); } } })();
+ ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\routes.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\routes.tsx"); } } })();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -3579,7 +3579,7 @@ exports.reducers = {
 };
 
 
- ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\store\\index.ts"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\store\\index.ts"); } } })();
+ ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\store\\index.ts"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\store\\index.ts"); } } })();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -5775,7 +5775,7 @@ exports.reducer = function (state, action) {
 };
 
 
- ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\store\\account\\index.ts"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\store\\account\\index.ts"); } } })();
+ ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\store\\account\\index.ts"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\store\\account\\index.ts"); } } })();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -6681,7 +6681,7 @@ if (true) {
 }
 
 
- ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\boot-client.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\boot-client.tsx"); } } })();
+ ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\boot-client.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\boot-client.tsx"); } } })();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -17075,7 +17075,7 @@ exports.default = react_redux_1.connect(function (state) { return state.account;
 var RegisterForm_1;
 
 
- ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\account\\register\\index.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\account\\register\\index.tsx"); } } })();
+ ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\account\\register\\index.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\account\\register\\index.tsx"); } } })();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -17155,7 +17155,7 @@ var Home = (function (_super) {
 exports.default = Home;
 
 
- ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\home\\home.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\home\\home.tsx"); } } })();
+ ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\home\\home.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\home\\home.tsx"); } } })();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -17207,7 +17207,7 @@ var AccountDropDown = (function (_super) {
 exports.default = AccountDropDown;
 
 
- ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\account-drop-down.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\account-drop-down.tsx"); } } })();
+ ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\account-drop-down.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\account-drop-down.tsx"); } } })();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -17280,7 +17280,7 @@ var CartDropDown = (function (_super) {
 exports.default = CartDropDown;
 
 
- ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\cart-drop-down.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\cart-drop-down.tsx"); } } })();
+ ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\cart-drop-down.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\cart-drop-down.tsx"); } } })();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -17360,7 +17360,7 @@ var MegaMenu = (function (_super) {
 exports.default = MegaMenu;
 
 
- ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\mega-menu.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\mega-menu.tsx"); } } })();
+ ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\mega-menu.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\mega-menu.tsx"); } } })();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -17403,7 +17403,7 @@ var SearchButton = (function (_super) {
 exports.default = SearchButton;
 
 
- ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\search-button.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\search-button.tsx"); } } })();
+ ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\search-button.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\search-button.tsx"); } } })();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -17442,7 +17442,7 @@ var SiteBranding = (function (_super) {
 exports.default = SiteBranding;
 
 
- ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\site-branding.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\site-branding.tsx"); } } })();
+ ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\site-branding.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\site-branding.tsx"); } } })();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -17498,7 +17498,7 @@ var SiteMenu = (function (_super) {
 exports.default = SiteMenu;
 
 
- ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\site-menu.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\site-menu.tsx"); } } })();
+ ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\site-menu.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\site-menu.tsx"); } } })();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -17570,7 +17570,7 @@ var SiteSearch = (function (_super) {
 exports.default = SiteSearch;
 
 
- ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\site-search.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\site-search.tsx"); } } })();
+ ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\site-search.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\site-search.tsx"); } } })();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -17620,7 +17620,7 @@ var ToolBar = (function (_super) {
 exports.default = ToolBar;
 
 
- ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\tool-bar.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\tool-bar.tsx"); } } })();
+ ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\tool-bar.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\components\\tool-bar.tsx"); } } })();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -17663,7 +17663,7 @@ var Header = (function (_super) {
 exports.default = Header;
 
 
- ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\header.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\header.tsx"); } } })();
+ ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\header.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\header\\header.tsx"); } } })();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -17702,7 +17702,7 @@ var Layout = (function (_super) {
 exports.default = Layout;
 
 
- ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\layout.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\layout.tsx"); } } })();
+ ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\layout.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\layout.tsx"); } } })();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -17755,7 +17755,7 @@ var TopBar = (function (_super) {
 exports.default = TopBar;
 
 
- ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\topbar\\topbar.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\topbar\\topbar.tsx"); } } })();
+ ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\topbar\\topbar.tsx"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\components\\shared\\layout\\topbar\\topbar.tsx"); } } })();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -17794,7 +17794,7 @@ function buildRootReducer(allReducers) {
 }
 
 
- ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\configureStore.ts"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller.FrontEnd\\MultiSellerIo.Frontend\\ClientApp\\configureStore.ts"); } } })();
+ ;(function register() { /* react-hot-loader/webpack */ if (process.env.NODE_ENV !== 'production') { if (typeof __REACT_HOT_LOADER__ === 'undefined') { return; } if (typeof module.exports === 'function') { __REACT_HOT_LOADER__.register(module.exports, 'module.exports', "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\configureStore.ts"); return; } for (var key in module.exports) { if (!Object.prototype.hasOwnProperty.call(module.exports, key)) { continue; } var namedExport = void 0; try { namedExport = module.exports[key]; } catch (err) { continue; } __REACT_HOT_LOADER__.register(namedExport, key, "C:\\Users\\SajithLakjaya\\Source\\Repos\\MultiSeller\\MultiSellerIo.Frontend\\ClientApp\\configureStore.ts"); } } })();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),

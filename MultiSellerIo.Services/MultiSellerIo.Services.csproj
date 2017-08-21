@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MultiSellerIo.Common\MultiSellerIo.Common.csproj" />
+    <ProjectReference Include="..\MultiSellerIo.Core\MultiSellerIo.Core.csproj" />
+    <ProjectReference Include="..\MultiSellerIo.Dal\MultiSellerIo.Dal.csproj" />
+  </ItemGroup>
+
+</Project>
