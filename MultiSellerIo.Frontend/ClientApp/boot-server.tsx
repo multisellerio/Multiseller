@@ -8,11 +8,23 @@ import { createServerRenderer, RenderResult } from 'aspnet-prerendering';
 import { routes } from './routes';
 import configureStore from './configureStore';
 
+import { actionCreator as AccountActionCreator } from './store/account';
+
 export default createServerRenderer(params => {
     return new Promise<RenderResult>((resolve, reject) => {
+
+        //Ge the token from parameters
+        let token = params.data.token;
+
+        let initialState = {
+            account: {
+                token: token
+            }
+        };
+
         // Prepare Redux store with in-memory history, and dispatch a navigation event
         // corresponding to the incoming URL
-        const store = configureStore(createMemoryHistory());
+        const store = configureStore(createMemoryHistory(), initialState);
         store.dispatch(replace(params.location));
 
         // Prepare an instance of the application and perform an inital render that will
@@ -30,7 +42,7 @@ export default createServerRenderer(params => {
             resolve({ redirectUrl: routerContext.url });
             return;
         }
-        
+
         // Once any async tasks are done, we can perform the final render
         // We also send the redux store state, so the client can continue execution where the server left off
         params.domainTasks.then(() => {

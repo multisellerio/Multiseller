@@ -5,9 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ImageSharp" Version="1.0.0-alpha9-00194" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MultiSellerIo.Common\MultiSellerIo.Common.csproj" />
     <ProjectReference Include="..\MultiSellerIo.Core\MultiSellerIo.Core.csproj" />
     <ProjectReference Include="..\MultiSellerIo.Dal\MultiSellerIo.Dal.csproj" />
+    <ProjectReference Include="..\MultiSellerIo.Intergrations.Azure\MultiSellerIo.Intergrations.Azure.csproj" />
   </ItemGroup>
 
 </Project>

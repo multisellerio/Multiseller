@@ -3,9 +3,15 @@ import { connect } from 'react-redux';
 import { reduxForm, Field, FormProps, FormErrors } from 'redux-form';
 
 import { ApplicationState } from '../../../store';
-import * as RegisterState from '../../../store/account';
+import * as AccountState from '../../../store/account';
+
+import { InputComponent, SelectComponent } from '../../shared/util/form-components';
+import { Alert } from '../../shared/util/alert';
 
 interface IRegisterFormData {
+    firstName: string,
+    lastName: string,
+    gender: number,
     username: string,
     password: string,
     confirmationPassword: string,
@@ -17,15 +23,14 @@ interface IRegisterFormProps extends FormProps<IRegisterFormData, {}, {}> {
     handleSubmit?: any,
 }
 
-const renderInput = field => {
-    const { input, label, type } = field;
-    return <div className="col-sm-6">
-        <div className={field.meta.touched && field.meta.error ? 'form-group has-danger' : 'form-group'}>
-            <label>{label}</label>
-            <input className="form-control" type={type} {...input} />
-            {field.meta.touched && field.meta.error && <div className="form-control-feedback">{field.meta.error}</div>}
-        </div>
-    </div>;
+const ErrorMessageComponent = error => {
+    const { message } = error;
+
+    if (!message)
+        return null;
+
+    return <Alert message={message} title="Error" type="alert-danger"/>;
+
 }
 
 @reduxForm<IRegisterFormData, {}, {}>({
@@ -34,11 +39,29 @@ const renderInput = field => {
 })
 class RegisterForm extends React.Component<IRegisterFormProps, {}> {
 
+    genderOptions = [
+        { name: 'Male', value: 1 },
+        { name: 'Female', value: 2 },
+        { name: 'Unspecifed', value: 3 }
+    ];
+
     static validate(values: IRegisterFormData) {
         let errors: FormErrors<IRegisterFormData> = {};
 
+        if (!values.firstName) {
+            errors.firstName = 'First Name is required';
+        }
+
+        if (!values.lastName) {
+            errors.lastName = 'Last Name is required';
+        }
+
         if (!values.username) {
             errors.username = 'Username is required';
+        }
+
+        if (!values.gender) {
+            errors.gender = 'Gender is required';
         }
 
         if (!values.password) {
@@ -64,10 +87,13 @@ class RegisterForm extends React.Component<IRegisterFormProps, {}> {
         const { handleSubmit } = this.props;
 
         return <form className="row" onSubmit={handleSubmit}>
-            <Field type="text" name="username" component={renderInput} label="Username" />
-            <Field type="email" name="email" component={renderInput} label="Email" />
-            <Field type="password" name="password" component={renderInput} label="Password"  />
-            <Field type="password" name="confirmationPassword" component={renderInput} label="Confirmation Password" />
+            <Field type="text" name="firstName" component={InputComponent} label="First Name" col="col-md-6" />
+            <Field type="text" name="lastName" component={InputComponent} label="Last Name" col="col-md-6" />
+            <Field type="text" name="username" component={InputComponent} label="Username" col="col-md-6" />
+            <Field name="gender" component={SelectComponent} label="Gender" options={this.genderOptions} col="col-md-6" />
+            <Field type="email" name="email" component={InputComponent} label="Email" col="col-md-12" />
+            <Field type="password" name="password" component={InputComponent} label="Password" col="col-md-6" />
+            <Field type="password" name="confirmationPassword" component={InputComponent} label="Confirmation Password" col="col-md-6" />
             <div className="col-12 text-center text-sm-right">
                 <button className="btn btn-primary margin-bottom-none" type="submit">Register</button>
             </div>
@@ -77,8 +103,8 @@ class RegisterForm extends React.Component<IRegisterFormProps, {}> {
 }
 
 type RegisterFormProps =
-    RegisterState.IRegisterState
-    & typeof RegisterState.actionCreator;
+    AccountState.IAccountState
+    & typeof AccountState.actionCreator;
 
 class Register extends React.Component<RegisterFormProps, {}> {
 
@@ -92,7 +118,11 @@ class Register extends React.Component<RegisterFormProps, {}> {
             id: 0,
             username: user.username,
             password: user.password,
-            email: user.email
+            confirmationPassword: user.confirmationPassword,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            gender: user.gender
         });
     }
 
@@ -101,28 +131,31 @@ class Register extends React.Component<RegisterFormProps, {}> {
             <div className="page-title">
                 <div className="container">
                     <div className="column">
-                        <h1>Login / Register Account</h1>
+                        <h1>Register Account</h1>
                     </div>
                     <div className="column">
                         <ul className="breadcrumbs">
-                            <li><a href="index.html">Home</a>
+                            <li><a>Home</a>
                             </li>
                             <li className="separator">&nbsp;</li>
-                            <li><a href="account-orders.html">Account</a>
+                            <li><a>Account</a>
                             </li>
                             <li className="separator">&nbsp;</li>
-                            <li>Login / Register</li>
+                            <li>Register</li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div className="container padding-bottom-3x mb-2">
                 <div className="row">
-                    <div className="col-md-12">
+                    <div className="col-md-6">
                         <h3 className="margin-bottom-1x">No Account? Register</h3>
                         <p>Registration takes less than a minute but gives you full control over your orders.</p>
                     </div>
-                    <RegisterForm onSubmit={this.onSubmit} />
+                    <div className="col-md-6">
+                        <ErrorMessageComponent message={this.props.errorMessage} />
+                        <RegisterForm onSubmit={this.onSubmit} />
+                    </div>
                 </div>
             </div>
         </div>;
@@ -132,7 +165,7 @@ class Register extends React.Component<RegisterFormProps, {}> {
 
 export default connect(
     (state: ApplicationState) => state.account,
-    RegisterState.actionCreator
+    AccountState.actionCreator
 )(Register) as typeof Register;
 
 

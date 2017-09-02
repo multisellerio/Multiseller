@@ -13,7 +13,7 @@ module.exports = (env) => {
         resolve: { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
         output: {
             filename: '[name].js',
-            publicPath: '/dist/' // Webpack dev middleware, if enabled, handles requests for this URL prefix
+            publicPath: '/assets/' // Webpack dev middleware, if enabled, handles requests for this URL prefix
         },
         module: {
             rules: [
@@ -24,7 +24,7 @@ module.exports = (env) => {
     });
 
     // Configuration for client-side bundle suitable for running in browsers
-    const clientBundleOutputDir = './wwwroot/dist';
+    const clientBundleOutputDir = './wwwroot/assets';
     const clientBundleConfig = merge(sharedConfig(), {
         entry: { 'main-client': './ClientApp/boot-client.tsx' },
         module: {
@@ -63,7 +63,7 @@ module.exports = (env) => {
             new ExtractTextPlugin('site.css'),
             new webpack.DllReferencePlugin({
                 context: __dirname,
-                manifest: require('./wwwroot/dist/vendor-manifest.json')
+                manifest: require('./wwwroot/assets/vendor-manifest.json')
             })
         ].concat(isDevBuild ? [
             // Plugins that apply in development builds only
@@ -84,14 +84,14 @@ module.exports = (env) => {
         plugins: [
             new webpack.DllReferencePlugin({
                 context: __dirname,
-                manifest: require('./ClientApp/dist/vendor-manifest.json'),
+                manifest: require('./ClientApp/assets/vendor-manifest.json'),
                 sourceType: 'commonjs2',
                 name: './vendor'
             })
         ],
         output: {
             libraryTarget: 'commonjs',
-            path: path.join(__dirname, './ClientApp/dist')
+            path: path.join(__dirname, './ClientApp/assets')
         },
         target: 'node',
         devtool: 'inline-source-map'

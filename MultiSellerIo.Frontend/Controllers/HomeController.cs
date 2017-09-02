@@ -6,6 +6,9 @@ namespace MultiSellerIo.FrontEnd.Controllers
     {
         public IActionResult Index()
         {
+            var token = Request.Cookies["ms-token"];
+            ViewBag.Token = token;
+
             return View();
         }
 

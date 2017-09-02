@@ -2,14 +2,13 @@ using System.IO.Compression;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Primitives;
-using Microsoft.Net.Http.Headers;
+using MultiSellerIo.Intergrations.Azure;
+using MultiSellerIo.Services.Images;
 
 namespace MultiSellerIo.FrontEnd
 {
@@ -30,6 +29,12 @@ namespace MultiSellerIo.FrontEnd
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var storageConfig = Configuration.GetSection("Storage");
+
+            services.AddScoped<IImageStorageService, ImageStorageService>(provider => new ImageStorageService(new AzureStorageService(storageConfig["ConnectionString"], storageConfig["ImagesContainerName"])));
+            services.AddScoped<IImageResizeService, ImageResizeService>();
+            services.AddScoped<IImageService, ImageService>();
+
             services.Configure<GzipCompressionProviderOptions>(options =>
             {
                 options.Level = CompressionLevel.Fastest;
