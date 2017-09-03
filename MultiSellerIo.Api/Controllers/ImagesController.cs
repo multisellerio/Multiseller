@@ -7,7 +7,6 @@ using MultiSellerIo.Services.Images.Core;
 
 namespace MultiSellerIo.Api.Controllers
 {
-    [Produces("application/json")]
     [Route("Images")]
     public class ImagesController : Controller
     {

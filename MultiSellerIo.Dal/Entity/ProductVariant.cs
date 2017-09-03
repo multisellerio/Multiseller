@@ -9,6 +9,7 @@ namespace MultiSellerIo.Dal.Entity
         public decimal Quantity { get; set; }
         public string Sku { get; set; }
         public string Barcode{ get; set; }
+        public string DefaultImage { get; set; }
         public virtual List<ProductVariantSpecificationAttributeMapping> ProductVariantSpecificationAttributeMappings { get; set; }
     }
 }

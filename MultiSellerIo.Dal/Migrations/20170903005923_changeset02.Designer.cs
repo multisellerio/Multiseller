@@ -12,9 +12,10 @@ using System;
 namespace MultiSellerIo.Dal.Migrations
 {
     [DbContext(typeof(MultiSellerIoContext))]
-    partial class MultiSellerIoContextModelSnapshot : ModelSnapshot
+    [Migration("20170903005923_changeset02")]
+    partial class changeset02
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

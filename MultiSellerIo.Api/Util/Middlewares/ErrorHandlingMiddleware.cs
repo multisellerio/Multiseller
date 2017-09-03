@@ -35,8 +35,13 @@ namespace MultiSellerIo.Api.Util.Middlewares
             if (exception is ServiceException) code = HttpStatusCode.BadRequest;
 
             var result = JsonConvert.SerializeObject(new { error = exception.Message });
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)code;
+
+            if (!context.Response.HasStarted)
+            {
+                context.Response.ContentType = "application/json";
+                context.Response.StatusCode = (int)code;
+            }
+
             return context.Response.WriteAsync(result);
         }
     }

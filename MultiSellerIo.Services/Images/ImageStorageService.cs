@@ -36,7 +36,7 @@ namespace MultiSellerIo.Services.Images
             }
             catch (Exception e)
             {
-                throw new ServiceException("Unable to upload image", e);
+                throw new Exception("Unable to upload image", e);
             }
         }
 

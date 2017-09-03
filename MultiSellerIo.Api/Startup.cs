@@ -14,7 +14,9 @@ using MultiSellerIo.Dal;
 using MultiSellerIo.Dal.Entity;
 using MultiSellerIo.Dal.Repository;
 using MultiSellerIo.Intergrations.Azure;
+using MultiSellerIo.Services.Cache;
 using MultiSellerIo.Services.Images;
+using MultiSellerIo.Services.Product;
 using MultiSellerIo.Services.User;
 
 namespace MultiSellerIo.Api
@@ -51,12 +53,24 @@ namespace MultiSellerIo.Api
                 .AddEntityFrameworkStores<MultiSellerIoContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = Configuration.GetValue<string>("RedisConnection");
+            });
+
             services.AddScoped<IMultiSellerIoContext, MultiSellerIoContext>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddScoped<ICacheService, CacheService>();
+
             services.AddScoped<IImageStorageService, ImageStorageService>(provider => new ImageStorageService(new AzureStorageService(storageConfig["ConnectionString"], storageConfig["ImagesContainerName"])));
             services.AddScoped<IImageResizeService, ImageResizeService>();
             services.AddScoped<IImageService, ImageService>();
+
             services.AddScoped<IUserService, UserService>();
+
+            services.AddScoped<IProductAttributeService, ProductAttributeService>();
+            services.AddScoped<IProductCategoryService, ProductCategoryService>();
 
             var authorizationConfiguration = Configuration.GetSection("Token");
 

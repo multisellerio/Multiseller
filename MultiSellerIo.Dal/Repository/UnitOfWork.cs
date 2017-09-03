@@ -10,6 +10,7 @@ namespace MultiSellerIo.Dal.Repository
         Task<IDbContextTransaction> GetTransaction();
         IRepository<Product> ProductRepository { get; }
         IRepository<Category> CategoryRepository { get; }
+        IRepository<ProductAttribute> ProductAttributeRepository { get; }
     }
 
     public class UnitOfWork : IUnitOfWork
@@ -18,6 +19,7 @@ namespace MultiSellerIo.Dal.Repository
 
         private IRepository<Category> _categoryRepository;
         private IRepository<Product> _productRepository;
+        private IRepository<ProductAttribute> _productAttributeRepository;
 
         public UnitOfWork(IMultiSellerIoContext context)
         {
@@ -31,8 +33,12 @@ namespace MultiSellerIo.Dal.Repository
 
         public IRepository<Category> CategoryRepository => _categoryRepository ??
                                                            new GenericRepository<Category>(_context);
+
         public IRepository<Product> ProductRepository => _productRepository ??
-                                                           new GenericRepository<Product>(_context);
+                                                         new GenericRepository<Product>(_context);
+
+        public IRepository<ProductAttribute> ProductAttributeRepository => _productAttributeRepository ??
+                                                         new GenericRepository<ProductAttribute>(_context);
 
     }
 }

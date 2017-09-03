@@ -70,7 +70,12 @@ namespace MultiSellerIo.Services.Images
             }
             catch (Exception e)
             {
-                throw new ServiceException($"Unable to process {fileName}", e);
+                if (e is ServiceException)
+                {
+                    throw;
+                }
+
+                throw new Exception($"Unable to process {fileName}", e);
             }
         }
 

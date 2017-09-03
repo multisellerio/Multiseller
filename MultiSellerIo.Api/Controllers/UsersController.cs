@@ -16,7 +16,6 @@ using MultiSellerIo.Services.User;
 
 namespace MultiSellerIo.Api.Controllers
 {
-    [Produces("application/json")]
     [Route("api/[controller]")]
     public class UsersController : Controller
     {
