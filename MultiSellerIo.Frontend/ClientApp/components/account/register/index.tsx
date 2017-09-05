@@ -29,7 +29,7 @@ const ErrorMessageComponent = error => {
     if (!message)
         return null;
 
-    return <Alert message={message} title="Error" type="alert-danger"/>;
+    return <Alert message={message} title="Error" type="alert-danger" />;
 
 }
 
@@ -94,8 +94,8 @@ class RegisterForm extends React.Component<IRegisterFormProps, {}> {
             <Field type="email" name="email" component={InputComponent} label="Email" col="col-md-12" />
             <Field type="password" name="password" component={InputComponent} label="Password" col="col-md-6" />
             <Field type="password" name="confirmationPassword" component={InputComponent} label="Confirmation Password" col="col-md-6" />
-            <div className="col-12 text-center text-sm-right">
-                <button className="btn btn-primary margin-bottom-none" type="submit">Register</button>
+            <div className="col-md-12 text-center">
+                <button className="btn btn-primary margin-bottom-none submit-button" type="submit">Register</button>
             </div>
         </form>;
     }
@@ -128,34 +128,18 @@ class Register extends React.Component<RegisterFormProps, {}> {
 
     public render() {
         return <div>
-            <div className="page-title">
-                <div className="container">
-                    <div className="column">
-                        <h1>Register Account</h1>
+            <div className="registration-box-wrapper container padding-bottom-3x mb-2">
+                <div className="registration-box">
+                    <h3 className="margin-bottom-1x text-center">Signup with GoodLook</h3>
+                    <h6 className="sub-header margin-bottom-1x">- Easily using -</h6>
+                    <div className="row margin-bottom-1x social-btn-section">
+                        <div className="col-xl-4 col-md-6 col-sm-4 social-btn"><a className="btn btn-sm btn-block facebook-btn" href="#"><i className="socicon-facebook"></i>&nbsp;Facebook</a></div>
+                        <div className="col-xl-4 col-md-6 col-sm-4 social-btn"><a className="btn btn-sm btn-block twitter-btn" href="#"><i className="socicon-twitter"></i>&nbsp;Twitter</a></div>
+                        <div className="col-xl-4 col-md-6 col-sm-4 social-btn"><a className="btn btn-sm btn-block google-btn" href="#"><i className="socicon-googleplus"></i>&nbsp;Google+</a></div>
                     </div>
-                    <div className="column">
-                        <ul className="breadcrumbs">
-                            <li><a>Home</a>
-                            </li>
-                            <li className="separator">&nbsp;</li>
-                            <li><a>Account</a>
-                            </li>
-                            <li className="separator">&nbsp;</li>
-                            <li>Register</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div className="container padding-bottom-3x mb-2">
-                <div className="row">
-                    <div className="col-md-6">
-                        <h3 className="margin-bottom-1x">No Account? Register</h3>
-                        <p>Registration takes less than a minute but gives you full control over your orders.</p>
-                    </div>
-                    <div className="col-md-6">
-                        <ErrorMessageComponent message={this.props.errorMessage} />
-                        <RegisterForm onSubmit={this.onSubmit} />
-                    </div>
+                    <h6 className="sub-header margin-bottom-1x">- Or -</h6>
+                    <ErrorMessageComponent message={this.props.errorMessage} />
+                    <RegisterForm onSubmit={this.onSubmit} />
                 </div>
             </div>
         </div>;

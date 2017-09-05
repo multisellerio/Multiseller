@@ -8,7 +8,7 @@ import { RouteComponentProps } from 'react-router-dom';
 
 type HomeProps =
     AccountState.IAccountState & typeof AccountState.actionCreator;
-class Home extends React.Component<RouteComponentProps<HomeProps>, {}> {
+class Home extends React.Component<HomeProps, {}> {
 
     constructor(props: HomeProps) {
         super(props);
@@ -22,7 +22,7 @@ class Home extends React.Component<RouteComponentProps<HomeProps>, {}> {
 
         if (!this.props.user) {
             return <div>
-                <h1>Hello, world!</h1>
+                <h1>Welcome GoodLook.lk</h1>
             </div>;
         }
 

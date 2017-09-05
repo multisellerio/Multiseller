@@ -18,7 +18,10 @@ export default createServerRenderer(params => {
 
         let initialState = {
             account: {
-                token: token
+                token: token,
+                isLoading: false,
+                errorMessage: null,
+                user: null,
             }
         };
 

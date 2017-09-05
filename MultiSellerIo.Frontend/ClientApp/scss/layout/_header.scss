@@ -9,8 +9,6 @@
   width: 100%;
   height: 40px;
   padding: 0 30px;
-  border-bottom: 1px solid $border-color;
-  background-color: $gray-lighter;
   z-index: 9010;
   .topbar-column {
     display: table-cell;
@@ -197,19 +195,20 @@
 
 // Navbar
 .navbar {
-  position: relative;
-  top: 0;
-  left: 0;
-  width: 100%;
-  min-height: $navbar-min-height;
-  border-bottom: 1px solid $border-color;
-  background-color: $white-color;
-  z-index: 9000;
-  padding: 0;
-  &.navbar-stuck {
-    position: fixed;
-    z-index: 9010;
-  }
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    box-shadow: 0 1px 3px $border-color;
+    min-height: $navbar-min-height;
+    background-color: $white-color;
+    z-index: 9000;
+    padding: 0;
+
+    &.navbar-stuck {
+        position: fixed;
+        z-index: 9010;
+    }
 }
 
 // Site Logo + Off-Canvas Toggle
@@ -246,7 +245,6 @@
 .offcanvas-toggle {
   width: 74px;
   transition: color .3s;
-  border-right: 1px solid $border-color;
   color: $navbar-tools-color;
   font-size: $offcanvas-toggle-icon-size;
   line-height: 1;

@@ -5,11 +5,11 @@ export default class TopBar extends React.Component<{}, {}> {
     public render() {
         return  <div className="topbar">
                     <div className="topbar-column">
-                        <a className="hidden-md-down" href="mailto:support@unishop.com">
-                            <i className="icon-mail"></i>&nbsp; support@unishop.com
+                        <a className="hidden-md-down" href="mailto:support@goodlook.com">
+                            <i className="icon-mail"></i>&nbsp; support@goodlook.lk
                         </a>
-                        <a className="hidden-md-down" href="tel:00331697720"><i className="icon-bell">
-                            </i>&nbsp; 00 33 169 7720
+                        <a className="hidden-md-down" href="tel:+94773781850"><i className="icon-bell">
+                            </i>&nbsp; +94773781850
                         </a>
                         <a className="social-button sb-facebook shape-none sb-dark" href="#" target="_blank">
                             <i className="socicon-facebook"></i>

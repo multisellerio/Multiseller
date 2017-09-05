@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "8fbf58a8b32551545284"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "2edfed31c486f414e66f"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -2278,19 +2278,19 @@ exports.actionCreator = {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    dispatch({ type: account_actions_1.REQUEST_USER_REGISTER, request: registerRequest });
+                    dispatch({ type: account_actions_1.REQUEST_USER_REGISTER, payload: registerRequest });
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, user_1.UserService.registerUser(registerRequest)];
                 case 2:
                     responseUser = _a.sent();
-                    dispatch({ type: account_actions_1.USER_REGISTERED, user: responseUser });
+                    dispatch({ type: account_actions_1.USER_REGISTERED, payload: responseUser });
                     dispatch(react_router_redux_1.push('/login'));
                     return [3 /*break*/, 4];
                 case 3:
                     err_1 = _a.sent();
-                    dispatch({ type: account_actions_1.USER_REGISTRATION_FAILED, message: err_1.message });
+                    dispatch({ type: account_actions_1.USER_REGISTRATION_FAILED, payload: err_1.message });
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
@@ -2301,20 +2301,20 @@ exports.actionCreator = {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    dispatch({ type: account_actions_1.USER_LOGIN_REQUEST, request: loginRequest });
+                    dispatch({ type: account_actions_1.USER_LOGIN_REQUEST, payload: loginRequest });
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, user_1.UserService.login(loginRequest)];
                 case 2:
                     loginResponse = _a.sent();
-                    dispatch({ type: account_actions_1.USER_LOGIN_SUCCESS, response: loginResponse });
+                    dispatch({ type: account_actions_1.USER_LOGIN_SUCCESS, payload: loginResponse });
                     cookies_1.Cookies.write('ms-token', loginResponse.token);
                     dispatch(react_router_redux_1.push('/'));
                     return [3 /*break*/, 4];
                 case 3:
                     err_2 = _a.sent();
-                    dispatch({ type: account_actions_1.USER_LOGIN_FAILED, message: err_2.message });
+                    dispatch({ type: account_actions_1.USER_LOGIN_FAILED, payload: err_2.message });
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
@@ -2337,7 +2337,7 @@ exports.actionCreator = {
                             return [4 /*yield*/, user_1.UserService.getCurrentUser(state.account.token)];
                         case 1:
                             currentUser = _a.sent();
-                            dispatch({ type: account_actions_1.GET_CURRENT_USER_SUCCESSFULLY, user: currentUser });
+                            dispatch({ type: account_actions_1.GET_CURRENT_USER_SUCCESSFULLY, payload: currentUser });
                             return [3 /*break*/, 3];
                         case 2:
                             err_3 = _a.sent();
@@ -2357,7 +2357,8 @@ exports.actionCreator = {
  *** REDUCERS
  *************************/
 var unloadedState = { isLoading: false, errorMessage: null, token: null, user: null };
-exports.reducer = function (state, action) {
+exports.reducer = function (state, incomingAction) {
+    var action = incomingAction;
     switch (action.type) {
         case account_actions_1.REQUEST_USER_REGISTER:
             return {
@@ -2377,7 +2378,7 @@ exports.reducer = function (state, action) {
             var userRegistrationFailedAction = action;
             return {
                 isLoading: false,
-                errorMessage: userRegistrationFailedAction.message,
+                errorMessage: userRegistrationFailedAction.payload,
                 token: null,
                 user: null
             };
@@ -2393,14 +2394,14 @@ exports.reducer = function (state, action) {
             return {
                 isLoading: false,
                 errorMessage: null,
-                token: userLoginSuccessAction.response.token,
-                user: userLoginSuccessAction.response.user
+                token: userLoginSuccessAction.payload.token,
+                user: userLoginSuccessAction.payload.user
             };
         case account_actions_1.USER_LOGIN_FAILED:
             var userLoginFailedAction = action;
             return {
                 isLoading: false,
-                errorMessage: userLoginFailedAction.message,
+                errorMessage: userLoginFailedAction.payload,
                 token: null,
                 user: null
             };
@@ -2417,7 +2418,7 @@ exports.reducer = function (state, action) {
                 isLoading: false,
                 errorMessage: null,
                 token: state.token,
-                user: currentUserSuccessfullyAction.user
+                user: currentUserSuccessfullyAction.payload
             };
         case account_actions_1.GET_CURRENT_USER_UNSUCCESSFULLY:
             return {
@@ -2426,8 +2427,6 @@ exports.reducer = function (state, action) {
                 token: null,
                 user: null
             };
-        default:
-            var exhaustiveCheck = action;
     }
     return state || unloadedState;
 };
@@ -17556,8 +17555,8 @@ var RegisterForm = RegisterForm_1 = (function (_super) {
             React.createElement(redux_form_1.Field, { type: "email", name: "email", component: form_components_1.InputComponent, label: "Email", col: "col-md-12" }),
             React.createElement(redux_form_1.Field, { type: "password", name: "password", component: form_components_1.InputComponent, label: "Password", col: "col-md-6" }),
             React.createElement(redux_form_1.Field, { type: "password", name: "confirmationPassword", component: form_components_1.InputComponent, label: "Confirmation Password", col: "col-md-6" }),
-            React.createElement("div", { className: "col-12 text-center text-sm-right" },
-                React.createElement("button", { className: "btn btn-primary margin-bottom-none", type: "submit" }, "Register")));
+            React.createElement("div", { className: "col-md-12 text-center" },
+                React.createElement("button", { className: "btn btn-primary margin-bottom-none submit-button", type: "submit" }, "Register")));
     };
     return RegisterForm;
 }(React.Component));
@@ -17588,27 +17587,26 @@ var Register = (function (_super) {
     };
     Register.prototype.render = function () {
         return React.createElement("div", null,
-            React.createElement("div", { className: "page-title" },
-                React.createElement("div", { className: "container" },
-                    React.createElement("div", { className: "column" },
-                        React.createElement("h1", null, "Register Account")),
-                    React.createElement("div", { className: "column" },
-                        React.createElement("ul", { className: "breadcrumbs" },
-                            React.createElement("li", null,
-                                React.createElement("a", null, "Home")),
-                            React.createElement("li", { className: "separator" }, "\u00A0"),
-                            React.createElement("li", null,
-                                React.createElement("a", null, "Account")),
-                            React.createElement("li", { className: "separator" }, "\u00A0"),
-                            React.createElement("li", null, "Register"))))),
-            React.createElement("div", { className: "container padding-bottom-3x mb-2" },
-                React.createElement("div", { className: "row" },
-                    React.createElement("div", { className: "col-md-6" },
-                        React.createElement("h3", { className: "margin-bottom-1x" }, "No Account? Register"),
-                        React.createElement("p", null, "Registration takes less than a minute but gives you full control over your orders.")),
-                    React.createElement("div", { className: "col-md-6" },
-                        React.createElement(ErrorMessageComponent, { message: this.props.errorMessage }),
-                        React.createElement(RegisterForm, { onSubmit: this.onSubmit })))));
+            React.createElement("div", { className: "registration-box-wrapper container padding-bottom-3x mb-2" },
+                React.createElement("div", { className: "registration-box" },
+                    React.createElement("h3", { className: "margin-bottom-1x text-center" }, "Signup with GoodLook"),
+                    React.createElement("h6", { className: "sub-header margin-bottom-1x" }, "- Easily using -"),
+                    React.createElement("div", { className: "row margin-bottom-1x social-btn-section" },
+                        React.createElement("div", { className: "col-xl-4 col-md-6 col-sm-4 social-btn" },
+                            React.createElement("a", { className: "btn btn-sm btn-block facebook-btn", href: "#" },
+                                React.createElement("i", { className: "socicon-facebook" }),
+                                "\u00A0Facebook")),
+                        React.createElement("div", { className: "col-xl-4 col-md-6 col-sm-4 social-btn" },
+                            React.createElement("a", { className: "btn btn-sm btn-block twitter-btn", href: "#" },
+                                React.createElement("i", { className: "socicon-twitter" }),
+                                "\u00A0Twitter")),
+                        React.createElement("div", { className: "col-xl-4 col-md-6 col-sm-4 social-btn" },
+                            React.createElement("a", { className: "btn btn-sm btn-block google-btn", href: "#" },
+                                React.createElement("i", { className: "socicon-googleplus" }),
+                                "\u00A0Google+"))),
+                    React.createElement("h6", { className: "sub-header margin-bottom-1x" }, "- Or -"),
+                    React.createElement(ErrorMessageComponent, { message: this.props.errorMessage }),
+                    React.createElement(RegisterForm, { onSubmit: this.onSubmit }))));
     };
     return Register;
 }(React.Component));
@@ -17650,7 +17648,7 @@ var Home = (function (_super) {
     Home.prototype.render = function () {
         if (!this.props.user) {
             return React.createElement("div", null,
-                React.createElement("h1", null, "Hello, world!"));
+                React.createElement("h1", null, "Welcome GoodLook.lk"));
         }
         return React.createElement("div", null,
             React.createElement("h1", null,
@@ -17942,8 +17940,8 @@ var SiteBranding = (function (_super) {
             React.createElement("div", { className: "inner" },
                 React.createElement("a", { className: "offcanvas-toggle cats-toggle", href: "#shop-categories", "data-toggle": "offcanvas" }),
                 React.createElement("a", { className: "offcanvas-toggle menu-toggle", href: "#mobile-menu", "data-toggle": "offcanvas" }),
-                React.createElement("a", { className: "site-logo", href: "index.html" },
-                    React.createElement("img", { src: "img/logo/logo.png", alt: "Unishop" }))));
+                React.createElement("a", { className: "site-logo" },
+                    React.createElement("img", { src: "/assets/images/Logo.png", alt: "GoodLook" }))));
     };
     return SiteBranding;
 }(React.Component));
@@ -18239,12 +18237,12 @@ var TopBar = (function (_super) {
     TopBar.prototype.render = function () {
         return React.createElement("div", { className: "topbar" },
             React.createElement("div", { className: "topbar-column" },
-                React.createElement("a", { className: "hidden-md-down", href: "mailto:support@unishop.com" },
+                React.createElement("a", { className: "hidden-md-down", href: "mailto:support@goodlook.com" },
                     React.createElement("i", { className: "icon-mail" }),
-                    "\u00A0 support@unishop.com"),
-                React.createElement("a", { className: "hidden-md-down", href: "tel:00331697720" },
+                    "\u00A0 support@goodlook.lk"),
+                React.createElement("a", { className: "hidden-md-down", href: "tel:+94773781850" },
                     React.createElement("i", { className: "icon-bell" }),
-                    "\u00A0 00 33 169 7720"),
+                    "\u00A0 +94773781850"),
                 React.createElement("a", { className: "social-button sb-facebook shape-none sb-dark", href: "#", target: "_blank" },
                     React.createElement("i", { className: "socicon-facebook" })),
                 React.createElement("a", { className: "social-button sb-twitter shape-none sb-dark", href: "#", target: "_blank" },

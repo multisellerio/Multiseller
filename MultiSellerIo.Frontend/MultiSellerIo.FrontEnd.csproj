@@ -16,6 +16,7 @@
     <None Remove="ClientApp\components\account\login.tsx" />
     <None Remove="ClientApp\components\shared\util\alert.tsx" />
     <None Remove="ClientApp\components\shared\util\form-components.tsx" />
+    <None Remove="ClientApp\types\actions\account-constants.ts" />
     <None Remove="yarn.lock" />
 
     <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
@@ -33,6 +34,7 @@
     <TypeScriptCompile Include="ClientApp\components\account\login\index.tsx" />
     <TypeScriptCompile Include="ClientApp\components\shared\util\alert.tsx" />
     <TypeScriptCompile Include="ClientApp\components\shared\util\form-components.tsx" />
+    <TypeScriptCompile Include="ClientApp\types\actions\account-constants.ts" />
     <TypeScriptCompile Include="ClientApp\util\cookies\index.ts" />
   </ItemGroup>
   <Target Name="RunWebpack" AfterTargets="ComputeFilesToPublish">

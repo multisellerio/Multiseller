@@ -7,7 +7,7 @@ export default class SiteBranding extends React.Component<{}, {}> {
             <div className="inner">
                 <a className="offcanvas-toggle cats-toggle" href="#shop-categories" data-toggle="offcanvas"></a>
                 <a className="offcanvas-toggle menu-toggle" href="#mobile-menu" data-toggle="offcanvas"></a>
-                <a className="site-logo" href="index.html"><img src="img/logo/logo.png" alt="Unishop" /></a>
+                <a className="site-logo"><img src="/assets/images/Logo.png" alt="GoodLook" /></a>
             </div>
         </div>;
     }

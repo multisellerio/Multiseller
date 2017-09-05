@@ -30,38 +30,45 @@ export interface IAccountState {
  *** ACTION CREATORS
  *************************/
 
-type KnownAction = IUserRegisterRequest | IUserRegistered | IUserRegistrationFailed |
-    IUserLoginRequest | IUserLoginSuccess | IUserLoginFailed | RouterAction |
-    IRequestCurrentUser | IGetCurrentUserSuccessfully | IGetCurrentUserUnsuccessfully
+type KnownAction = IUserRegisterRequest |
+                   IUserRegistered |
+                   IUserRegistrationFailed |
+                   IUserLoginRequest |
+                   IUserLoginSuccess |
+                   IUserLoginFailed |
+                   IRequestCurrentUser |
+                   IGetCurrentUserSuccessfully |
+                   IGetCurrentUserUnsuccessfully |
+                   RouterAction;
 
 export const actionCreator = {
     userRegister: (registerRequest: IRegisterRequest): AppThunkAction<KnownAction> => async (dispatch, getState) => {
 
-        dispatch({ type: REQUEST_USER_REGISTER, request: registerRequest });
+        dispatch({ type: REQUEST_USER_REGISTER, payload: registerRequest });
 
         try {
             let responseUser = await UserService.registerUser(registerRequest);
-            dispatch({ type: USER_REGISTERED, user: responseUser });
+            dispatch({ type: USER_REGISTERED, payload: responseUser });
             dispatch(push('/login'));
 
         } catch (err) {
-            dispatch({ type: USER_REGISTRATION_FAILED, message: err.message });
+            dispatch({ type: USER_REGISTRATION_FAILED, payload: err.message });
         }
 
     },
     login: (loginRequest: ILoginRequest): AppThunkAction<KnownAction> => async (dispatch, getState) => {
 
-        dispatch({ type: USER_LOGIN_REQUEST, request: loginRequest });
+        dispatch({ type: USER_LOGIN_REQUEST, payload: loginRequest });
 
         try {
 
             let loginResponse = await UserService.login(loginRequest);
-            dispatch({ type: USER_LOGIN_SUCCESS, response: loginResponse });
+            dispatch({ type: USER_LOGIN_SUCCESS, payload: loginResponse });
             Cookies.write('ms-token', loginResponse.token);
             dispatch(push('/'));
 
         } catch (err) {
-            dispatch({ type: USER_LOGIN_FAILED, message: err.message });
+            dispatch({ type: USER_LOGIN_FAILED, payload: err.message });
         }
     },
     getCurrentUser: (): AppThunkAction<KnownAction> => async (dispatch, getState) => {
@@ -75,7 +82,7 @@ export const actionCreator = {
         let getUserTask = async () => {
             try {
                 let currentUser = await UserService.getCurrentUser(state.account.token);
-                dispatch({ type: GET_CURRENT_USER_SUCCESSFULLY, user: currentUser });
+                dispatch({ type: GET_CURRENT_USER_SUCCESSFULLY, payload: currentUser });
             } catch (err) {
                 dispatch({ type: GET_CURRENT_USER_UNSUCCESSFULLY });
             }
@@ -94,7 +101,9 @@ export const actionCreator = {
 
 const unloadedState: IAccountState = { isLoading: false, errorMessage: null, token: null, user: null };
 
-export const reducer: Reducer<IAccountState> = (state: IAccountState, action: KnownAction) => {
+export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAction: KnownAction) => {
+
+    const action = incomingAction as KnownAction;
 
     switch (action.type) {
         case REQUEST_USER_REGISTER:
@@ -115,7 +124,7 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, action: Kn
             let userRegistrationFailedAction = action as IUserRegistrationFailed;
             return {
                 isLoading: false,
-                errorMessage: userRegistrationFailedAction.message,
+                errorMessage: userRegistrationFailedAction.payload,
                 token: null,
                 user: null
             }
@@ -131,14 +140,14 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, action: Kn
             return {
                 isLoading: false,
                 errorMessage: null,
-                token: userLoginSuccessAction.response.token,
-                user: userLoginSuccessAction.response.user
+                token: userLoginSuccessAction.payload.token,
+                user: userLoginSuccessAction.payload.user
             }
         case USER_LOGIN_FAILED:
             let userLoginFailedAction = action as IUserLoginFailed;
             return {
                 isLoading: false,
-                errorMessage: userLoginFailedAction.message,
+                errorMessage: userLoginFailedAction.payload,
                 token: null,
                 user: null
             }
@@ -155,7 +164,7 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, action: Kn
                 isLoading: false,
                 errorMessage: null,
                 token: state.token,
-                user: currentUserSuccessfullyAction.user
+                user: currentUserSuccessfullyAction.payload
             }
         case GET_CURRENT_USER_UNSUCCESSFULLY:
             return {
@@ -164,8 +173,6 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, action: Kn
                 token: null,
                 user: null
             }
-        default:
-            const exhaustiveCheck: never = action;
     }
 
     return state || unloadedState;

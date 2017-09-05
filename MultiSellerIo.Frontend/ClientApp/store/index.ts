@@ -2,7 +2,7 @@ import * as Account from './account'
 
 // The top-level state object
 export interface ApplicationState {
-    account: Account.IRegisterState,
+    account: Account.IAccountState,
 }
 
 // Whenever an action is dispatched, Redux will update each top-level application state property using
