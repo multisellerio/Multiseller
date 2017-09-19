@@ -5,6 +5,9 @@ import CartDropDown from './cart-drop-down';
 
 interface IToolBarProps {
     searchButtonClick: any;
+    isAuthorize: boolean,
+    username: string,
+    logOff(),
 }
 
 export default class ToolBar extends React.Component<IToolBarProps, {}> {
@@ -26,8 +29,8 @@ export default class ToolBar extends React.Component<IToolBarProps, {}> {
             <div className="inner">
                 <div className="tools">
                     <SearchButton onClick={this.searchButtonClick} />
-                    <AccountDropDown />
-                    <CartDropDown />
+                    <AccountDropDown logOff={this.props.logOff} isAuthorize={this.props.isAuthorize} username={this.props.username} />
+                    <CartDropDown isAuthorize={this.props.isAuthorize} />
                 </div>
             </div>
         </div>;

@@ -13,6 +13,18 @@ export const InputComponent = field => {
            </div>;
 }
 
+//TEXTAREA COMPONENT
+export const TextAreaComponent = field => {
+    const { input, label, col } = field;
+    return <div className={col}>
+               <div className={field.meta.touched && field.meta.error ? 'form-group has-danger' : 'form-group'}>
+                   <label>{label}</label>
+                   <textarea className="form-control" {...input} />
+                   {field.meta.touched && field.meta.error && <span className="form-control-feedback">{field.meta.error}</span>}
+               </div>
+           </div>;
+}
+
 //SELECT COMPONENT
 
 export const SelectComponent = field => {

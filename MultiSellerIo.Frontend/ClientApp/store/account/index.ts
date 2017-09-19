@@ -6,10 +6,10 @@ import { IRegisterRequest, ILoginRequest, IUser } from '../../models/account-mod
 import { UserService } from '../../api/user';
 import {
     IUserRegistered, IUserRegisterRequest, IUserRegistrationFailed,
-    IUserLoginRequest, IUserLoginSuccess, IUserLoginFailed,
+    IUserLoginRequest, IUserLoginSuccess, IUserLoginFailed, IUserLogoff,
     IGetCurrentUserSuccessfully, IGetCurrentUserUnsuccessfully, IRequestCurrentUser,
     USER_REGISTERED, USER_REGISTRATION_FAILED, REQUEST_USER_REGISTER,
-    USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGIN_FAILED,
+    USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGIN_FAILED, USER_LOGOFF,
     REQUEST_CURRENT_USER, GET_CURRENT_USER_SUCCESSFULLY, GET_CURRENT_USER_UNSUCCESSFULLY
 } from '../../types/actions/account-actions';
 import { Cookies } from '../../util/cookies';
@@ -21,6 +21,7 @@ import { Cookies } from '../../util/cookies';
 export interface IAccountState {
     isLoading: boolean,
     errorMessage: string,
+    isAuthorize: boolean,
     token: string,
     user: IUser,
 }
@@ -39,6 +40,7 @@ type KnownAction = IUserRegisterRequest |
                    IRequestCurrentUser |
                    IGetCurrentUserSuccessfully |
                    IGetCurrentUserUnsuccessfully |
+                   IUserLogoff |
                    RouterAction;
 
 export const actionCreator = {
@@ -92,6 +94,11 @@ export const actionCreator = {
 
         dispatch({ type: REQUEST_CURRENT_USER });
 
+    },
+    logOff: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        dispatch({ type: USER_LOGOFF });
+        Cookies.write('ms-token', null);
+        dispatch(push('/'));
     }
 }
 
@@ -99,7 +106,8 @@ export const actionCreator = {
  *** REDUCERS
  *************************/
 
-const unloadedState: IAccountState = { isLoading: false, errorMessage: null, token: null, user: null };
+const unloadedState: IAccountState =
+    { isLoading: false, errorMessage: null, token: null, user: null, isAuthorize: false };
 
 export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAction: KnownAction) => {
 
@@ -111,14 +119,16 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAc
                 isLoading: true,
                 errorMessage: null,
                 token: null,
-                user: null
+                user: null,
+                isAuthorize: false,
             };
         case USER_REGISTERED:
             return {
                 isLoading: false,
                 errorMessage: null,
                 token: null,
-                user: null
+                user: null,
+                isAuthorize: false,
             };
         case USER_REGISTRATION_FAILED:
             let userRegistrationFailedAction = action as IUserRegistrationFailed;
@@ -126,14 +136,16 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAc
                 isLoading: false,
                 errorMessage: userRegistrationFailedAction.payload,
                 token: null,
-                user: null
+                user: null,
+                isAuthorize: false,
             }
         case USER_LOGIN_REQUEST:
             return {
                 isLoading: true,
                 errorMessage: null,
                 token: null,
-                user: null
+                user: null,
+                isAuthorize: false,
             }
         case USER_LOGIN_SUCCESS:
             let userLoginSuccessAction = action as IUserLoginSuccess;
@@ -141,7 +153,8 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAc
                 isLoading: false,
                 errorMessage: null,
                 token: userLoginSuccessAction.payload.token,
-                user: userLoginSuccessAction.payload.user
+                user: userLoginSuccessAction.payload.user,
+                isAuthorize: true,
             }
         case USER_LOGIN_FAILED:
             let userLoginFailedAction = action as IUserLoginFailed;
@@ -149,14 +162,16 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAc
                 isLoading: false,
                 errorMessage: userLoginFailedAction.payload,
                 token: null,
-                user: null
+                user: null,
+                isAuthorize: false,
             }
         case REQUEST_CURRENT_USER:
             return {
                 isLoading: true,
                 errorMessage: null,
                 token: state.token,
-                user: null
+                user: null,
+                isAuthorize: false,
             }
         case GET_CURRENT_USER_SUCCESSFULLY:
             let currentUserSuccessfullyAction = action as IGetCurrentUserSuccessfully;
@@ -164,14 +179,24 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAc
                 isLoading: false,
                 errorMessage: null,
                 token: state.token,
-                user: currentUserSuccessfullyAction.payload
+                user: currentUserSuccessfullyAction.payload,
+                isAuthorize: true,
             }
         case GET_CURRENT_USER_UNSUCCESSFULLY:
             return {
                 isLoading: true,
                 errorMessage: null,
                 token: null,
-                user: null
+                user: null,
+                isAuthorize: false,
+            }
+        case USER_LOGOFF:
+            return {
+                isLoading: false,
+                errorMessage: null,
+                token: null,
+                user: null,
+                isAuthorize: false,
             }
     }
 

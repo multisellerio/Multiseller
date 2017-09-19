@@ -1,0 +1,136 @@
+﻿.fileUploader {
+    width: 680px;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.fileContainer {
+    background: $white-color;
+    position: relative;
+    border-radius: 10px;
+    padding: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    transition: all 0.3s ease-in;
+
+    input {
+        opacity: 0;
+        position: absolute;
+        z-index: -1;
+    }
+
+    p {
+        font-size: $font-size-base * .8125;
+        margin: 8px 0 4px;
+    }
+
+    .errorsContainer {
+        max-width: 300px;
+        font-size: $font-size-base * .8125;
+        color: $brand-danger;
+        text-align: left;
+    }
+
+    .chooseFileButton {
+        padding: 6px 23px;
+        background: $gray-dark;
+        border-radius: 30px;
+        color: $white-color;
+        font-weight: $font-style-base;
+        font-size: $font-size-base * .8125;
+        margin: 10px 0;
+        transition: all 0.2s ease-in;
+        cursor: pointer;
+        outline: none;
+        border: none;
+
+        &:hover {
+            background: $gray-dark;
+        }
+    }
+
+    .uploadFilesButton {
+        padding: 5px 43px;
+        background: transparent;
+        border-radius: 30px;
+        color: $gray-dark;
+        font-weight: $font-style-base;
+        font-size: $font-size-base * .8125;
+        margin: 10px 0;
+        transition: all 0.2s ease-in;
+        cursor: pointer;
+        outline: none;
+        border: 1px solid $border-color;
+
+        &:hover {
+            background: $gray-darker;
+            color: #fff;
+        }
+    }
+
+    .uploadIcon {
+        width: 50px;
+        height: 50px;
+        font-size: 50px;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
+
+}
+
+.images-container {
+    padding: 10px;
+    width: 530px;
+
+    :first-child {
+        height: 320px;
+        width: 320px;
+    }
+}
+
+.image-box {
+    display: block;
+    float: left;
+    margin: 10px;
+    height: 150px;
+    width: 150px;
+    border: 1px solid $border-color;
+    z-index: 10;
+    align-items: center;
+    align-content: center;
+    position: relative;
+    display: flex;
+
+
+    img {
+        max-height: 100%;
+        max-width: 100%;
+        position: absolute;
+        display: block;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+    }
+
+    :hover {
+        cursor: move;
+    }
+
+    .deleteImage {
+        display: none;
+        font-size: $font-size-base * .5;
+        color: $white-color;
+        background: $brand-primary;
+        border-radius: 50%;
+        width: 15px;
+        height: 15px;
+        text-align: center;
+        line-height: 15px;
+        cursor: pointer;
+    }
+}

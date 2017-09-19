@@ -11,6 +11,7 @@ namespace MultiSellerIo.Dal.Repository
         IRepository<Product> ProductRepository { get; }
         IRepository<Category> CategoryRepository { get; }
         IRepository<ProductAttribute> ProductAttributeRepository { get; }
+        Task<int> SaveChangesAsync();
     }
 
     public class UnitOfWork : IUnitOfWork
@@ -39,6 +40,11 @@ namespace MultiSellerIo.Dal.Repository
 
         public IRepository<ProductAttribute> ProductAttributeRepository => _productAttributeRepository ??
                                                          new GenericRepository<ProductAttribute>(_context);
+
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync();
+        }
 
     }
 }

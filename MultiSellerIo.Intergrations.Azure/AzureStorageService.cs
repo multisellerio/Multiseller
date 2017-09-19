@@ -9,7 +9,7 @@ namespace MultiSellerIo.Intergrations.Azure
 {
     public class AzureStorageService : IStorageService
     {
-        private CloudBlobContainer _container;
+        private readonly CloudBlobContainer _container;
 
         public AzureStorageService(string connectionString, string container)
         {

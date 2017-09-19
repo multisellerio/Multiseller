@@ -128,7 +128,7 @@ class Register extends React.Component<RegisterFormProps, {}> {
 
     public render() {
         return <div>
-            <div className="registration-box-wrapper container padding-bottom-3x mb-2">
+            <div className="animated fadeIn registration-box-wrapper container padding-bottom-3x mb-2">
                 <div className="registration-box">
                     <h3 className="margin-bottom-1x text-center">Signup with GoodLook</h3>
                     <h6 className="sub-header margin-bottom-1x">- Easily using -</h6>

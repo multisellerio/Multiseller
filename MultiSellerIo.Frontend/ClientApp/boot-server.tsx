@@ -8,8 +8,6 @@ import { createServerRenderer, RenderResult } from 'aspnet-prerendering';
 import { routes } from './routes';
 import configureStore from './configureStore';
 
-import { actionCreator as AccountActionCreator } from './store/account';
-
 export default createServerRenderer(params => {
     return new Promise<RenderResult>((resolve, reject) => {
 
@@ -18,11 +16,13 @@ export default createServerRenderer(params => {
 
         let initialState = {
             account: {
+                isAuthorize: false,
                 token: token,
                 isLoading: false,
                 errorMessage: null,
                 user: null,
-            }
+            },
+            products : null
         };
 
         // Prepare Redux store with in-memory history, and dispatch a navigation event

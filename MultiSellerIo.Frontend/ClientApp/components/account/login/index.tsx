@@ -89,36 +89,17 @@ class Login extends React.Component<LoginFormProps, {}> {
 
     public render() {
         return <div>
-            <div className="page-title">
-                <div className="container">
-                    <div className="column">
-                        <h1>Login</h1>
+            <div className="animated fadeIn registration-box-wrapper container padding-bottom-3x mb-2">
+                <div className="registration-box">
+                    <h3 className="margin-bottom-1x text-center">Login to GoodLook</h3>
+                    <br/>
+                    <div className="row margin-bottom-1x social-btn-section">
+                        <div className="col-xl-4 col-md-6 col-sm-4 social-btn"><a className="btn btn-sm btn-block facebook-btn" href="#"><i className="socicon-facebook"></i>&nbsp;Facebook</a></div>
+                        <div className="col-xl-4 col-md-6 col-sm-4 social-btn"><a className="btn btn-sm btn-block twitter-btn" href="#"><i className="socicon-twitter"></i>&nbsp;Twitter</a></div>
+                        <div className="col-xl-4 col-md-6 col-sm-4 social-btn"><a className="btn btn-sm btn-block google-btn" href="#"><i className="socicon-googleplus"></i>&nbsp;Google+</a></div>
                     </div>
-                    <div className="column">
-                        <ul className="breadcrumbs">
-                            <li><a>Home</a>
-                            </li>
-                            <li className="separator">&nbsp;</li>
-                            <li><a>Account</a>
-                            </li>
-                            <li className="separator">&nbsp;</li>
-                            <li>Login</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div className="container padding-bottom-3x mb-2">
-                <div className="row">
-                    <div className="offset-md-3 col-md-6 offset-md-3">
-                        <div className="row margin-bottom-1x">
-                            <div className="col-xl-4 col-md-6 col-sm-4"><a className="btn btn-sm btn-block facebook-btn" href="#"><i className="socicon-facebook"></i>&nbsp;Facebook login</a></div>
-                            <div className="col-xl-4 col-md-6 col-sm-4"><a className="btn btn-sm btn-block twitter-btn" href="#"><i className="socicon-twitter"></i>&nbsp;Twitter login</a></div>
-                            <div className="col-xl-4 col-md-6 col-sm-4"><a className="btn btn-sm btn-block google-btn" href="#"><i className="socicon-googleplus"></i>&nbsp;Google+ login</a></div>
-                        </div>
-                        <h4 className="margin-bottom-1x text-center">Or using form below</h4>
-                        <ErrorMessageComponent message={this.props.errorMessage} />
-                        <LoginForm onSubmit={this.onSubmit} />
-                    </div>
+                    <ErrorMessageComponent message={this.props.errorMessage} />
+                    <LoginForm onSubmit={this.onSubmit} />
                 </div>
             </div>
         </div>;

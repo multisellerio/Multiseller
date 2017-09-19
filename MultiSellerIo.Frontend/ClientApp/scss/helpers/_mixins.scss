@@ -56,13 +56,14 @@
 
 // Outline Button Variants
 @mixin outline-button-variant($color) {
-  border-color: $color;
-  background-color: transparent;
-  color: $color;
-  &:hover {
-    background-color: $color;
-    color: $white-color;
-  }
+    border-color: $color;
+    background-color: transparent;
+    color: $color;
+    &:hover {
+        background-color: $color;
+        border-color: $color;
+        color: $white-color;
+    }
 }
 
 // Link Button Variants
@@ -172,4 +173,13 @@
     clear: both;
     content: '';
   }
+}
+
+// Background image
+@mixin background($imgpath,$position: 0 0,$repeat: no-repeat) {
+    background: {
+        image: url($imgpath);
+        position: $position;
+        repeat: $repeat;
+    }
 }

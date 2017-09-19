@@ -16,7 +16,6 @@
     <None Remove="ClientApp\components\account\login.tsx" />
     <None Remove="ClientApp\components\shared\util\alert.tsx" />
     <None Remove="ClientApp\components\shared\util\form-components.tsx" />
-    <None Remove="ClientApp\types\actions\account-constants.ts" />
     <None Remove="yarn.lock" />
 
     <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
@@ -34,8 +33,71 @@
     <TypeScriptCompile Include="ClientApp\components\account\login\index.tsx" />
     <TypeScriptCompile Include="ClientApp\components\shared\util\alert.tsx" />
     <TypeScriptCompile Include="ClientApp\components\shared\util\form-components.tsx" />
-    <TypeScriptCompile Include="ClientApp\types\actions\account-constants.ts" />
     <TypeScriptCompile Include="ClientApp\util\cookies\index.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\img\payment_methods.png" />
+    <None Include="wwwroot\img\shop\cart\01.jpg" />
+    <None Include="wwwroot\img\shop\cart\02.jpg" />
+    <None Include="wwwroot\img\shop\cart\03.jpg" />
+    <None Include="wwwroot\img\shop\categories\01.jpg" />
+    <None Include="wwwroot\img\shop\categories\02.jpg" />
+    <None Include="wwwroot\img\shop\categories\03.jpg" />
+    <None Include="wwwroot\img\shop\categories\04.jpg" />
+    <None Include="wwwroot\img\shop\categories\05.jpg" />
+    <None Include="wwwroot\img\shop\categories\06.jpg" />
+    <None Include="wwwroot\img\shop\categories\07.jpg" />
+    <None Include="wwwroot\img\shop\categories\08.jpg" />
+    <None Include="wwwroot\img\shop\categories\09.jpg" />
+    <None Include="wwwroot\img\shop\categories\10.jpg" />
+    <None Include="wwwroot\img\shop\categories\11.jpg" />
+    <None Include="wwwroot\img\shop\categories\12.jpg" />
+    <None Include="wwwroot\img\shop\categories\13.jpg" />
+    <None Include="wwwroot\img\shop\categories\14.jpg" />
+    <None Include="wwwroot\img\shop\categories\15.jpg" />
+    <None Include="wwwroot\img\shop\categories\16.jpg" />
+    <None Include="wwwroot\img\shop\categories\17.jpg" />
+    <None Include="wwwroot\img\shop\categories\18.jpg" />
+    <None Include="wwwroot\img\shop\products\01.jpg" />
+    <None Include="wwwroot\img\shop\products\02.jpg" />
+    <None Include="wwwroot\img\shop\products\03.jpg" />
+    <None Include="wwwroot\img\shop\products\04.jpg" />
+    <None Include="wwwroot\img\shop\products\05.jpg" />
+    <None Include="wwwroot\img\shop\products\06.jpg" />
+    <None Include="wwwroot\img\shop\products\07.jpg" />
+    <None Include="wwwroot\img\shop\products\08.jpg" />
+    <None Include="wwwroot\img\shop\products\09.jpg" />
+    <None Include="wwwroot\img\shop\products\10.jpg" />
+    <None Include="wwwroot\img\shop\products\11.jpg" />
+    <None Include="wwwroot\img\shop\products\12.jpg" />
+    <None Include="wwwroot\img\shop\products\13.jpg" />
+    <None Include="wwwroot\img\shop\products\14.jpg" />
+    <None Include="wwwroot\img\shop\products\15.jpg" />
+    <None Include="wwwroot\img\shop\products\16.jpg" />
+    <None Include="wwwroot\img\shop\single\01.jpg" />
+    <None Include="wwwroot\img\shop\single\02.jpg" />
+    <None Include="wwwroot\img\shop\single\03.jpg" />
+    <None Include="wwwroot\img\shop\single\04.jpg" />
+    <None Include="wwwroot\img\shop\single\05.jpg" />
+    <None Include="wwwroot\img\shop\single\th01.jpg" />
+    <None Include="wwwroot\img\shop\single\th02.jpg" />
+    <None Include="wwwroot\img\shop\single\th03.jpg" />
+    <None Include="wwwroot\img\shop\single\th04.jpg" />
+    <None Include="wwwroot\img\shop\single\th05.jpg" />
+    <None Include="wwwroot\img\shop\widget\01.jpg" />
+    <None Include="wwwroot\img\shop\widget\02.jpg" />
+    <None Include="wwwroot\img\shop\widget\03.jpg" />
+    <None Include="wwwroot\img\shop\widget\04.jpg" />
+    <None Include="wwwroot\img\shop\widget\05.jpg" />
+    <None Include="wwwroot\img\shop\widget\06.jpg" />
+    <None Include="wwwroot\img\shop\widget\07.jpg" />
+    <None Include="wwwroot\img\shop\widget\08.jpg" />
+    <None Include="wwwroot\img\shop\widget\09.jpg" />
+    <None Include="wwwroot\img\shop\widget\10.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ClientApp\dist\" />
+    <Folder Include="wwwroot\assets\" />
   </ItemGroup>
   <Target Name="RunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->

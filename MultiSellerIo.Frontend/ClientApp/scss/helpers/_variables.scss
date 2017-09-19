@@ -17,7 +17,7 @@ $white-color:            #ffffff;
 $black-color:            #000000;
 
 // Brand colors
-$brand-primary:         #e74c3c;
+$brand-primary: #e74c3c;
 $brand-info:		    #50c6e9;
 $brand-success:         #43d9a3;
 $brand-warning:         #ffb74f;
@@ -52,7 +52,7 @@ $highlight-color:       #fff8b0;
 //## Font, line-height, and color for body text, headings, and more.
 // -------------------------------------------------------
 
-$font-family-base: 'Sarala', sans-serif;
+$font-family-base: 'Lato', sans-serif;
 $font-family-headings: 	    inherit;
 
 // Font sizes
@@ -76,12 +76,12 @@ $display-3:               floor(($font-size-base * 3.125)); // ~50px
 $display-4:               floor(($font-size-base * 2.5)); // ~40px
 
 // Font styles
-$font-style-base:         normal;
-$font-style-headings:     normal;
+$font-style-base: Regular;
+$font-style-headings: Bold;
 
 // Font weights
-$font-weight-base:         normal;
-$font-weight-headings:     500;
+$font-weight-base: Regular;
+$font-weight-headings: Bold;
 
 // Text transforms
 $text-transform-base:     none;

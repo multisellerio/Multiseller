@@ -8,6 +8,7 @@ export const USER_REGISTRATION_FAILED: string = 'USER_REGISTRATION_FAILED';
 export const USER_LOGIN_REQUEST: string = 'USER_LOGIN_REQUEST';
 export const USER_LOGIN_SUCCESS: string = 'USER_LOGING_SUCCESS';
 export const USER_LOGIN_FAILED: string = 'USER_LOGIN_FAILED';
+export const USER_LOGOFF: string = 'USER_LOGOFF';
 
 export const REQUEST_CURRENT_USER: string = 'REQUEST_CURRENT_USER';
 export const GET_CURRENT_USER_SUCCESSFULLY: string = 'GET_CURRENT_USER_SUCCESSFULLY';
@@ -49,6 +50,10 @@ export interface IUserLoginSuccess extends Action {
 export interface IUserLoginFailed extends Action {
     type: typeof USER_LOGIN_FAILED,
     payload: string,
+}
+
+export interface IUserLogoff extends Action {
+    type: typeof USER_LOGOFF
 }
 
 /*************************
