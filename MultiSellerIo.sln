@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiSellerIo.FrontEnd", "MultiSellerIo.Frontend\MultiSellerIo.FrontEnd.csproj", "{27E66916-9B49-4C1A-92E8-363329EC7D5A}"
 EndProject
@@ -21,7 +21,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiSellerIo.Services.Test
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intergrations", "Intergrations", "{4B6B474A-4CCB-408F-B3D0-C27042F2C10C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiSellerIo.Intergrations.Azure", "MultiSellerIo.Intergrations.Azure\MultiSellerIo.Intergrations.Azure.csproj", "{4EC47E99-F17B-49D2-8D53-8363259CD821}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiSellerIo.Intergrations.Azure", "MultiSellerIo.Intergrations.Azure\MultiSellerIo.Intergrations.Azure.csproj", "{4EC47E99-F17B-49D2-8D53-8363259CD821}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiSellerIo.Admin", "MultiSellerIo.Admin\MultiSellerIo.Admin.csproj", "{09106942-B2FE-4F2D-B158-8A2BE388329F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7C602556-53F8-4940-8138-9B053B087526}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +68,10 @@ Global
 		{4EC47E99-F17B-49D2-8D53-8363259CD821}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EC47E99-F17B-49D2-8D53-8363259CD821}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EC47E99-F17B-49D2-8D53-8363259CD821}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09106942-B2FE-4F2D-B158-8A2BE388329F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09106942-B2FE-4F2D-B158-8A2BE388329F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09106942-B2FE-4F2D-B158-8A2BE388329F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09106942-B2FE-4F2D-B158-8A2BE388329F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
