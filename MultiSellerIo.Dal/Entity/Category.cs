@@ -10,5 +10,6 @@ namespace MultiSellerIo.Dal.Entity
         public virtual List<CategoryAttribute> CategoryAttributes { get; set; }
         public long? ParentCategoryId { get; set; }
         public virtual Category ParentCategory { get; set; }
+        public virtual ICollection<Category> Children { get; set; }
     }
 }

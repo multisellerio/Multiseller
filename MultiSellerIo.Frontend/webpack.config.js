@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 const merge = require('webpack-merge');
+const theme = require('./theme.js');
 
 module.exports = (env) => {
     const isDevBuild = !(env && env.prod);
@@ -48,6 +49,31 @@ module.exports = (env) => {
                                 options: {
                                     outputStyle: 'expanded',
                                     sourceMap: true,
+                                    sourceMapContents: !isDevBuild
+                                }
+                            }
+                        ]
+                    })
+                },
+                {
+                    test: /\.less$/,
+                    loader: ExtractTextPlugin.extract({
+                        fallback: 'style-loader',
+                        use: [
+                            {
+                                loader: 'css-loader',
+                                options: {
+                                    importLoaders: 2,
+                                    sourceMap: true,
+                                    minimize: !isDevBuild
+                                }
+                            },
+                            {
+                                loader: 'less-loader',
+                                options: {
+                                    outputStyle: 'expanded',
+                                    sourceMap: true,
+                                    modifyVars: theme,
                                     sourceMapContents: !isDevBuild
                                 }
                             }

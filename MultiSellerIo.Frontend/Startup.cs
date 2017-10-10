@@ -35,16 +35,6 @@ namespace MultiSellerIo.FrontEnd
             services.AddScoped<IImageResizeService, ImageResizeService>();
             services.AddScoped<IImageService, ImageService>();
 
-            services.Configure<GzipCompressionProviderOptions>(options =>
-            {
-                options.Level = CompressionLevel.Fastest;
-            });
-
-            services.AddResponseCompression(options =>
-            {
-                options.Providers.Add<GzipCompressionProvider>();
-                options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "image/svg+xml" });
-            });
             // Add framework services.
             services.AddMvc();
         }
@@ -60,7 +50,7 @@ namespace MultiSellerIo.FrontEnd
                 app.UseDeveloperExceptionPage();
                 app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
                     HotModuleReplacement = true,
-                    ReactHotModuleReplacement = true
+                    ReactHotModuleReplacement = true,
                 });
             }
             else

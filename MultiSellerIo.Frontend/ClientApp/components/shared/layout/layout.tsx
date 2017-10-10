@@ -1,12 +1,12 @@
-import * as React from 'react';
-import TopBar from './topbar/topbar';
-import Header from './header/header';
-import Footer from './footer/footer';
+import * as React from "react";
+import Footer from "./footer/footer";
+import Header from "./header/header";
+import TopBar from "./topbar/topbar";
 
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
-import { ApplicationState } from '../../../store';
-import * as AccountState from '../../../store/account';
+import { ApplicationState } from "../../../store";
+import * as AccountState from "../../../store/account";
 
 type LayoutProps =
     AccountState.IAccountState & typeof AccountState.actionCreator;
@@ -18,11 +18,11 @@ class Layout extends React.Component<LayoutProps, {}> {
         this.logOff = this.logOff.bind(this);
     }
 
-    componentWillMount(): void {
+    public componentWillMount(): void {
         this.props.getCurrentUser();
     }
 
-    logOff() {
+    public logOff() {
         this.props.logOff();
     }
 
@@ -46,5 +46,5 @@ export default connect(
     (state: ApplicationState) => state.account,
     AccountState.actionCreator,
     null,
-    { pure: false }
+    { pure: false },
 )(Layout);

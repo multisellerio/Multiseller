@@ -1,16 +1,16 @@
-﻿import * as React from 'react';
-import SearchButton from './search-button';
-import AccountDropDown from './account-drop-down';
-import CartDropDown from './cart-drop-down';
+﻿ import * as React from "react";
+ import AccountDropDown from "./account-drop-down";
+ import CartDropDown from "./cart-drop-down";
+ import SearchButton from "./search-button";
 
-interface IToolBarProps {
+ interface IToolBarProps {
     searchButtonClick: any;
-    isAuthorize: boolean,
-    username: string,
-    logOff(),
+    isAuthorize: boolean;
+    username: string;
+    logOff();
 }
 
-export default class ToolBar extends React.Component<IToolBarProps, {}> {
+ export default class ToolBar extends React.Component<IToolBarProps, {}> {
 
     constructor(props: IToolBarProps) {
         super(props);

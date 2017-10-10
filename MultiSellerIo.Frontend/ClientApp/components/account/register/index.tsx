@@ -1,29 +1,29 @@
-﻿import * as React from 'React';
-import { connect } from 'react-redux';
-import { reduxForm, Field, FormProps, FormErrors } from 'redux-form';
+﻿ import * as React from "React";
+ import { connect } from "react-redux";
+ import { Field, FormErrors, FormProps, reduxForm } from "redux-form";
 
-import { ApplicationState } from '../../../store';
-import * as AccountState from '../../../store/account';
+ import { ApplicationState } from "../../../store";
+ import * as AccountState from "../../../store/account";
 
-import { InputComponent, SelectComponent } from '../../shared/util/form-components';
-import { Alert } from '../../shared/util/alert';
+ import { Alert } from "../../shared/util/alert";
+ import { InputComponent, SelectComponent } from "../../shared/util/form-components";
 
-interface IRegisterFormData {
-    firstName: string,
-    lastName: string,
-    gender: number,
-    username: string,
-    password: string,
-    confirmationPassword: string,
-    email: string,
+ interface IRegisterFormData {
+    firstName: string;
+    lastName: string;
+    gender: number;
+    username: string;
+    password: string;
+    confirmationPassword: string;
+    email: string;
 }
 
-interface IRegisterFormProps extends FormProps<IRegisterFormData, {}, {}> {
-    onSubmit: any,
-    handleSubmit?: any,
+ interface IRegisterFormProps extends FormProps<IRegisterFormData, {}, {}> {
+    onSubmit: any;
+    handleSubmit?: any;
 }
 
-const ErrorMessageComponent = error => {
+ const ErrorMessageComponent = (error) => {
     const { message } = error;
 
     if (!message)
@@ -31,45 +31,45 @@ const ErrorMessageComponent = error => {
 
     return <Alert message={message} title="Error" type="alert-danger" />;
 
-}
+};
 
-@reduxForm<IRegisterFormData, {}, {}>({
-    form: 'register',
+ @reduxForm<IRegisterFormData, {}, {}>({
+    form: "register",
     validate: RegisterForm.validate,
 })
 class RegisterForm extends React.Component<IRegisterFormProps, {}> {
 
-    genderOptions = [
-        { name: 'Male', value: 1 },
-        { name: 'Female', value: 2 },
-        { name: 'Unspecifed', value: 3 }
+    public genderOptions = [
+        { name: "Male", value: 1 },
+        { name: "Female", value: 2 },
+        { name: "Unspecifed", value: 3 },
     ];
 
-    static validate(values: IRegisterFormData) {
-        let errors: FormErrors<IRegisterFormData> = {};
+    public static validate(values: IRegisterFormData) {
+        const errors: FormErrors<IRegisterFormData> = {};
 
         if (!values.firstName) {
-            errors.firstName = 'First Name is required';
+            errors.firstName = "First Name is required";
         }
 
         if (!values.lastName) {
-            errors.lastName = 'Last Name is required';
+            errors.lastName = "Last Name is required";
         }
 
         if (!values.username) {
-            errors.username = 'Username is required';
+            errors.username = "Username is required";
         }
 
         if (!values.gender) {
-            errors.gender = 'Gender is required';
+            errors.gender = "Gender is required";
         }
 
         if (!values.password) {
-            errors.password = 'Password is required';
+            errors.password = "Password is required";
         }
 
         if (!values.confirmationPassword) {
-            errors.confirmationPassword = 'Confirmation password is required';
+            errors.confirmationPassword = "Confirmation password is required";
         }
 
         if (values.password !== values.confirmationPassword) {
@@ -77,7 +77,7 @@ class RegisterForm extends React.Component<IRegisterFormProps, {}> {
         }
 
         if (!values.email) {
-            errors.email = 'Email is required';
+            errors.email = "Email is required";
         }
         return errors;
     }
@@ -102,11 +102,11 @@ class RegisterForm extends React.Component<IRegisterFormProps, {}> {
 
 }
 
-type RegisterFormProps =
+ type RegisterFormProps =
     AccountState.IAccountState
     & typeof AccountState.actionCreator;
 
-class Register extends React.Component<RegisterFormProps, {}> {
+ class Register extends React.Component<RegisterFormProps, {}> {
 
     constructor(props: RegisterFormProps) {
         super(props);
@@ -122,7 +122,7 @@ class Register extends React.Component<RegisterFormProps, {}> {
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
-            gender: user.gender
+            gender: user.gender,
         });
     }
 
@@ -147,9 +147,7 @@ class Register extends React.Component<RegisterFormProps, {}> {
 
 }
 
-export default connect(
+ export default connect(
     (state: ApplicationState) => state.account,
-    AccountState.actionCreator
+    AccountState.actionCreator,
 )(Register) as typeof Register;
-
-

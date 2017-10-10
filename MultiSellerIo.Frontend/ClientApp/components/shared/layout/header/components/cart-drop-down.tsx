@@ -1,10 +1,10 @@
-﻿import * as React from 'react';
+﻿ import * as React from "react";
 
-interface ICartDropDownProps {
-    isAuthorize: boolean
+ interface ICartDropDownProps {
+    isAuthorize: boolean;
 }
 
-export default class CartDropDown extends React.Component<ICartDropDownProps, {}> {
+ export default class CartDropDown extends React.Component<ICartDropDownProps, {}> {
 
     public render() {
 

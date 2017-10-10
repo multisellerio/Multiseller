@@ -21,10 +21,10 @@ namespace MultiSellerIo.Services.Images
                 image.Resize(new ResizeOptions()
                 {
                     Size = new SixLabors.Primitives.Size(width, height),
-                    Mode = ResizeMode.Max
+                    Mode = ResizeMode.Max,
                 }).SaveAsJpeg(outputStream, new JpegEncoder()
                 {
-                    Quality = 100
+                    Quality = 100,
                 });
             }
 

@@ -1,20 +1,20 @@
-﻿import * as React from 'react';
-import { Link } from "react-router-dom";
+﻿ import * as React from "react";
+ import { Link } from "react-router-dom";
 
-interface IAccountDropDownProps {
-    username: string,
-    isAuthorize: boolean,
-    logOff(),
+ interface IAccountDropDownProps {
+    username: string;
+    isAuthorize: boolean;
+    logOff();
 }
 
-export default class AccountDropDown extends React.Component<IAccountDropDownProps, {}> {
+ export default class AccountDropDown extends React.Component<IAccountDropDownProps, {}> {
 
     constructor(props: IAccountDropDownProps) {
         super(props);
         this.logOff = this.logOff.bind(this);
     }
 
-    logOff() {
+    public logOff() {
         this.props.logOff();
     }
 
@@ -23,7 +23,7 @@ export default class AccountDropDown extends React.Component<IAccountDropDownPro
         const { isAuthorize, username } = this.props;
 
         if (!isAuthorize) {
-            return <div className="account"><Link to='/account/login' /><i className="icon-lock"></i>
+            return <div className="account"><Link to="/account/login" /><i className="icon-lock"></i>
             </div>;
         }
 

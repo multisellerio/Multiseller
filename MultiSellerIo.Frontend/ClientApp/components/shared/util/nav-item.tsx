@@ -1,16 +1,16 @@
-﻿import * as React from 'react';
-import * as PropTypes from 'prop-types'
-import { Link, LinkProps, matchPath } from 'react-router-dom';
+﻿ import * as PropTypes from "prop-types";
+ import * as React from "react";
+ import { Link, LinkProps, matchPath } from "react-router-dom";
 
-interface INavLinkProps extends LinkProps {
+ interface INavLinkProps extends LinkProps {
     activeClassName?: string;
-    exact? : boolean;
+    exact?: boolean;
 }
 
-export default class ListNavLink extends React.Component<INavLinkProps, {}> {
+ export default class ListNavLink extends React.Component<INavLinkProps, {}> {
 
-    static contextTypes = {
-        router: PropTypes.object
+    public static contextTypes = {
+        router: PropTypes.object,
     };
 
     public render() {
@@ -22,7 +22,7 @@ export default class ListNavLink extends React.Component<INavLinkProps, {}> {
         const match = matchPath(router.route.location.pathname, to);
         const isActive = match != null && (!exact || match.isExact === exact);
 
-        return (<li className={isActive ? 'active' : ''}>
+        return (<li className={isActive ? "active" : ""}>
             <Link to={to} {...rest} />
         </li>);
     }

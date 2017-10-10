@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using MultiSellerIo.Core.Enum;
 using MultiSellerIo.Dal;
+using MultiSellerIo.Dal.Entity;
 using System;
 
 namespace MultiSellerIo.Dal.Migrations
@@ -131,9 +132,13 @@ namespace MultiSellerIo.Dal.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("AttributeType");
+
                     b.Property<long>("CategoryId");
 
                     b.Property<DateTimeOffset>("Created");
+
+                    b.Property<bool>("IsGroup");
 
                     b.Property<bool>("IsRequired");
 
@@ -447,7 +452,7 @@ namespace MultiSellerIo.Dal.Migrations
             modelBuilder.Entity("MultiSellerIo.Dal.Entity.Category", b =>
                 {
                     b.HasOne("MultiSellerIo.Dal.Entity.Category", "ParentCategory")
-                        .WithMany()
+                        .WithMany("Children")
                         .HasForeignKey("ParentCategoryId");
                 });
 

@@ -1,21 +1,21 @@
-﻿import { API_URL } from '../';
-import { IProductMetaData } from '../../models/product-models';
+﻿ import { API_URL } from "../";
+ import { IProductMetaData } from "../../models/product-models";
 
-export const ProductService = {
+ export const ProductService = {
 
     getMetaData: async (): Promise<IProductMetaData> => {
         try {
 
-            let response = await fetch(API_URL + 'products/meta',
+            const response = await fetch(API_URL + "products/meta",
                 {
-                    method: 'post',
                     headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    }
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    method: "post",
                 });
 
-            let responseData = await response.json();
+            const responseData = await response.json();
 
             if (response.status === 400) {
                 throw new Error(responseData.error);
@@ -26,7 +26,6 @@ export const ProductService = {
         } catch (err) {
             throw err;
         }
-    }
+    },
 
-}
-
+};

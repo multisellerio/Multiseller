@@ -1,18 +1,21 @@
-import './css/site.css';
-import './css/feather.min.css';
-import './css/socicon.min.css';
-import './scss/styles.scss';
-import 'bootstrap';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { AppContainer } from 'react-hot-loader';
-import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
-import { createBrowserHistory } from 'history';
-import configureStore from './configureStore';
-import { ApplicationState }  from './store';
-import * as RoutesModule from './routes';
+import "antd/dist/antd.less";
+import "bootstrap";
+import { createBrowserHistory } from "history";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import { AppContainer } from "react-hot-loader";
+import { Provider } from "react-redux";
+import { ConnectedRouter } from "react-router-redux";
+import configureStore from "./configureStore";
+import "./css/feather.min.css";
+import "./css/site.css";
+import "./css/socicon.min.css";
+import * as RoutesModule from "./routes";
+import "./scss/styles.scss";
+import { ApplicationState } from "./store";
 let routes = RoutesModule.routes;
+import { LocaleProvider } from 'antd';
+import * as enUS from 'antd/lib/locale-provider/en_US';
 
 // Create browser history to use in the Redux store
 const history = createBrowserHistory();
@@ -26,11 +29,13 @@ function renderApp() {
     // and injects the app into a DOM element.
     ReactDOM.render(
         <AppContainer>
-            <Provider store={ store }>
-                <ConnectedRouter history={ history } children={ routes } />
+            <Provider store={store}>
+                <LocaleProvider locale={enUS}>
+                    <ConnectedRouter history={history} children={routes} />
+                </LocaleProvider>
             </Provider>
         </AppContainer>,
-        document.getElementById('react-app')
+        document.getElementById("react-app"),
     );
 }
 
@@ -38,8 +43,8 @@ renderApp();
 
 // Allow Hot Module Replacement
 if (module.hot) {
-    module.hot.accept('./routes', () => {
-        routes = require<typeof RoutesModule>('./routes').routes;
+    module.hot.accept("./routes", () => {
+        routes = require<typeof RoutesModule>("./routes").routes;
         renderApp();
     });
 }

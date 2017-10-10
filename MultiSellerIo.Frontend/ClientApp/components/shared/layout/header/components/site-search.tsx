@@ -1,18 +1,18 @@
-﻿import * as React from 'react';
+﻿ import * as React from "react";
 
-interface ISiteSearchState {
+ interface ISiteSearchState {
     showSearch: boolean;
     value: string;
 }
 
-export default class SiteSearch extends React.Component<{}, ISiteSearchState> {
+ export default class SiteSearch extends React.Component<{}, ISiteSearchState> {
 
     constructor(props: any) {
         super(props);
 
         this.state = {
             showSearch: false,
-            value: ''
+            value: "",
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -22,10 +22,10 @@ export default class SiteSearch extends React.Component<{}, ISiteSearchState> {
 
     public toggle() {
 
-        var currentShowState = this.state.showSearch;
+        const currentShowState = this.state.showSearch;
 
         this.setState({
-            showSearch: !currentShowState
+            showSearch: !currentShowState,
         });
 
         this.clear();
@@ -37,26 +37,26 @@ export default class SiteSearch extends React.Component<{}, ISiteSearchState> {
 
     private open() {
         this.setState({
-            showSearch: true
+            showSearch: true,
         });
     }
 
     private close() {
         this.setState({
-            showSearch: false
+            showSearch: false,
         });
     }
 
     private clear() {
         this.setState({
-            value : ''
+            value : "",
         });
     }
 
     public render() {
-        return <form className={ this.state.showSearch ? 'site-search search-visible' : 'site-search' } method="get">
+        return <form className={ this.state.showSearch ? "site-search search-visible" : "site-search" } method="get">
                    <input type="text" name="site_search" placeholder="Type to search..." onChange={this.handleInputChange} value={this.state.value} />
                    <div className="search-tools"><span className="clear-search" onClick={this.clear}>Clear</span><span onClick={this.close} className="close-search"><i className="icon-cross"></i></span></div>
-               </form>
+               </form>;
     }
 }

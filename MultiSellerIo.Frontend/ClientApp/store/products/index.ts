@@ -1,82 +1,79 @@
-﻿import { addTask } from 'domain-task';
-import { Reducer } from 'redux';
-import { push, RouterAction } from 'react-router-redux';
-import { AppThunkAction } from '.././';
-import { IProductMetaData } from '../../models/product-models';
-import { ProductService } from '../../api/products';
-import {
-    IRequestProductsMetadata, IReceivedProductsMetaDataSuccessfully, IReceivedProductsMetaDataUnSuccessfully,
-    REQUEST_PRODUCTS_METADATA, RECEIVED_PRODUCTS_METADATA_SUCCESSFULLY, RECEIVED_PRODUCTS_METADATA_UNSUCCESSFULLY
-     } from '../../types/actions/product-actions';
-import { Cookies } from '../../util/cookies';
+﻿ import { addTask } from "domain-task";
+ import { push, RouterAction } from "react-router-redux";
+ import { Reducer } from "redux";
+ import { ProductService } from "../../api/products";
+ import { IProductMetaData } from "../../models/product-models";
+ import {
+    IReceivedProductsMetaDataSuccessfully, IReceivedProductsMetaDataUnSuccessfully, IRequestProductsMetadata,
+    RECEIVED_PRODUCTS_METADATA_SUCCESSFULLY, RECEIVED_PRODUCTS_METADATA_UNSUCCESSFULLY, REQUEST_PRODUCTS_METADATA,
+     } from "../../types/actions/product-actions";
+ import { Cookies } from "../../util/cookies";
+ import { AppThunkAction } from ".././";
 
 /*************************
  *** STORE
  *************************/
 
-export interface IProductsState {
-    metaData : IProductMetaData
+ export interface IProductsState {
+    metaData: IProductMetaData;
 }
-
 
 /*************************
  *** ACTION CREATORS
  *************************/
 
-type KnownAction = IRequestProductsMetadata | IReceivedProductsMetaDataSuccessfully | IReceivedProductsMetaDataUnSuccessfully |
-                   RouterAction;
+ type KnownAction = IRequestProductsMetadata | IReceivedProductsMetaDataSuccessfully
+     | IReceivedProductsMetaDataUnSuccessfully | RouterAction;
 
-export const actionCreator = {
+ export const actionCreator = {
 
     getMetaData: (): AppThunkAction<KnownAction> => async (dispatch, getState) => {
 
         dispatch({ type: REQUEST_PRODUCTS_METADATA, payload: null });
 
-        let getMetaDataTask = async () => {
+        const getMetaDataTask = async () => {
             try {
 
-                let metadata = await ProductService.getMetaData();
+                const metadata = await ProductService.getMetaData();
                 dispatch({ type: RECEIVED_PRODUCTS_METADATA_SUCCESSFULLY, payload: metadata });
 
             } catch (err) {
                 dispatch({ type: RECEIVED_PRODUCTS_METADATA_UNSUCCESSFULLY, payload: err.message });
             }
-        }
+        };
 
         addTask(getMetaDataTask());
 
     },
-    
-}
+
+};
 
 /*************************
  *** REDUCERS
  *************************/
 
-const unloadedState: IProductsState = { metaData: null };
+ const unloadedState: IProductsState = { metaData: null };
 
-export const reducer: Reducer<IProductsState> = (state: IProductsState, incomingAction: KnownAction) => {
+ export const reducer: Reducer<IProductsState> = (state: IProductsState, incomingAction: KnownAction) => {
 
     const action = incomingAction as KnownAction;
 
     switch (action.type) {
         case REQUEST_PRODUCTS_METADATA:
             return {
-                metaData: null
-            }
+                metaData: null,
+            };
         case RECEIVED_PRODUCTS_METADATA_SUCCESSFULLY:
-            var successAction = action as IReceivedProductsMetaDataSuccessfully;
-            console.log(successAction);
+            const successAction = action as IReceivedProductsMetaDataSuccessfully;
             return {
-                metaData: successAction.payload
+                metaData: successAction.payload,
             };
         case RECEIVED_PRODUCTS_METADATA_UNSUCCESSFULLY:
-            var errorAction = action as IReceivedProductsMetaDataSuccessfully;
+            const errorAction = action as IReceivedProductsMetaDataSuccessfully;
             return {
-                metaData: null
-            }
+                metaData: null,
+            };
     }
 
     return state || unloadedState;
 };
-

@@ -1,17 +1,17 @@
-﻿import * as React from 'react';
+﻿ import * as React from "react";
 
-interface ISearchButtonProps {
+ interface ISearchButtonProps {
     onClick: any;
 }
 
-export default class SearchButton extends React.Component<ISearchButtonProps, {}> {
+ export default class SearchButton extends React.Component<ISearchButtonProps, {}> {
 
     constructor(props: ISearchButtonProps) {
         super(props);
         this.handleClick = this.handleClick.bind(this);
     }
 
-    handleClick() {
+    public handleClick() {
         if (!this.props.onClick) {
             return;
         }

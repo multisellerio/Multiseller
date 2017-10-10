@@ -1,6 +1,6 @@
-﻿import * as React from 'react';
+﻿ import * as React from "react";
 
-export default class SiteBranding extends React.Component<{}, {}> {
+ export default class SiteBranding extends React.Component<{}, {}> {
 
     public render() {
         return <div className="site-branding">

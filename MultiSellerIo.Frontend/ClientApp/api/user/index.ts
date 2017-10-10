@@ -1,23 +1,22 @@
-﻿import { API_URL } from '../';
-import { IRegisterRequest, IUser, ILoginRequest, ILoginResponse } from '../../models/account-models';
+﻿ import { API_URL } from "../";
+ import { ILoginRequest, ILoginResponse, IRegisterRequest, IUser } from "../../models/account-models";
 
-export const UserService = {
+ export const UserService = {
     registerUser: async (request: IRegisterRequest): Promise<IUser> => {
 
         try {
 
-            let response = await fetch(API_URL + 'users/register',
+            const response = await fetch(API_URL + "users/register",
                 {
-                    method: 'post',
+                    body: JSON.stringify(request),
                     headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
                     },
-                    body: JSON.stringify(request)
-
+                    method: "post",
                 });
 
-            let responseData = await response.json();
+            const responseData = await response.json();
 
             if (response.status === 400) {
                 throw new Error(responseData.error);
@@ -33,18 +32,18 @@ export const UserService = {
     login: async (request: ILoginRequest): Promise<ILoginResponse> => {
         try {
 
-            let response = await fetch(API_URL + 'users/login',
+            const response = await fetch(API_URL + "users/login",
                 {
-                    method: 'post',
+                    method: "post",
                     headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
                     },
-                    body: JSON.stringify(request)
+                    body: JSON.stringify(request),
 
                 });
 
-            let responseData = await response.json();
+            const responseData = await response.json();
 
             if (response.status === 400) {
                 throw new Error(responseData.error);
@@ -60,17 +59,17 @@ export const UserService = {
     getCurrentUser: async (token: string): Promise<IUser> => {
         try {
 
-            let response = await fetch(API_URL + 'users',
+            const response = await fetch(API_URL + "users",
                 {
-                    method: 'get',
+                    method: "get",
                     headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization' : 'Bearer ' + token
-                    }
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization : "Bearer " + token,
+                    },
                 });
 
-            let responseData = await response.json();
+            const responseData = await response.json();
 
             if (response.status === 400) {
                 throw new Error(responseData.error);
@@ -81,5 +80,5 @@ export const UserService = {
         } catch (err) {
             throw err;
         }
-    }
+    },
 };

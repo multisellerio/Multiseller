@@ -1,6 +1,6 @@
-﻿import * as React from 'react';
+﻿ import * as React from "react";
 
-export default class MegaMenu extends React.Component<{}, {}> {
+ export default class MegaMenu extends React.Component<{}, {}> {
 
     public render() {
         return <li className="has-megamenu"><a href="#"><span>Mega Menu</span></a>

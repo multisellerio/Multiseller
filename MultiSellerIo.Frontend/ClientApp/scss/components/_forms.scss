@@ -3,9 +3,7 @@
 // --------------------------------------------------
 
 .form-control {
-  padding: 0 18px 3px;
   border: 1px solid darken($border-color, 2%);
-  border-radius: ceil($input-height / 2);
   background-color: $white-color;
   color: $gray-dark;
   font: {
@@ -58,7 +56,6 @@ select.form-control {
   margin-bottom: floor($grid-vertical-step / 1.2); //~20px
   label {
     margin-bottom: 8px;
-    padding-left: 18px;
     font: {
       size: $font-size-xs;
       weight: 500;
@@ -257,7 +254,6 @@ select.form-control.form-control-sm {
 .form-control-feedback {
   padding: {
     top: 2px;
-    left: 18px;
   }
 }
 

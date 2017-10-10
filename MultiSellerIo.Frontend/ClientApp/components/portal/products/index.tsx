@@ -1,14 +1,14 @@
-﻿import * as React from 'React';
-import { Link } from "react-router-dom";
-import { connect } from 'react-redux';
-import { reduxForm, Field, FormProps, FormErrors } from 'redux-form';
+﻿ import * as React from "React";
+ import { connect } from "react-redux";
+ import { Link } from "react-router-dom";
+ import { Field, FormErrors, FormProps, reduxForm } from "redux-form";
 
-export default class ProductsComponent extends React.Component<{}, {}> {
+ export default class ProductsComponent extends React.Component<{}, {}> {
 
     public render() {
         return <div>
             <div className="table-responsive wishlist-table margin-bottom-none">
-                <Link className="btn btn-sm btn-outline-primary" to='/portal/products/add-product'>
+                <Link className="btn btn-sm btn-outline-primary" to="/portal/products/add-product">
                     <i className="icon-plus"></i>
                     &nbsp;New Product
                 </Link>

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MultiSellerIo.Dal.Entity;
@@ -26,7 +27,14 @@ namespace MultiSellerIo.Services.Product
         {
             return await _cacheService.GetFromCacheIfExists("product-categories", async () =>
             {
-                return await _unitOfWork.CategoryRepository.GetAll().Include(category => category.CategoryAttributes)
+                //Load all the categories
+                await _unitOfWork.CategoryRepository.GetAll()
+                    .Include(category => category.CategoryAttributes)
+                    .ThenInclude(categoryAttribute => categoryAttribute.ProductAttribute)
+                    .ToListAsync();
+
+                return await _unitOfWork.CategoryRepository.GetAll()
+                .Where(category => category.ParentCategoryId == null)
                     .ToListAsync();
             });
         }

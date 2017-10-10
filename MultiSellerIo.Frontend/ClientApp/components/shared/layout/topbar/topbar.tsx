@@ -1,6 +1,6 @@
-﻿import * as React from 'react';
+﻿ import * as React from "react";
 
-export default class TopBar extends React.Component<{}, {}> {
+ export default class TopBar extends React.Component<{}, {}> {
 
     public render() {
         return  <div className="topbar">

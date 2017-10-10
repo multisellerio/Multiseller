@@ -1,0 +1,70 @@
+﻿.ant-upload-select-picture-card {
+
+    i {
+        font-size: 28px;
+        color: #999;
+    }
+
+    .ant-upload-text {
+        margin-top: 8px;
+        font-size: 12px;
+        color: #666;
+    }
+
+    > .ant-upload {
+        padding: 68px 0 !important;
+    }
+}
+
+.ant-upload {
+    &.ant-upload-select-picture-card {
+        width: 200px !important;
+        height: 200px !important;
+    }
+}
+
+.ant-upload-list-picture-card {
+    .ant-upload-list-item {
+        width: 200px !important;
+        height: 200px !important;
+    }
+
+
+    .ant-upload-list-item-thumbnail {
+        max-width: 100%;
+        max-height: 100%;
+
+        img {
+            width: auto !important;
+            height: auto !important;
+            max-width: 100%;
+            max-height: 100%;
+            margin: auto;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+    }
+}
+
+.ant-select ul {
+    margin-bottom: 0px;
+    padding-left: 0px;
+}
+
+.ant-modal .ant-select {
+    width: 100%;
+}
+
+.product-form {
+
+    .variant-product-input {
+        width: auto;
+    }
+
+    .image-select-option img {
+        width: auto !important;
+        height: auto !important;
+    }
+}

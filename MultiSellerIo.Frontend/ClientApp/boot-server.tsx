@@ -1,28 +1,30 @@
-import * as React from 'react';
-import { Provider } from 'react-redux';
-import { renderToString } from 'react-dom/server';
-import { StaticRouter } from 'react-router-dom';
-import { replace } from 'react-router-redux';
-import { createMemoryHistory } from 'history';
-import { createServerRenderer, RenderResult } from 'aspnet-prerendering';
-import { routes } from './routes';
-import configureStore from './configureStore';
+import { createServerRenderer, RenderResult } from "aspnet-prerendering";
+import { createMemoryHistory } from "history";
+import * as React from "react";
+import { renderToString } from "react-dom/server";
+import { Provider } from "react-redux";
+import { StaticRouter } from "react-router-dom";
+import { replace } from "react-router-redux";
+import configureStore from "./configureStore";
+import { routes } from "./routes";
+import { LocaleProvider } from 'antd';
+import * as enUS from 'antd/lib/locale-provider/en_US';
 
-export default createServerRenderer(params => {
+export default createServerRenderer((params) => {
     return new Promise<RenderResult>((resolve, reject) => {
 
-        //Ge the token from parameters
-        let token = params.data.token;
+        // Get the token from parameters
+        const token = params.data.token;
 
-        let initialState = {
+        const initialState = {
             account: {
                 isAuthorize: false,
-                token: token,
+                token,
                 isLoading: false,
                 errorMessage: null,
                 user: null,
             },
-            products : null
+            products: null,
         };
 
         // Prepare Redux store with in-memory history, and dispatch a navigation event
@@ -34,8 +36,10 @@ export default createServerRenderer(params => {
         // cause any async tasks (e.g., data access) to begin
         const routerContext: any = {};
         const app = (
-            <Provider store={ store }>
-                <StaticRouter context={ routerContext } location={ params.location.path } children={ routes } />
+            <Provider store={store}>
+                <LocaleProvider locale={enUS}>
+                    <StaticRouter context={routerContext} location={params.location.path} children={routes} />
+                </LocaleProvider>
             </Provider>
         );
         renderToString(app);
@@ -51,7 +55,7 @@ export default createServerRenderer(params => {
         params.domainTasks.then(() => {
             resolve({
                 html: renderToString(app),
-                globals: { initialReduxState: store.getState() }
+                globals: { initialReduxState: store.getState() },
             });
         }, reject); // Also propagate any errors back into the host application
     });

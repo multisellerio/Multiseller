@@ -1,37 +1,36 @@
-﻿import { addTask } from 'domain-task';
-import { Reducer } from 'redux';
-import { push, RouterAction } from 'react-router-redux';
-import { AppThunkAction } from '.././';
-import { IRegisterRequest, ILoginRequest, IUser } from '../../models/account-models';
-import { UserService } from '../../api/user';
-import {
-    IUserRegistered, IUserRegisterRequest, IUserRegistrationFailed,
-    IUserLoginRequest, IUserLoginSuccess, IUserLoginFailed, IUserLogoff,
-    IGetCurrentUserSuccessfully, IGetCurrentUserUnsuccessfully, IRequestCurrentUser,
-    USER_REGISTERED, USER_REGISTRATION_FAILED, REQUEST_USER_REGISTER,
-    USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGIN_FAILED, USER_LOGOFF,
-    REQUEST_CURRENT_USER, GET_CURRENT_USER_SUCCESSFULLY, GET_CURRENT_USER_UNSUCCESSFULLY
-} from '../../types/actions/account-actions';
-import { Cookies } from '../../util/cookies';
+﻿ import { addTask } from "domain-task";
+ import { push, RouterAction } from "react-router-redux";
+ import { Reducer } from "redux";
+ import { UserService } from "../../api/user";
+ import { ILoginRequest, IRegisterRequest, IUser } from "../../models/account-models";
+ import {
+    GET_CURRENT_USER_SUCCESSFULLY, GET_CURRENT_USER_UNSUCCESSFULLY, IGetCurrentUserSuccessfully,
+    IGetCurrentUserUnsuccessfully, IRequestCurrentUser, IUserLoginFailed, IUserLoginRequest,
+    IUserLoginSuccess, IUserLogoff, IUserRegistered,
+    IUserRegisterRequest, IUserRegistrationFailed, REQUEST_CURRENT_USER,
+    REQUEST_USER_REGISTER, USER_LOGIN_FAILED, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,
+    USER_LOGOFF, USER_REGISTERED, USER_REGISTRATION_FAILED,
+} from "../../types/actions/account-actions";
+ import { Cookies } from "../../util/cookies";
+ import { AppThunkAction } from ".././";
 
 /*************************
  *** STORE
  *************************/
 
-export interface IAccountState {
-    isLoading: boolean,
-    errorMessage: string,
-    isAuthorize: boolean,
-    token: string,
-    user: IUser,
+ export interface IAccountState {
+    isLoading: boolean;
+    errorMessage: string;
+    isAuthorize: boolean;
+    token: string;
+    user: IUser;
 }
-
 
 /*************************
  *** ACTION CREATORS
  *************************/
 
-type KnownAction = IUserRegisterRequest |
+ type KnownAction = IUserRegisterRequest |
                    IUserRegistered |
                    IUserRegistrationFailed |
                    IUserLoginRequest |
@@ -43,15 +42,15 @@ type KnownAction = IUserRegisterRequest |
                    IUserLogoff |
                    RouterAction;
 
-export const actionCreator = {
+ export const actionCreator = {
     userRegister: (registerRequest: IRegisterRequest): AppThunkAction<KnownAction> => async (dispatch, getState) => {
 
         dispatch({ type: REQUEST_USER_REGISTER, payload: registerRequest });
 
         try {
-            let responseUser = await UserService.registerUser(registerRequest);
+            const responseUser = await UserService.registerUser(registerRequest);
             dispatch({ type: USER_REGISTERED, payload: responseUser });
-            dispatch(push('/login'));
+            dispatch(push("/login"));
 
         } catch (err) {
             dispatch({ type: USER_REGISTRATION_FAILED, payload: err.message });
@@ -64,10 +63,10 @@ export const actionCreator = {
 
         try {
 
-            let loginResponse = await UserService.login(loginRequest);
+            const loginResponse = await UserService.login(loginRequest);
             dispatch({ type: USER_LOGIN_SUCCESS, payload: loginResponse });
-            Cookies.write('ms-token', loginResponse.token);
-            dispatch(push('/'));
+            Cookies.write("ms-token", loginResponse.token);
+            dispatch(push("/"));
 
         } catch (err) {
             dispatch({ type: USER_LOGIN_FAILED, payload: err.message });
@@ -75,20 +74,20 @@ export const actionCreator = {
     },
     getCurrentUser: (): AppThunkAction<KnownAction> => async (dispatch, getState) => {
 
-        var state = getState();
+        const state = getState();
 
         if (state.account.user != null) {
             return;
         }
 
-        let getUserTask = async () => {
+        const getUserTask = async () => {
             try {
-                let currentUser = await UserService.getCurrentUser(state.account.token);
+                const currentUser = await UserService.getCurrentUser(state.account.token);
                 dispatch({ type: GET_CURRENT_USER_SUCCESSFULLY, payload: currentUser });
             } catch (err) {
                 dispatch({ type: GET_CURRENT_USER_UNSUCCESSFULLY });
             }
-        }
+        };
 
         addTask(getUserTask());
 
@@ -97,19 +96,19 @@ export const actionCreator = {
     },
     logOff: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
         dispatch({ type: USER_LOGOFF });
-        Cookies.write('ms-token', null);
-        dispatch(push('/'));
-    }
-}
+        Cookies.write("ms-token", null);
+        dispatch(push("/"));
+    },
+};
 
 /*************************
  *** REDUCERS
  *************************/
 
-const unloadedState: IAccountState =
+ const unloadedState: IAccountState =
     { isLoading: false, errorMessage: null, token: null, user: null, isAuthorize: false };
 
-export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAction: KnownAction) => {
+ export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAction: KnownAction) => {
 
     const action = incomingAction as KnownAction;
 
@@ -131,14 +130,14 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAc
                 isAuthorize: false,
             };
         case USER_REGISTRATION_FAILED:
-            let userRegistrationFailedAction = action as IUserRegistrationFailed;
+            const userRegistrationFailedAction = action as IUserRegistrationFailed;
             return {
                 isLoading: false,
                 errorMessage: userRegistrationFailedAction.payload,
                 token: null,
                 user: null,
                 isAuthorize: false,
-            }
+            };
         case USER_LOGIN_REQUEST:
             return {
                 isLoading: true,
@@ -146,25 +145,25 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAc
                 token: null,
                 user: null,
                 isAuthorize: false,
-            }
+            };
         case USER_LOGIN_SUCCESS:
-            let userLoginSuccessAction = action as IUserLoginSuccess;
+            const userLoginSuccessAction = action as IUserLoginSuccess;
             return {
                 isLoading: false,
                 errorMessage: null,
                 token: userLoginSuccessAction.payload.token,
                 user: userLoginSuccessAction.payload.user,
                 isAuthorize: true,
-            }
+            };
         case USER_LOGIN_FAILED:
-            let userLoginFailedAction = action as IUserLoginFailed;
+            const userLoginFailedAction = action as IUserLoginFailed;
             return {
                 isLoading: false,
                 errorMessage: userLoginFailedAction.payload,
                 token: null,
                 user: null,
                 isAuthorize: false,
-            }
+            };
         case REQUEST_CURRENT_USER:
             return {
                 isLoading: true,
@@ -172,24 +171,24 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAc
                 token: state.token,
                 user: null,
                 isAuthorize: false,
-            }
+            };
         case GET_CURRENT_USER_SUCCESSFULLY:
-            let currentUserSuccessfullyAction = action as IGetCurrentUserSuccessfully;
+            const currentUserSuccessfullyAction = action as IGetCurrentUserSuccessfully;
             return {
                 isLoading: false,
                 errorMessage: null,
                 token: state.token,
                 user: currentUserSuccessfullyAction.payload,
                 isAuthorize: true,
-            }
+            };
         case GET_CURRENT_USER_UNSUCCESSFULLY:
             return {
-                isLoading: true,
+                isLoading: false,
                 errorMessage: null,
                 token: null,
                 user: null,
                 isAuthorize: false,
-            }
+            };
         case USER_LOGOFF:
             return {
                 isLoading: false,
@@ -197,9 +196,8 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAc
                 token: null,
                 user: null,
                 isAuthorize: false,
-            }
+            };
     }
 
     return state || unloadedState;
 };
-

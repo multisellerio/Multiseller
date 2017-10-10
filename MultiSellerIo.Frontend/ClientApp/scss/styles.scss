@@ -1,11 +1,4 @@
-/*
- * M-Store | Modern E-Commerce Template
- * Copyright 2016 rokaux
- * Theme Styles
- */
-
-//Import Google Fonts (Roboto)
-@import url('https://fonts.googleapis.com/css?family=Lato:400,500,700,900');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
 // Helpers: Variables, Mixins and Placeholders
 @import 'helpers/variables';
@@ -38,7 +31,6 @@
 @import 'components/countdown';
 @import 'components/widgets';
 @import 'components/banners';
-@import 'components/image-uploader.scss';
 
 // Layout
 @import 'layout/section';
@@ -54,3 +46,4 @@
 @import 'modules/account';
 @import 'modules/shop';
 @import 'modules/blog';
+@import 'modules/add-product';
