@@ -1,12 +1,14 @@
 ﻿ export interface IProductAttributeValue {
     id: number;
     value: string;
+    meta: any;
 }
 
  export interface IProductAttribute {
     id: number;
     name: string;
     description: string;
+    meta: any;
     productAttributeValues: IProductAttributeValue[];
 }
 
@@ -36,4 +38,43 @@
  export interface IProductMetaData {
     categories: IProductCategory[];
     productAttributes: IProductAttribute[];
-}
+ }
+
+ export interface IProductImage {
+     id: number;
+     name: string;
+ }
+
+ export interface IProductVariantSpecificationAttributeMapping {
+     id: number;
+     productVariantId: number;
+     productAttributeValues: number[];
+ }
+
+ export interface IProductVariant {
+     id: number;
+     price: number;
+     compareAtPrice: number;
+     quantity: number;
+     sku: string;
+     barcode: string;
+     defaultImage: string;
+     productVariantSpecificationAttributeMappings: IProductVariantSpecificationAttributeMapping[];
+ }
+
+ export interface IProductAttributeMapping {
+     id: number;
+     productAttributeId: number;
+ }
+
+ export interface IProduct {
+     id: number;
+     categoryId: number;
+     title: string;
+     description: string;
+     vendor: string;
+     images: IProductImage[];
+     productVariants: IProductVariant[];
+ }
+
+

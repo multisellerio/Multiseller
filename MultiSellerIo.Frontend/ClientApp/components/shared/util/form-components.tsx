@@ -1,6 +1,7 @@
-﻿import { Cascader, Select, InputNumber, Input } from "antd";
-import * as React from "React";
-import { CirclePicker } from "react-color";
+﻿import * as React from "React";
+import { WrappedFieldProps, Field, GenericField, GenericFieldArray, FieldArray } from "redux-form";
+import { Cascader, Select, InputNumber, Input } from "antd";
+
 const Option = Select.Option;
 
 export interface ISelectOption {
@@ -10,7 +11,14 @@ export interface ISelectOption {
 
 //INPUT COMPONENT
 
-export const InputComponent = (field) => {
+type TextInputProps = {
+    hideLabel: boolean;
+    label: string;
+    col: string;
+}  & WrappedFieldProps;
+
+export const InputComponent: React.StatelessComponent<TextInputProps> = (field: TextInputProps) => {
+
     const { input, label, col, hideLabel } = field;
 
     if (hideLabel) {
@@ -30,7 +38,15 @@ export const InputComponent = (field) => {
 };
 
 //INPUT NUMBER COMPONENT
-export const InputNumberComponent = (field) => {
+
+type InputNumberProps = {
+    hideLabel: boolean;
+    label: string;
+    col: string;
+} & WrappedFieldProps;
+
+export const InputNumberComponent: React.StatelessComponent<InputNumberProps> = (field: TextInputProps) => {
+
     const { input, label, col, hideLabel } = field;
 
     if (hideLabel) {
@@ -50,7 +66,15 @@ export const InputNumberComponent = (field) => {
 };
 
 //TEXTAREA COMPONENT
-export const TextAreaComponent = (field) => {
+
+type TextAreaProps = {
+    hideLabel: boolean;
+    label: string;
+    col: string;
+} & WrappedFieldProps;
+
+export const TextAreaComponent: React.StatelessComponent<TextAreaProps> = (field: TextAreaProps) => {
+
     const { input, label, col } = field;
     return <div className={col}>
         <div className={field.meta.touched && field.meta.error ? "form-group has-error has-danger" : "form-group"}>
@@ -63,8 +87,17 @@ export const TextAreaComponent = (field) => {
 
 //SELECT COMPONENT
 
-export const SelectComponent = (field) => {
+type SelectProps = {
+    hideLabel: boolean;
+    label: string;
+    col: string;
+    options: any;
+} & WrappedFieldProps;
+
+export const SelectComponent: React.StatelessComponent<SelectProps> = (field: SelectProps) => {
+
     const { input, label, options, col } = field;
+
     return <div className={col}>
         <div className={field.meta.touched && field.meta.error ? "form-group has-danger" : "form-group"}>
             <label>{label}</label>
@@ -82,8 +115,18 @@ export const SelectComponent = (field) => {
 };
 
 //SEARCHABLE COMPONENT
-export const SelectCascader = (field) => {
+
+type SelectCascaderProps = {
+    hideLabel: boolean;
+    label: string;
+    col: string;
+    options: any;
+} & WrappedFieldProps;
+
+export const SelectCascader: React.StatelessComponent<SelectCascaderProps> = (field: SelectCascaderProps) => {
+
     const { input, label, options, col } = field;
+
     return <div className={col}>
         <div className={field.meta.touched && field.meta.error ? "form-group has-danger has-error" : "form-group"}>
             <label>{label}</label>
@@ -94,9 +137,21 @@ export const SelectCascader = (field) => {
 };
 
 // ANTD SELECT COMPONENT
-export const AntdSelectComponent = (field) => {
 
-    const { input, label, options, col, mode, hideLabel, componentStyle, placeholder } = field;
+type AntdSelectProps = {
+    hideLabel: boolean;
+    label: string;
+    col: string;
+    options: any;
+    mode: "default" | "multiple" | "tags" | "combobox" ;
+    componentStyle: React.CSSProperties;
+    placeholder: string;
+    filterOption: any;
+} & WrappedFieldProps;
+
+export const AntdSelectComponent : React.StatelessComponent<AntdSelectProps> = (field: AntdSelectProps) => {
+
+    const { input, label, options, col, mode, hideLabel, componentStyle, placeholder, filterOption } = field;
 
     let value = input.value;
 
@@ -109,11 +164,12 @@ export const AntdSelectComponent = (field) => {
         return <div className={field.meta.touched && field.meta.error ? "has-error has-danger" : ""}>
             <Select placeholder={placeholder} mode={mode}
                 style={componentStyle}
+                filterOption={filterOption}
                 value={value}
-                onChange={(value) => { input.onChange(value); }}>
+                onChange={(value) => { mode === null ? input.onChange([value]) : input.onChange(value); }}>
                 {
                     options.map((option, index) => {
-                        return <Option value={option.value}>{option.name}</Option>;
+                        return <Option title={option.name} value={option.value}>{option.child? option.child: option.name}</Option>;
                     })
                 }
             </Select>
@@ -125,10 +181,10 @@ export const AntdSelectComponent = (field) => {
     return <div className={col}>
         <div className={field.meta.touched && field.meta.error ? "form-group has-danger has-error" : "form-group"}>
             <label>{label}</label>
-            <Select placeholder={placeholder} style={componentStyle} mode={mode} value={value} onChange={(value) => { input.onChange(value); }}>
+            <Select placeholder={placeholder} style={componentStyle} mode={mode} value={value} filterOption={filterOption} onChange={(value) => { input.onChange(value); }}>
                 {
                     options.map((option, index) => {
-                        return <Option value={option.value}>{option.name}</Option>;
+                        return <Option title={option.name} value={option.value}>{option.child ? option.child : option.name}</Option>;
                     })
                 }
             </Select>
@@ -137,14 +193,7 @@ export const AntdSelectComponent = (field) => {
     </div>;
 };
 
-//COLOR CIRCLE COMPONENT
-export const ColorCircleComponent = (field) => {
-    const { input, label, col, mode } = field;
-    return <div className={col}>
-        <div className={field.meta.touched && field.meta.error ? "form-group has-danger has-error" : "form-group"}>
-            <label>{label}</label>
-            <CirclePicker width="100%" />
-            {field.meta.touched && field.meta.error && <span className="form-control-feedback">{field.meta.error}</span>}
-        </div>
-    </div>;
-};
+const InputField = Field as new () => GenericField<any>;
+const InputArrayField = FieldArray as new () => any;
+
+export { InputField as Field, InputArrayField as FieldArray }

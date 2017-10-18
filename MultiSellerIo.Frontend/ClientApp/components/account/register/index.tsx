@@ -1,12 +1,12 @@
 ﻿ import * as React from "React";
  import { connect } from "react-redux";
- import { Field, FormErrors, FormProps, reduxForm } from "redux-form";
+ import { FormErrors, InjectedFormProps, reduxForm } from "redux-form";
 
  import { ApplicationState } from "../../../store";
  import * as AccountState from "../../../store/account";
 
  import { Alert } from "../../shared/util/alert";
- import { InputComponent, SelectComponent } from "../../shared/util/form-components";
+ import { InputComponent, SelectComponent, Field } from "../../shared/util/form-components";
 
  interface IRegisterFormData {
     firstName: string;
@@ -18,9 +18,7 @@
     email: string;
 }
 
- interface IRegisterFormProps extends FormProps<IRegisterFormData, {}, {}> {
-    onSubmit: any;
-    handleSubmit?: any;
+ interface IRegisterFormProps extends InjectedFormProps<IRegisterFormData, {}> {
 }
 
  const ErrorMessageComponent = (error) => {
@@ -33,11 +31,8 @@
 
 };
 
- @reduxForm<IRegisterFormData, {}, {}>({
-    form: "register",
-    validate: RegisterForm.validate,
-})
-class RegisterForm extends React.Component<IRegisterFormProps, {}> {
+
+class Form extends React.Component<IRegisterFormProps, {}> {
 
     public genderOptions = [
         { name: "Male", value: 1 },
@@ -100,7 +95,12 @@ class RegisterForm extends React.Component<IRegisterFormProps, {}> {
         </form>;
     }
 
-}
+ }
+
+ const RegisterForm = reduxForm<IRegisterFormData, {}>({
+     form: "register",
+     validate: Form.validate,
+ })(Form);
 
  type RegisterFormProps =
     AccountState.IAccountState

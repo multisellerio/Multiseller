@@ -1,7 +1,6 @@
 ﻿ import * as React from "React";
  import { connect } from "react-redux";
  import { Link } from "react-router-dom";
- import { Field, FormErrors, FormProps, reduxForm } from "redux-form";
 
  export default class ProductsComponent extends React.Component<{}, {}> {
 

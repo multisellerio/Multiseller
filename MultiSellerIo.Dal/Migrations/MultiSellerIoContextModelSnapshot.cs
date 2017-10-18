@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using MultiSellerIo.Core.Enum;
 using MultiSellerIo.Dal;
-using MultiSellerIo.Dal.Entity;
 using System;
 
 namespace MultiSellerIo.Dal.Migrations
@@ -198,6 +197,8 @@ namespace MultiSellerIo.Dal.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<string>("Meta");
+
                     b.Property<string>("Name");
 
                     b.Property<DateTimeOffset>("Updated");
@@ -207,34 +208,14 @@ namespace MultiSellerIo.Dal.Migrations
                     b.ToTable("ProductAttributes");
                 });
 
-            modelBuilder.Entity("MultiSellerIo.Dal.Entity.ProductAttributeMapping", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTimeOffset>("Created");
-
-                    b.Property<long>("ProductAttributeId");
-
-                    b.Property<long>("ProductId");
-
-                    b.Property<DateTimeOffset>("Updated");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductAttributeId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductAttributeMapping");
-                });
-
             modelBuilder.Entity("MultiSellerIo.Dal.Entity.ProductAttributeValue", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTimeOffset>("Created");
+
+                    b.Property<string>("Meta");
 
                     b.Property<long>("ProductAttributeId");
 
@@ -479,19 +460,6 @@ namespace MultiSellerIo.Dal.Migrations
                     b.HasOne("MultiSellerIo.Dal.Entity.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("MultiSellerIo.Dal.Entity.ProductAttributeMapping", b =>
-                {
-                    b.HasOne("MultiSellerIo.Dal.Entity.ProductAttribute", "ProductAttribute")
-                        .WithMany()
-                        .HasForeignKey("ProductAttributeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("MultiSellerIo.Dal.Entity.Product", "Product")
-                        .WithMany("ProductAttributeMappings")
-                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

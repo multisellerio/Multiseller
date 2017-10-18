@@ -22,9 +22,14 @@ namespace MultiSellerIo.Api.Util.Middlewares
             {
                 await next(context);
             }
-            catch (Exception ex)
+            catch (ServiceException ex)
             {
                 await HandleExceptionAsync(context, ex);
+            }
+            catch (Exception ex)
+            {
+               //Todo log the exception
+                await HandleExceptionAsync(context, new Exception("Internal server error, Please report the issue to us"));
             }
         }
 

@@ -1,5 +1,8 @@
-﻿using MultiSellerIo.Api.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using MultiSellerIo.Api.Models;
 using MultiSellerIo.Dal.Entity;
+using Newtonsoft.Json;
 
 namespace MultiSellerIo.Api.Util.Mapper
 {
@@ -9,14 +12,59 @@ namespace MultiSellerIo.Api.Util.Mapper
         {
             AutoMapper.Mapper.Initialize(config =>
             {
-                config.CreateMap<ProductAttributeValue, ProductAttributeValueBindingModel>();
-                config.CreateMap<ProductAttribute, ProductAttributeBindingModel>();
+                config.CreateMap<ProductAttributeValue, ProductAttributeValueBindingModel>()
+                    .ForMember(member => member.Meta,
+                        map => map.MapFrom(src => !string.IsNullOrEmpty(src.Meta) ? JsonConvert.DeserializeObject(src.Meta) : null));
+                config.CreateMap<ProductAttribute, ProductAttributeBindingModel>()
+                    .ForMember(member => member.Meta,
+                        map => map.MapFrom(src => !string.IsNullOrEmpty(src.Meta) ? JsonConvert.DeserializeObject(src.Meta) : null));
                 config.CreateMap<CategoryAttribute, CategoryAttributeBindingModel>();
                 config.CreateMap<Category, CategoryBindingModel>();
+                config.CreateMap<CategoryBindingModel, Category>();
                 config.CreateMap<User, UserResponseBindingModel>();
-
                 config.CreateMap<ProductAttributeValueBindingModel, ProductAttributeValue>();
                 config.CreateMap<ProductAttributeBindingModel, ProductAttribute>();
+                config.CreateMap<ProductImageBindingModel, ProductImage>();
+                config.CreateMap<ProductImage, ProductImageBindingModel>();
+                config.CreateMap<ProductVariant, ProductVariantBindingModel>()
+                    .ForMember(dest => dest.ProductVariantSpecificationAttributeMappings, option => option.Ignore())
+                    .AfterMap((src, dest) =>
+                    {
+                        if (src.ProductVariantSpecificationAttributeMappings == null)
+                        {
+                            return;
+                        }
+
+                        dest.ProductVariantSpecificationAttributeMappings = src
+                            .ProductVariantSpecificationAttributeMappings
+                            .GroupBy(attribute => attribute.ProductVariantId)
+                            .Select(groupAttribute => new ProductVariantSpecificationAttributeMappingBindingModel()
+                            {
+                                ProductVariantId = groupAttribute.Key,
+                                ProductAttributeValues = groupAttribute.Select(attribute => attribute.ProductAttributeValueId).ToArray()
+                            }).ToList();
+                    });
+                config.CreateMap<ProductVariantBindingModel, ProductVariant>()
+                    .ForMember(dest => dest.ProductVariantSpecificationAttributeMappings, option => option.Ignore())
+                    .AfterMap((src, dest) =>
+                    {
+                        if (src.ProductVariantSpecificationAttributeMappings == null)
+                        {
+                            return;
+                        }
+
+                        dest.ProductVariantSpecificationAttributeMappings = src
+                            .ProductVariantSpecificationAttributeMappings.SelectMany(attribute => attribute
+                                .ProductAttributeValues.Select(
+                                    value => new ProductVariantSpecificationAttributeMapping()
+                                    {
+                                        ProductVariantId = attribute.ProductVariantId,
+                                        ProductAttributeValueId = value
+                                    }).ToList()).ToList();
+                    });
+
+                config.CreateMap<ProductBindingModel, Product>();
+                config.CreateMap<Product, ProductBindingModel>();
 
             });
         }

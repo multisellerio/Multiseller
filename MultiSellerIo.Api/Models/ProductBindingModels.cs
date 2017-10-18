@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using MultiSellerIo.Core.Enum;
 
 namespace MultiSellerIo.Api.Models
@@ -8,6 +10,7 @@ namespace MultiSellerIo.Api.Models
         public long Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public object Meta { get; set; }
         public IList<ProductAttributeValueBindingModel> ProductAttributeValues { get; set; }
     }
 
@@ -15,6 +18,7 @@ namespace MultiSellerIo.Api.Models
     {
         public long Id { get; set; }
         public string Value { get; set; }
+        public object Meta { get; set; }
     }
 
     public class CategoryBindingModel
@@ -42,6 +46,51 @@ namespace MultiSellerIo.Api.Models
     {
         public List<CategoryBindingModel> Categories { get; set; }
         public List<ProductAttributeBindingModel> ProductAttributes { get; set; }
+    }
+
+    public class ProductVariantSpecificationAttributeMappingBindingModel
+    {
+        public long Id { get; set; }
+        public long ProductVariantId { get; set; }
+        public long[] ProductAttributeValues { get; set; }
+    }
+
+    public class ProductImageBindingModel
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class ProductVariantBindingModel
+    {
+        public long Id { get; set; }
+        public decimal Price { get; set; }
+        public decimal CompareAtPrice { get; set; }
+        public decimal Quantity { get; set; }
+        public string Sku { get; set; }
+        public string Barcode { get; set; }
+        public string DefaultImage { get; set; }
+        public virtual List<ProductVariantSpecificationAttributeMappingBindingModel> ProductVariantSpecificationAttributeMappings { get; set; }
+    }
+
+    public class ProductAttributeMappingBindingModel
+    {
+        public long Id { get; set; }
+        public long ProductAttributeId { get; set; }
+    }
+
+    public class ProductBindingModel
+    {
+        public long Id { get; set; }
+        public long CategoryId { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string Vendor { get; set; }
+        public virtual List<ProductImageBindingModel> Images { get; set; }
+
+        //Variants
+        public virtual List<ProductVariantBindingModel> ProductVariants { get; set; }
+
     }
 
 }

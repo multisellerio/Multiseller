@@ -18,6 +18,7 @@ using MultiSellerIo.Services.Cache;
 using MultiSellerIo.Services.Images;
 using MultiSellerIo.Services.Product;
 using MultiSellerIo.Services.User;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace MultiSellerIo.Api
 {
@@ -71,6 +72,7 @@ namespace MultiSellerIo.Api
 
             services.AddScoped<IProductAttributeService, ProductAttributeService>();
             services.AddScoped<IProductCategoryService, ProductCategoryService>();
+            services.AddScoped<IProductService, ProductService>();
 
             var authorizationConfiguration = Configuration.GetSection("Token");
 
@@ -90,6 +92,11 @@ namespace MultiSellerIo.Api
 
             // Add framework services.
             services.AddMvc();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Multiseller.io API Documentation", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -110,6 +117,8 @@ namespace MultiSellerIo.Api
             //Intial the automapper configurations
             MapperConfig.Initialize();
 
+            app.UseStaticFiles();
+
             app.UseCors(builder =>
                 builder.WithOrigins("http://localhost:61334")
                 .AllowAnyHeader()
@@ -119,6 +128,17 @@ namespace MultiSellerIo.Api
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
             app.UseMvc();
+
+            app.UseSwagger(c =>
+            {
+                c.RouteTemplate = "docs/{documentName}/docs.json";
+            });
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/docs/v1/docs.json", "Multiseller.io v1 api");
+                c.RoutePrefix = "docs";
+                c.InjectStylesheet("/css/doc.css");
+            });
         }
     }
 }

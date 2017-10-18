@@ -1,25 +1,25 @@
 ﻿import * as React from "React";
-import { Field, FormErrors, FormProps, reduxForm, FieldArray } from "redux-form";
+import { FormErrors, reduxForm, InjectedFormProps, arrayPush, arrayRemoveAll, GenericFieldArray } from "redux-form";
 
-import { IProductCategory, IProductMetaData, ICategoryAttribute,
+import {
+    IProductCategory, IProductMetaData, ICategoryAttribute,
     CategoryAttributeType, IProductAttributeValue
 } from "../../../models/product-models";
 
-import { Button, Icon, Modal, Upload, Avatar, Popconfirm } from "antd";
-import { Alert } from "../../shared/util/alert";
+import { Button, Icon, Modal, Upload, Avatar, Popconfirm, Badge, Alert } from "antd";
 import {
     AntdSelectComponent, InputComponent,
-    SelectCascader, TextAreaComponent, ISelectOption, InputNumberComponent
+    SelectCascader, TextAreaComponent, InputNumberComponent, Field, FieldArray
 } from "../../shared/util/form-components";
 
 import * as Api from "../../../api";
 
 import * as _ from "lodash";
 
-interface IProductFormData {
+export interface IProductFormData {
     title: string;
     description: string;
-    category: number;
+    category: number[];
     vendor: string;
     images: IProductImage[];
     productVariants: IProductVairation[];
@@ -30,11 +30,18 @@ interface IProductImage {
     url: string,
 }
 
-interface IProductFormProps extends FormProps<IProductFormData, {}, {}> {
-    onSubmit: any;
-    handleSubmit?: any;
+interface IProductFormProps extends InjectedFormProps<IProductFormData, {}> {
+}
+
+interface IAdditionalFormProps {
     metaData: IProductMetaData;
-    change: any,
+    dispatch: any;
+}
+
+interface IReduxFormProps {
+    change: any;
+    handleSubmit: any;
+    submitting: boolean;
 }
 
 interface IProductVairation {
@@ -51,11 +58,10 @@ interface IProductVariationAttribute {
     attributeId: number,
     name: string,
     isGroup: boolean,
-    values: number[]
+    values: number[],
 }
 
-
-export interface IProductFormState {
+interface IProductFormState {
     files: any;
     previewVisible: boolean;
     previewImage: string;
@@ -63,21 +69,38 @@ export interface IProductFormState {
     productVariations: IProductVairation[],
 }
 
-const ErrorMessageComponent = (error) => {
-    const { message } = error;
+//Todo change the types
 
-    if (!message)
-        return null;
+interface IProductVariantFieldArray  {
+    files: any;
+    change: any;
+    variantCategories: any;
+    fields: any;
+    meta: any;
+}
 
-    return <Alert message={message} title="Error" type="alert-danger" />;
+//Todo change the types
 
-};
+interface IFieldImageArraryProps {
+    fields: any;
+    meta: any;
+    change: any;
+}
 
-const renderProductVariant = (fieldArray) => {
+const renderProductVariant: React.StatelessComponent<IProductVariantFieldArray> = (fieldArray: IProductVariantFieldArray) => {
 
-    const { fields, variantCategories, change, images } = fieldArray;
+    const { fields, variantCategories, change, files } = fieldArray;
 
     return <div>
+
+        {(fieldArray.meta.submitFailed && fieldArray.meta.error) && <div className="margin-bottom-1x">
+            <Alert
+                message="Error"
+                description={fieldArray.meta.error}
+                type="error"
+                showIcon
+            />
+        </div>}
 
         <div className="margin-bottom-1x">
             <Button onClick={() => fields.push({ price: 0, quantity: 0 })}><Icon type="plus" />Add a variant product</Button>
@@ -106,12 +129,33 @@ const renderProductVariant = (fieldArray) => {
 
                     const attributes = _.map(variantCategories, ((categoryAttribute: ICategoryAttribute, index: number) => {
 
-                        const options: ISelectOption[] = _.map(categoryAttribute.productAttribute.productAttributeValues, (productAttributeValue: IProductAttributeValue) => {
-                            return {
-                                name: productAttributeValue.value,
-                                value: productAttributeValue.id
-                            }
-                        });
+                        let options;
+
+                        if (categoryAttribute.productAttribute.meta != null &&
+                            categoryAttribute.productAttribute.meta.component === 'color') {
+
+                            let valueName = categoryAttribute.productAttribute.meta.valueName;
+
+                            options = _.map(categoryAttribute.productAttribute.productAttributeValues,
+                                (productAttributeValue: IProductAttributeValue) => {
+                                    let color = productAttributeValue.meta[valueName];
+                                    let value = productAttributeValue.value;
+                                    return {
+                                        name: value,
+                                        child: <div className="select-color-option"><Badge dot={true} style={{ backgroundColor: color, boxShadow: `${color} 0px 0px 0px 14px inset` }}></Badge><span className="color-name">{value}</span></div>,
+                                        value: productAttributeValue.id
+                                    }
+                                });
+
+                        } else {
+
+                            options = _.map(categoryAttribute.productAttribute.productAttributeValues, (productAttributeValue: IProductAttributeValue) => {
+                                return {
+                                    name: productAttributeValue.value,
+                                    value: productAttributeValue.id
+                                }
+                            });
+                        }
 
                         const labelName = `${categoryAttribute.productAttribute.name}${categoryAttribute.isGroup ? ' (S)' : ''}`;
 
@@ -125,6 +169,9 @@ const renderProductVariant = (fieldArray) => {
                             <Field component="input" type="hidden" name={`${variant}.attributes[${index}].isGroup`} value={categoryAttribute.isGroup} />
                             <Field
                                 component={AntdSelectComponent}
+                                filterOption={(value, option) => {
+                                    return option.props.title && option.props.title.toLowerCase().includes(value.toLowerCase());
+                                }}
                                 hideLabel={true}
                                 placeholder={`Select ${labelName}`}
                                 name={`${variant}.attributes[${index}].values`}
@@ -135,15 +182,20 @@ const renderProductVariant = (fieldArray) => {
                         </td>;
                     }));
 
-                    const imageOptions = _.map(images,
+                    const imageOptions = _.filter(_.map(files,
                         (image) => {
+
+                            if (image.response == null) {
+                                return null;
+                            }
+
                             let fileName = image.response.fileList[0];
                             let imageUrl = Api.getImageAssets(fileName, 200, 200);
                             return {
                                 value: fileName,
                                 name: <Avatar className="image-select-option" src={imageUrl}></Avatar>
                             }
-                        });
+                        }), (option) => option != null);
 
                     return <tr key={index}>
                         <td>
@@ -160,7 +212,7 @@ const renderProductVariant = (fieldArray) => {
                             <Field style={{ width: '100%' }} precision={2} name={`${variant}.price`} min={0}
                                 onFocus={(event) => event.target.select()}
                                 component={InputNumberComponent}
-                                formatter={value => { return `Rs. ${value && typeof value.replace === "function" ? value.replace(/\Rs.\s?|(,*)/g, '') : '0'}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }}
+                                formatter={value => { return `Rs. ${value && typeof value.replace === "function" ? value.replace(/\Rs.\s?|(,*)/g, '') : value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }}
                                 hideLabel={true} />
                         </td>
                         <td>
@@ -178,13 +230,43 @@ const renderProductVariant = (fieldArray) => {
 
 }
 
-@reduxForm<IProductFormData, {}, {}>({
-    form: "product-form",
-    validate: ProductForm.validate,
-})
-export class ProductForm extends React.Component<IProductFormProps, IProductFormState> {
+const renderImages: React.StatelessComponent<IFieldImageArraryProps> = (fieldArray: IFieldImageArraryProps) => {
 
-    constructor(props: IProductFormProps) {
+    const { fields, change } = fieldArray;
+
+    return <div>
+
+        {(fieldArray.meta.submitFailed && fieldArray.meta.error) &&
+            <div className="margin-bottom-1x">
+                <Alert
+                    message="Error"
+                    description={fieldArray.meta.error}
+                    type="error"
+                    showIcon />
+            </div>
+        }
+
+        {
+            fields.map((image, index) => {
+
+                change(`images[${index}].id`, image.id);
+                change(`images[${index}].name`, image.name);
+
+                return <div>
+                    <Field component="input" type="hidden" name={`images[${index}].id`} value={image.id} />
+                    <Field component="input" type="hidden" name={`images[${index}].name`} value={image.name} />
+                </div>;
+
+            })
+        }
+
+    </div>;
+
+}
+
+class ProductForm extends React.Component<IProductFormProps & IAdditionalFormProps, IProductFormState> {
+
+    constructor(props: IProductFormProps & IAdditionalFormProps) {
         super(props);
         this.state = {
             files: [],
@@ -202,7 +284,7 @@ export class ProductForm extends React.Component<IProductFormProps, IProductForm
 
     public static validate(values: IProductFormData) {
 
-        const errors: FormErrors<IProductFormProps> = {};
+        const errors: FormErrors<IProductFormData, string> = {};
 
         if (!values.category) {
             errors.category = "Category is required";
@@ -216,13 +298,14 @@ export class ProductForm extends React.Component<IProductFormProps, IProductForm
             errors.description = "Description is required";
         }
 
-        errors.productVariants = [];
 
-        console.log(values.productVariants);
+        if (values.productVariants != null && values.productVariants.length > 0) {
 
-        if (values.productVariants != null) {
+            errors.productVariants = [];
 
-            values.productVariants.forEach((productVariant: IProductVairation, index: number) => {
+            let productVariationErrors = [];
+
+            values.productVariants.forEach((productVariant: IProductVairation) => {
 
                 let productVariantError = {
                     price: null,
@@ -256,10 +339,19 @@ export class ProductForm extends React.Component<IProductFormProps, IProductForm
 
                 }
 
-                errors.productVariants.push(productVariantError);
+                productVariationErrors.push(productVariantError);
 
             });
 
+            errors.productVariants = productVariationErrors;
+
+        } else {
+            errors.productVariants = { _error: "At least one variant must be entered" }
+        }
+
+        if (values.images == null || values.images.length === 0) {
+
+            errors.images = { _error: "At least one image must be entered" }
         }
 
         return errors;
@@ -282,9 +374,21 @@ export class ProductForm extends React.Component<IProductFormProps, IProductForm
 
         let file = response.file;
         file.id = 0;
+
         this.setState({
             files: response.fileList,
         });
+
+        this.props.dispatch(arrayRemoveAll('product-form', 'images'));
+
+        _.map(this.state.files,
+            (file) => {
+
+                if (file.response && file.response.fileList && file.response.fileList[0] != null) {
+                    this.props.dispatch(arrayPush('product-form', 'images', { id: file.id, name: file.response.fileList[0]}));
+                }
+
+            });
     }
 
     public uploadHandlePreview(file) {
@@ -316,28 +420,11 @@ export class ProductForm extends React.Component<IProductFormProps, IProductForm
 
     public render() {
 
-        const { handleSubmit } = this.props;
+        const { handleSubmit, submitting } = this.props;
+
         const { files, previewVisible, previewImage } = this.state;
 
         const categories = this.getCategoryOptions();
-
-        const hiddenFileData = _.map(files, (file, index) => {
-
-            if (file.response && file.response.fileList && file.response.fileList.length != 0) {
-
-                this.props.change(`files[${index}].id`, file.id);
-                this.props.change(`files[${index}].url`, file.response.fileList[0]);
-
-                return <div>
-                    <Field component="input" type="hidden" name={`files[${index}].id`} value={file.id} />
-                    <Field component="input" type="hidden" name={`files[${index}].url`} value={file.response.fileList[0]} />
-                </div>
-
-            }
-
-            return null;
-
-        });
 
         const uploadButton = (
             <div>
@@ -347,11 +434,12 @@ export class ProductForm extends React.Component<IProductFormProps, IProductForm
         );
 
         return <div className="product-form">
+
             <form onSubmit={handleSubmit}>
 
                 <div className="card">
                     <div className="card-block">
-                        <h6>Product Variant</h6>
+                        <h6>Product Details</h6>
                         <br />
                         <div className="row">
                             <Field name="category" searchPromptText="Select category" showSearch={true} component={SelectCascader} label="Category" options={categories} onChange={this.selectCategory} col="col-md-6" />
@@ -368,8 +456,18 @@ export class ProductForm extends React.Component<IProductFormProps, IProductForm
                     <div className="card-block">
                         <div className="row">
                             <div className="col-md-12">
+                                {this.props.error && <div className="margin-bottom-1x">
+                                    <Alert
+                                        message="Error"
+                                        description={this.props.error}
+                                        type="error"
+                                        showIcon
+                                    />
+                                </div>}
+
                                 <h6>Images</h6>
                                 <br />
+                                <FieldArray component={renderImages} name="images" change={this.props.change} />
                                 <Upload
                                     action={Api.ImageUploadUrl}
                                     listType="picture-card"
@@ -382,7 +480,6 @@ export class ProductForm extends React.Component<IProductFormProps, IProductForm
                                 <Modal visible={previewVisible} footer={null} onCancel={this.uploadHandleCancel}>
                                     <img alt="example" style={{ width: "100%" }} src={previewImage} />
                                 </Modal>
-                                {hiddenFileData}
                             </div>
                         </div>
                     </div>
@@ -399,7 +496,7 @@ export class ProductForm extends React.Component<IProductFormProps, IProductForm
                         {this.state.categoryAttributes.length !== 0 &&
                             <div>
                                 <br />
-                                <FieldArray name="productVariants" variantCategories={this.getAllVariantsCategoryAttributes()} images={this.state.files} change={this.props.change} component={renderProductVariant} />
+                                <FieldArray component={renderProductVariant} files={this.state.files} name="productVariants" variantCategories={this.getAllVariantsCategoryAttributes()} change={this.props.change} />
                             </div>
                         }
 
@@ -410,8 +507,9 @@ export class ProductForm extends React.Component<IProductFormProps, IProductForm
                 <br />
 
                 <div>
-                    <br />
-                    <button type="submit">Submit</button>
+                    <Button type="primary" loading={submitting} onClick={handleSubmit}>Submit</Button>
+                    &nbsp;
+                    <Button>Back to Portal</Button>
                 </div>
 
             </form>
@@ -423,7 +521,7 @@ export class ProductForm extends React.Component<IProductFormProps, IProductForm
     private getAllVariantsCategoryAttributes(): ICategoryAttribute[] {
 
         let varientAttributes = _.filter(this.state.categoryAttributes, (categoryAttribute: ICategoryAttribute) => {
-            return categoryAttribute.attributeType == CategoryAttributeType.Variant;
+            return categoryAttribute.attributeType === CategoryAttributeType.Variant;
         });
 
         return varientAttributes;
@@ -544,3 +642,10 @@ export class ProductForm extends React.Component<IProductFormProps, IProductForm
     }
 
 }
+
+const form = reduxForm<IProductFormData, IAdditionalFormProps>({
+    form: "product-form",
+    validate: ProductForm.validate,
+})(ProductForm);
+
+export { form as ProductForm }
