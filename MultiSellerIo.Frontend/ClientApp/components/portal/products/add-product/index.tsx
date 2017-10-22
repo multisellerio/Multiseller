@@ -50,14 +50,20 @@ class AddProductComponents extends React.Component<AddProductProps, {}> {
 
     public render() {
         return <div>
-            <h3 className="padding-bottom-1x">Add Product</h3>
+            <div className="row">
+                <div className="col-md-8">
+                    <h3 className="mt-1">Add Product</h3>
+                    <p>Enter your product details with product variants</p>
+                </div>
+                <div className="col-md-4"></div>
+            </div>
             {this.props.currentProductData.error && <div><Alert
                 message="Error"
                 description={this.props.currentProductData.error}
                 type="error"
                 showIcon
-            /><br/></div>}
-            <ProductForm metaData={this.props.meta.metaData} onSubmit={this.onSubmit} />
+            /><br /></div>}
+            <ProductForm loading={this.props.currentProductData.loading} metaData={this.props.meta.metaData} onSubmit={this.onSubmit} />
         </div>;
     }
 

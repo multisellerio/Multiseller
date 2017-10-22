@@ -1,5 +1,5 @@
 ﻿import * as React from "React";
-import { FormErrors, reduxForm, InjectedFormProps, arrayPush, arrayRemoveAll, GenericFieldArray } from "redux-form";
+import { FormErrors, reduxForm, InjectedFormProps, arrayPush, arrayRemoveAll } from "redux-form";
 
 import {
     IProductCategory, IProductMetaData, ICategoryAttribute,
@@ -36,6 +36,7 @@ interface IProductFormProps extends InjectedFormProps<IProductFormData, {}> {
 interface IAdditionalFormProps {
     metaData: IProductMetaData;
     dispatch: any;
+    loading: boolean;
 }
 
 interface IReduxFormProps {
@@ -507,7 +508,7 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
                 <br />
 
                 <div>
-                    <Button type="primary" loading={submitting} onClick={handleSubmit}>Submit</Button>
+                    <Button type="primary" loading={submitting} onClick={handleSubmit} loading={this.props.loading} >Submit</Button>
                     &nbsp;
                     <Button>Back to Portal</Button>
                 </div>

@@ -5,6 +5,15 @@ using MultiSellerIo.Core.Enum;
 
 namespace MultiSellerIo.Api.Models
 {
+
+    public class ProductQueryModel
+    {
+        public int Page{ get; set; }
+        public int PageSize { get; set; }
+        public string SearchText { get; set; }
+        public long? CategoryId { get; set; }
+    }
+
     public class ProductAttributeBindingModel
     {
         public long Id { get; set; }

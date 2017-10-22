@@ -1,5 +1,5 @@
 ﻿import { API_URL, getToken } from "../";
-import { IProductMetaData, IProduct } from "../../models/product-models";
+import { IProductMetaData, IProduct, IProductList, IProductListRequest } from "../../models/product-models";
 
 export const ProductService = {
 
@@ -18,7 +18,7 @@ export const ProductService = {
 
             const responseData = await response.json();
 
-            if (response.status === 400 || response.status === 500) {
+            if (response.status !== 200) {
                 throw new Error(responseData.error);
             }
 
@@ -46,7 +46,7 @@ export const ProductService = {
 
             const responseData = await response.json();
 
-            if (response.status === 400 || response.status === 500) {
+            if (response.status !== 200) {
                 throw new Error(responseData.error);
             }
 
@@ -56,6 +56,32 @@ export const ProductService = {
             throw err;
         }
 
+    },
+
+    getProducts: async (productRequest: IProductListRequest): Promise<IProductList> => {
+        try {
+            let token = getToken();
+            const response = await fetch(`${API_URL}products?page=${productRequest.page}&pageSize=${productRequest.pageSize}`,
+                {
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    method: "get"
+                });
+
+            const responseData = await response.json();
+
+            if (response.status !== 200) {
+                throw new Error(responseData.error);
+            }
+
+            return responseData as IProductList;
+
+        } catch (err) {
+            throw err;
+        }
     }
 
 };

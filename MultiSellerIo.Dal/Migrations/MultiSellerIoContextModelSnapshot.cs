@@ -269,7 +269,7 @@ namespace MultiSellerIo.Dal.Migrations
 
                     b.Property<long?>("ProductId");
 
-                    b.Property<decimal>("Quantity");
+                    b.Property<int>("Quantity");
 
                     b.Property<string>("Sku");
 

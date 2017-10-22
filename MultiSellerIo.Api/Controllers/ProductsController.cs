@@ -28,6 +28,23 @@ namespace MultiSellerIo.Api.Controllers
             _userService = userService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Get(ProductQueryModel model)
+        {
+            var user = await _userService.GetUser(User);
+
+            var result = await _productService.GetProductsAsync(new ProductQuery()
+            {
+                Page = model.Page,
+                PageSize = model.PageSize,
+                CategoryId = model.CategoryId,
+                SearchText = model.SearchText,
+                UserId = user.Id
+            });
+
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]ProductBindingModel model)
         {

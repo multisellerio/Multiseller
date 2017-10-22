@@ -6,7 +6,7 @@ namespace MultiSellerIo.Dal.Entity
     {
         public decimal Price { get; set; }
         public decimal CompareAtPrice { get; set; }
-        public decimal Quantity { get; set; }
+        public int Quantity { get; set; }
         public string Sku { get; set; }
         public string Barcode{ get; set; }
         public string DefaultImage { get; set; }

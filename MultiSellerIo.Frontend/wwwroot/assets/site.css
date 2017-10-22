@@ -24236,4 +24236,8 @@ video {
   margin-left: 10px;
 }
 
+.portal-product-list .ant-pagination-item-active {
+  color: white;
+}
+
 /*# sourceMappingURL=site.css.map*/
