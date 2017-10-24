@@ -45,6 +45,14 @@ namespace MultiSellerIo.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        [Route("GetById/{id}")]
+        public async Task<IActionResult> GetById(long id)
+        {
+            var product = await _productService.GetById(id);
+            return Ok(Mapper.Map<ProductBindingModel>(product));
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]ProductBindingModel model)
         {
@@ -54,6 +62,19 @@ namespace MultiSellerIo.Api.Controllers
             requestProduct.UserId = user.Id;
 
             var product = await _productService.AddProduct(requestProduct);
+
+            return Ok(Mapper.Map<ProductBindingModel>(product));
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody]ProductBindingModel model)
+        {
+            var user = await _userService.GetUser(User);
+
+            var requestProduct = Mapper.Map<Product>(model);
+            requestProduct.UserId = user.Id;
+
+            var product = await _productService.UpdateProduct(requestProduct);
 
             return Ok(Mapper.Map<ProductBindingModel>(product));
         }

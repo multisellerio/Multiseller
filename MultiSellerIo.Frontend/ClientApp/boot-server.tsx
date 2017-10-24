@@ -8,6 +8,7 @@ import { replace } from "react-router-redux";
 import configureStore from "./configureStore";
 import { routes } from "./routes";
 import { LocaleProvider } from 'antd';
+import { setToken } from './api/';
 import * as enUS from 'antd/lib/locale-provider/en_US';
 
 export default createServerRenderer((params) => {
@@ -15,6 +16,8 @@ export default createServerRenderer((params) => {
 
         // Get the token from parameters
         const token = params.data.token;
+
+        setToken(token);
 
         const initialState = {
             account: {

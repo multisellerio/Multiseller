@@ -17,6 +17,7 @@ import * as Api from "../../../api";
 import * as _ from "lodash";
 
 export interface IProductFormData {
+    id: number;
     title: string;
     description: string;
     category: number[];
@@ -25,9 +26,9 @@ export interface IProductFormData {
     productVariants: IProductVairation[];
 }
 
-interface IProductImage {
+export interface IProductImage {
     id: number,
-    url: string,
+    name: string,
 }
 
 interface IProductFormProps extends InjectedFormProps<IProductFormData, {}> {
@@ -37,6 +38,7 @@ interface IAdditionalFormProps {
     metaData: IProductMetaData;
     dispatch: any;
     loading: boolean;
+    editing: boolean;
 }
 
 interface IReduxFormProps {
@@ -45,17 +47,17 @@ interface IReduxFormProps {
     submitting: boolean;
 }
 
-interface IProductVairation {
+export interface IProductVairation {
     id: number,
     quantity: number,
     sku: string,
     upc: string,
-    price: number,
+    price: string,
     defaultImage: number,
     attributes: IProductVariationAttribute[],
 }
 
-interface IProductVariationAttribute {
+export interface IProductVariationAttribute {
     attributeId: number,
     name: string,
     isGroup: boolean,
@@ -72,7 +74,7 @@ interface IProductFormState {
 
 //Todo change the types
 
-interface IProductVariantFieldArray  {
+interface IProductVariantFieldArray {
     files: any;
     change: any;
     variantCategories: any;
@@ -178,7 +180,7 @@ const renderProductVariant: React.StatelessComponent<IProductVariantFieldArray> 
                                 name={`${variant}.attributes[${index}].values`}
                                 mode={categoryAttribute.isGroup ? "multiple" : null}
                                 options={options}
-                                componentStyle={{ width: !categoryAttribute.isGroup ? '100px' : '200px' }}
+                                componentStyle={{ width: !categoryAttribute.isGroup ? '50px' : '200px' }}
                             />
                         </td>;
                     }));
@@ -204,13 +206,13 @@ const renderProductVariant: React.StatelessComponent<IProductVariantFieldArray> 
                         </td>
                         {attributes}
                         <td>
-                            <Field name={`${variant}.sku`} component={InputComponent} hideLabel={true} onFocus={(event) => event.target.select()} />
+                            <Field name={`${variant}.sku`} style={{ width: '70px' }} component={InputComponent} hideLabel={true} onFocus={(event) => event.target.select()} />
                         </td>
                         <td>
-                            <Field style={{ width: '100%' }} precision={0} name={`${variant}.quantity`} min={0} component={InputNumberComponent} hideLabel={true} onFocus={(event) => event.target.select()} />
+                            <Field style={{ width: '50px' }} precision={0} name={`${variant}.quantity`} min={0} component={InputNumberComponent} hideLabel={true} onFocus={(event) => event.target.select()} />
                         </td>
                         <td>
-                            <Field style={{ width: '100%' }} precision={2} name={`${variant}.price`} min={0}
+                            <Field style={{ width: '100px' }} precision={2} name={`${variant}.price`} min={0}
                                 onFocus={(event) => event.target.select()}
                                 component={InputNumberComponent}
                                 formatter={value => { return `Rs. ${value && typeof value.replace === "function" ? value.replace(/\Rs.\s?|(,*)/g, '') : value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }}
@@ -283,7 +285,7 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
         this.selectCategory = this.selectCategory.bind(this);
     }
 
-    public static validate(values: IProductFormData) {
+    public static validate(values: IProductFormData,  props: any) {
 
         const errors: FormErrors<IProductFormData, string> = {};
 
@@ -358,6 +360,28 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
         return errors;
     }
 
+    componentWillReceiveProps(props: IProductFormProps & IAdditionalFormProps): void {
+
+        if (props.editing && props.initialValues && props.pristine) {
+            console.log('initial the value of editing....');
+            this.selectCategory(props.initialValues.category, props.initialValues.category);
+            this.setState({
+                files: _.map(props.initialValues.images, (image) => {
+                    return {
+                        uid: image.id,
+                        id: image.id,
+                        name: image.name,
+                        status: 'done',
+                        url: Api.getImageAssets(image.name, 200, 200),
+                        response : {
+                            fileList : [image.name]
+                        }
+                    }
+                })
+            });
+        }
+    }
+
     public getCategoryOptions() {
 
         const self = this;
@@ -386,7 +410,7 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
             (file) => {
 
                 if (file.response && file.response.fileList && file.response.fileList[0] != null) {
-                    this.props.dispatch(arrayPush('product-form', 'images', { id: file.id, name: file.response.fileList[0]}));
+                    this.props.dispatch(arrayPush('product-form', 'images', { id: file.id, name: file.response.fileList[0] }));
                 }
 
             });
@@ -421,7 +445,7 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
 
     public render() {
 
-        const { handleSubmit, submitting } = this.props;
+        const { handleSubmit } = this.props;
 
         const { files, previewVisible, previewImage } = this.state;
 
@@ -443,6 +467,7 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
                         <h6>Product Details</h6>
                         <br />
                         <div className="row">
+                            <Field name="id" component="input" type="hidden" />
                             <Field name="category" searchPromptText="Select category" showSearch={true} component={SelectCascader} label="Category" options={categories} onChange={this.selectCategory} col="col-md-6" />
                             <Field name="vendor" component={InputComponent} label="Vendor" col="col-md-6" />
                             <Field type="text" name="title" component={InputComponent} label="Title" col="col-md-12" />
@@ -508,7 +533,7 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
                 <br />
 
                 <div>
-                    <Button type="primary" loading={submitting} onClick={handleSubmit} loading={this.props.loading} >Submit</Button>
+                    <Button type="primary" onClick={handleSubmit} loading={this.props.loading} >Submit</Button>
                     &nbsp;
                     <Button>Back to Portal</Button>
                 </div>
@@ -644,7 +669,7 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
 
 }
 
-const form = reduxForm<IProductFormData, IAdditionalFormProps>({
+const form = reduxForm<IProductFormData, IProductFormProps & IAdditionalFormProps>({
     form: "product-form",
     validate: ProductForm.validate,
 })(ProductForm);

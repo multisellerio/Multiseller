@@ -1,5 +1,8 @@
 ﻿import { Cookies } from '../util/cookies';
+import { ApplicationState } from "./../store";
 const ApiHost = "http://localhost:50564/";
+
+let currentToken = null;
 
 export const API_URL = ApiHost + "api/";
 
@@ -15,6 +18,10 @@ export const getImageAssets = (image: string, width?: number, height?: number) =
 
 };
 
+export const setToken = (token: string) => {
+    currentToken = token;
+}
+
 export const getToken = () => {
-    return Cookies.read('ms-token');
+    return currentToken;
 }

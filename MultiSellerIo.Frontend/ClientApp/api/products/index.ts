@@ -58,6 +58,35 @@ export const ProductService = {
 
     },
 
+    updateProduct: async (product: IProduct): Promise<IProduct> => {
+
+        try {
+            let token = getToken();
+            const response = await fetch(API_URL + "products",
+                {
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + token,
+                    },
+                    method: "put",
+                    body: JSON.stringify(product)
+                });
+
+            const responseData = await response.json();
+
+            if (response.status !== 200) {
+                throw new Error(responseData.error);
+            }
+
+            return responseData as IProduct;
+
+        } catch (err) {
+            throw err;
+        }
+
+    },
+
     getProducts: async (productRequest: IProductListRequest): Promise<IProductList> => {
         try {
             let token = getToken();
@@ -82,6 +111,34 @@ export const ProductService = {
         } catch (err) {
             throw err;
         }
+    },
+
+    getProduct: async (id: number): Promise<IProduct> => {
+
+        try {
+            let token = getToken();
+            const response = await fetch(API_URL + "products/getbyid/" + id,
+                {
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + token,
+                    },
+                    method: "get"
+                });
+
+            const responseData = await response.json();
+
+            if (response.status !== 200) {
+                throw new Error(responseData.error);
+            }
+
+            return responseData as IProduct;
+
+        } catch (err) {
+            throw err;
+        }
+
     }
 
 };

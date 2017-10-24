@@ -16,6 +16,7 @@ import { ApplicationState } from "./store";
 let routes = RoutesModule.routes;
 import { LocaleProvider } from 'antd';
 import * as enUS from 'antd/lib/locale-provider/en_US';
+import { setToken } from './api/';
 
 // Create browser history to use in the Redux store
 const history = createBrowserHistory();
@@ -23,6 +24,8 @@ const history = createBrowserHistory();
 // Get the application-wide store instance, prepopulating with state from the server where available.
 const initialState = (window as any).initialReduxState as ApplicationState;
 const store = configureStore(history, initialState);
+
+setToken(initialState.account.token);
 
 function renderApp() {
     // This code starts up the React app when it runs in a browser. It sets up the routing configuration

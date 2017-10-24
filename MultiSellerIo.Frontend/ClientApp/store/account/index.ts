@@ -1,9 +1,10 @@
-﻿ import { addTask } from "domain-task";
- import { push, RouterAction } from "react-router-redux";
- import { Reducer } from "redux";
- import { UserService } from "../../api/user";
- import { ILoginRequest, IRegisterRequest, IUser } from "../../models/account-models";
- import {
+﻿import { addTask } from "domain-task";
+import { push, RouterAction } from "react-router-redux";
+import { Reducer } from "redux";
+import { UserService } from "../../api/user";
+import { setToken } from "../../api";
+import { ILoginRequest, IRegisterRequest, IUser } from "../../models/account-models";
+import {
     GET_CURRENT_USER_SUCCESSFULLY, GET_CURRENT_USER_UNSUCCESSFULLY, IGetCurrentUserSuccessfully,
     IGetCurrentUserUnsuccessfully, IRequestCurrentUser, IUserLoginFailed, IUserLoginRequest,
     IUserLoginSuccess, IUserLogoff, IUserRegistered,
@@ -11,14 +12,14 @@
     REQUEST_USER_REGISTER, USER_LOGIN_FAILED, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,
     USER_LOGOFF, USER_REGISTERED, USER_REGISTRATION_FAILED,
 } from "../../types/actions/account-actions";
- import { Cookies } from "../../util/cookies";
- import { AppThunkAction } from ".././";
+import { Cookies } from "../../util/cookies";
+import { AppThunkAction } from ".././";
 
 /*************************
  *** STORE
  *************************/
 
- export interface IAccountState {
+export interface IAccountState {
     isLoading: boolean;
     errorMessage: string;
     isAuthorize: boolean;
@@ -30,19 +31,19 @@
  *** ACTION CREATORS
  *************************/
 
- type KnownAction = IUserRegisterRequest |
-                   IUserRegistered |
-                   IUserRegistrationFailed |
-                   IUserLoginRequest |
-                   IUserLoginSuccess |
-                   IUserLoginFailed |
-                   IRequestCurrentUser |
-                   IGetCurrentUserSuccessfully |
-                   IGetCurrentUserUnsuccessfully |
-                   IUserLogoff |
-                   RouterAction;
+type KnownAction = IUserRegisterRequest |
+    IUserRegistered |
+    IUserRegistrationFailed |
+    IUserLoginRequest |
+    IUserLoginSuccess |
+    IUserLoginFailed |
+    IRequestCurrentUser |
+    IGetCurrentUserSuccessfully |
+    IGetCurrentUserUnsuccessfully |
+    IUserLogoff |
+    RouterAction;
 
- export const actionCreator = {
+export const actionCreator = {
     userRegister: (registerRequest: IRegisterRequest): AppThunkAction<KnownAction> => async (dispatch, getState) => {
 
         dispatch({ type: REQUEST_USER_REGISTER, payload: registerRequest });
@@ -66,6 +67,7 @@
             const loginResponse = await UserService.login(loginRequest);
             dispatch({ type: USER_LOGIN_SUCCESS, payload: loginResponse });
             Cookies.write("ms-token", loginResponse.token);
+            setToken(loginResponse.token);
             dispatch(push("/"));
 
         } catch (err) {
@@ -105,10 +107,10 @@
  *** REDUCERS
  *************************/
 
- const unloadedState: IAccountState =
+const unloadedState: IAccountState =
     { isLoading: false, errorMessage: null, token: null, user: null, isAuthorize: false };
 
- export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAction: KnownAction) => {
+export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAction: KnownAction) => {
 
     const action = incomingAction as KnownAction;
 

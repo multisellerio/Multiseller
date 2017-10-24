@@ -79,13 +79,13 @@ class ProductsComponent extends React.Component<ProductsProps, IProductComponent
         let rows = _.map(this.props.productListData.productList.result,
             (product: IProductListModel) => {
 
-                let imageUrl = Api.getImageAssets(product.images[0], 130, null);
+                let imageUrl = Api.getImageAssets(product.images[0], 300, 300);
 
                 return <tr>
                     <td>
-                        <div className="product-item"><a className="product-thumb"><img src={imageUrl} alt="Product" /></a>
+                        <div className="product-item"><Link className="product-thumb" to={`/portal/products/edit-product/${product.id}`}><img src={imageUrl} alt="Product" /></Link>
                             <div className="product-info">
-                                <h4 className="product-title"><a href="shop-single.html">{product.title}</a></h4>
+                                <h4 className="product-title"><Link to={`/portal/products/edit-product/${product.id}`}>{product.title}</Link></h4>
                                 <div className="text-lg text-medium text-muted">Rs. {product.price.toFixed(2)}</div>
                                 <div>Availability: &nbsp;
                                     {product.quantity > 0 && <div className="d-inline text-success">In Stock</div>}

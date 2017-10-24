@@ -37,7 +37,7 @@ namespace MultiSellerIo.Api.Util.Mapper
 
                         dest.ProductVariantSpecificationAttributeMappings = src
                             .ProductVariantSpecificationAttributeMappings
-                            .GroupBy(attribute => attribute.ProductVariantId)
+                            .GroupBy(attribute => attribute.ProductAttributeValue.ProductAttributeId)
                             .Select(groupAttribute => new ProductVariantSpecificationAttributeMappingBindingModel()
                             {
                                 ProductVariantId = groupAttribute.Key,

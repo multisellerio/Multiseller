@@ -14,7 +14,9 @@ namespace MultiSellerIo.Services.Product
     public interface IProductService
     {
         Task<Dal.Entity.Product> AddProduct(Dal.Entity.Product product);
+        Task<Dal.Entity.Product> UpdateProduct(Dal.Entity.Product product);
         Task<PaginationResult<ProductModel>> GetProductsAsync(ProductQuery query);
+        Task<Dal.Entity.Product> GetById(long id);
     }
 
     public class ProductQuery
@@ -32,7 +34,7 @@ namespace MultiSellerIo.Services.Product
         public string Slug { get; set; }
         public long CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public string Title{ get; set; }
+        public string Title { get; set; }
         public string Description { get; set; }
         public string Vendor { get; set; }
         public int Quantity { get; set; }
@@ -109,6 +111,90 @@ namespace MultiSellerIo.Services.Product
             await _unitOfWork.ProductRepository.Add(product);
             await _unitOfWork.SaveChangesAsync();
             return product;
+        }
+
+        public async Task<Dal.Entity.Product> UpdateProduct(Dal.Entity.Product product)
+        {
+
+            var currentProduct = await GetById(product.Id);
+
+            currentProduct.CategoryId = product.CategoryId;
+            currentProduct.Title = product.Title;
+            currentProduct.Description = product.Description;
+            currentProduct.Vendor = product.Vendor;
+            currentProduct.Updated = DateTimeOffset.Now;
+
+            //---Update images---
+
+            //Add new images
+            var addedImages = product.Images.Where(image =>
+                currentProduct.Images.All(currentProductImage => currentProductImage.Name != image.Name))
+                .ToList();
+
+            //Remove, removed images
+            currentProduct.Images.RemoveAll(image =>
+                product.Images.All(updateProductImage => updateProductImage.Name != image.Name));
+
+            currentProduct.Images.AddRange(addedImages);
+
+            //---Update product variants---
+
+            //Add new product variants
+            currentProduct.ProductVariants.AddRange(product.ProductVariants.Where(productVariants => productVariants.Id == 0));
+
+            //Remove, removed product variants
+            currentProduct.ProductVariants.RemoveAll(productVariant =>
+                product.Id != 0 && product.ProductVariants.All(updatedProductVariant =>
+                    updatedProductVariant.Id != productVariant.Id));
+
+            //Update product variants
+            currentProduct.ProductVariants.ForEach(productVariant =>
+            {
+                var updatedProductVariant = product.ProductVariants.First(variant => variant.Id == productVariant.Id);
+
+                productVariant.Price = updatedProductVariant.Price;
+                productVariant.DefaultImage = updatedProductVariant.DefaultImage;
+                productVariant.Barcode = updatedProductVariant.Barcode;
+                productVariant.Sku = updatedProductVariant.Sku;
+                productVariant.CompareAtPrice = updatedProductVariant.CompareAtPrice;
+                productVariant.Quantity = updatedProductVariant.Quantity;
+
+                //Add new attribute mappings
+                productVariant.ProductVariantSpecificationAttributeMappings.AddRange(updatedProductVariant.ProductVariantSpecificationAttributeMappings.Where(
+                    attributeMapping => productVariant.ProductVariantSpecificationAttributeMappings.All(
+                        currentAttributeMapping => attributeMapping.ProductAttributeValueId != currentAttributeMapping.ProductAttributeValueId)));
+
+                //Remove, removed attribute mappings
+                productVariant.ProductVariantSpecificationAttributeMappings.RemoveAll(
+                    attributeMapping => updatedProductVariant.ProductVariantSpecificationAttributeMappings.All(
+                        currentAttributeMapping => attributeMapping.ProductAttributeValueId != currentAttributeMapping.ProductAttributeValueId) );
+            });
+
+
+            //If product is invalid, throw service exceptions
+            ValidateProduct(currentProduct);
+
+            _unitOfWork.ProductRepository.Update(currentProduct);
+            await _unitOfWork.SaveChangesAsync();
+            return await GetById(currentProduct.Id);
+        }
+
+        public async Task<Dal.Entity.Product> GetById(long id)
+        {
+            var currentProduct = await _unitOfWork.ProductRepository.GetAll()
+                .Where(product => product.Id == id && !product.IsDeleted)
+                .Include(product => product.Images)
+                .Include(product => product.ProductVariants)
+                .ThenInclude(productVariant => productVariant.ProductVariantSpecificationAttributeMappings)
+                .ThenInclude(attributeMapping => attributeMapping.ProductAttributeValue)
+                .FirstOrDefaultAsync();
+
+            if (currentProduct == null)
+            {
+                throw new ServiceException($"Unable to find product");
+            }
+
+            return currentProduct;
         }
 
         private void ValidateProduct(Dal.Entity.Product product)
