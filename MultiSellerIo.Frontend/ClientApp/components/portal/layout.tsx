@@ -7,7 +7,7 @@
         return <div className="animated fadeIn container padding-bottom-3x mb-2">
             <div className="row">
                 <div className="col-lg-3">
-                    <Menu theme="light" mode="inline">
+                    <Menu className="portal-menu" mode="inline">
                         <SubMenu title={<span><Icon type="bars" /><span>Products</span></span>}>
                             <Menu.Item>
                                 <Icon type="plus-circle-o" />

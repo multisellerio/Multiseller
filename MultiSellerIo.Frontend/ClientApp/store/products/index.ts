@@ -32,8 +32,9 @@ interface IMetaData {
 
 interface ICurrentProductData {
     loading: boolean;
-    error: string,
-    product: IProductFormData,
+    error: string;
+    dataLoading: boolean;
+    product: IProductFormData;
 }
 
 interface ICurrentProductList {
@@ -188,7 +189,8 @@ const unloadedState: IProductsState = {
     currentProductData: {
         product: null,
         loading: false,
-        error: null
+        error: null,
+        dataLoading: false,
     },
     productListData: {
         productList: null,
@@ -206,7 +208,7 @@ export const reducer: Reducer<IProductsState> = (state: IProductsState, incoming
             return {
                 ...state,
                 meta: {
-                    loading: true,
+                    loading: false,
                     metaData: null,
                     error: null
                 },
@@ -238,6 +240,7 @@ export const reducer: Reducer<IProductsState> = (state: IProductsState, incoming
                     product: null,
                     error: null,
                     loading: true,
+                    dataLoading: false,
                 }
             }
         case CREATED_PRODUCT_SUCCESSFULLY:
@@ -247,6 +250,7 @@ export const reducer: Reducer<IProductsState> = (state: IProductsState, incoming
                     product: null,
                     error: null,
                     loading: false,
+                    dataLoading: false,
                 }
             }
         case CREATED_PRODUCT_UNSUCCESSFULLY:
@@ -257,6 +261,7 @@ export const reducer: Reducer<IProductsState> = (state: IProductsState, incoming
                     product: null,
                     error: createdProductUnsuccessfullyAction.payload,
                     loading: false,
+                    dataLoading: false,
                 }
             }
         case REQUEST_PRODUCTS:
@@ -294,7 +299,8 @@ export const reducer: Reducer<IProductsState> = (state: IProductsState, incoming
                 currentProductData: {
                     product: null,
                     error: null,
-                    loading: true,
+                    loading: false,
+                    dataLoading: true,
                 }
             }
         case FETCH_PRODUCT_SUCCESSFULLY:
@@ -307,6 +313,7 @@ export const reducer: Reducer<IProductsState> = (state: IProductsState, incoming
                     product: ProductUtil.toProductFormData(fetchProductAction.payload, state.meta.metaData.categories),
                     error: null,
                     loading: false,
+                    dataLoading: false,
                 }
             }
         case FETCH_PRODUCT_UNSUCCESSFULLY:
@@ -319,6 +326,7 @@ export const reducer: Reducer<IProductsState> = (state: IProductsState, incoming
                     product: null,
                     error: fetchProductUnsuccessAction.payload,
                     loading: false,
+                    dataLoading: false,
                 }
             }
         case UPDATE_PRODUCT:
@@ -329,6 +337,7 @@ export const reducer: Reducer<IProductsState> = (state: IProductsState, incoming
                     product: state.currentProductData.product,
                     error: null,
                     loading: true,
+                    dataLoading: false,
                 }
             }
 
@@ -340,6 +349,7 @@ export const reducer: Reducer<IProductsState> = (state: IProductsState, incoming
                     product: null,
                     error: null,
                     loading: false,
+                    dataLoading: false,
                 }
             }
         
@@ -353,6 +363,7 @@ export const reducer: Reducer<IProductsState> = (state: IProductsState, incoming
                     product: null,
                     error: updateProductUnsuccessfully.payload,
                     loading: false,
+                    dataLoading: false,
                 }
             }
     }

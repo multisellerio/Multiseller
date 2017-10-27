@@ -1,5 +1,12 @@
 ﻿.portal-content-wrapper {
-    padding: 20px;
-    box-shadow: 2px 2px 3px #e1e7ec;
-    border: 1px #e1e7ec solid;
+}
+
+.portal-menu {
+    border-right: none !important;
+
+    .ant-menu-submenu {
+        .ant-menu-submenu-title {
+            font-size: $font-size-sm;
+        }
+    }
 }

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 import { ApplicationState } from "../../../../store";
 import * as ProductState from "../../../../store/products";
-import { Alert } from "antd";
+import { Alert, Spin } from "antd";
 import { ProductForm, IProductFormData } from '../product-form';
 import * as _ from 'lodash';
 
@@ -31,7 +31,6 @@ class EditProductComponent extends React.Component<EditProductProps, IEditProduc
     }
 
     private onSubmit(productFormData: IProductFormData) {
-        console.log(productFormData);
         this.props.updateProduct({
             id: productFormData.id,
             categoryId: productFormData.category[productFormData.category.length - 1],
@@ -74,7 +73,10 @@ class EditProductComponent extends React.Component<EditProductProps, IEditProduc
                 type="error"
                 showIcon
             /><br /></div>}
-            <ProductForm loading={this.props.currentProductData.loading} metaData={this.props.meta.metaData} onSubmit={this.onSubmit} editing={true} initialValues={this.props.currentProductData.product} />
+            <div className="text-center">
+                {this.props.currentProductData.dataLoading && <Spin size="large" spinning={this.props.currentProductData.dataLoading} />}
+            </div>
+            {!this.props.currentProductData.dataLoading && <ProductForm loading={this.props.currentProductData.loading} metaData={this.props.meta.metaData} onSubmit={this.onSubmit} editing={true} initialValues={this.props.currentProductData.product} />}
         </div>;
     }
 

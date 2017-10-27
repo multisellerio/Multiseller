@@ -15,7 +15,7 @@ type TextInputProps = {
     hideLabel: boolean;
     label: string;
     col: string;
-}  & WrappedFieldProps;
+} & WrappedFieldProps;
 
 export const InputComponent: React.StatelessComponent<TextInputProps> = (field: TextInputProps) => {
 
@@ -24,7 +24,9 @@ export const InputComponent: React.StatelessComponent<TextInputProps> = (field: 
     if (hideLabel) {
         return <div className={field.meta.touched && field.meta.error ? "has-error has-danger" : ""}>
             <Input {...input} {...field} />
-            {field.meta.touched && field.meta.error && <span className="form-control-feedback">{field.meta.error}</span>}
+            {field.meta.touched &&
+                field.meta.error &&
+                <span className="form-control-feedback">{field.meta.error}</span>}
         </div>;
     }
 
@@ -79,7 +81,7 @@ export const TextAreaComponent: React.StatelessComponent<TextAreaProps> = (field
     return <div className={col}>
         <div className={field.meta.touched && field.meta.error ? "form-group has-error has-danger" : "form-group"}>
             <label>{label}</label>
-            <Input.TextArea {...input} {...field}  />
+            <Input.TextArea {...input} {...field} />
             {field.meta.touched && field.meta.error && <span className="form-control-feedback">{field.meta.error}</span>}
         </div>
     </div>;
@@ -125,12 +127,22 @@ type SelectCascaderProps = {
 
 export const SelectCascader: React.StatelessComponent<SelectCascaderProps> = (field: SelectCascaderProps) => {
 
+    let cascader = null;
+
     const { input, label, options, col } = field;
+
+    const onPopupVisibleChange = (value: boolean) => {
+        if (value) {
+            input.onFocus(undefined);
+        } else {
+            input.onBlur(undefined);
+        }
+    }
 
     return <div className={col}>
         <div className={field.meta.touched && field.meta.error ? "form-group has-danger has-error" : "form-group"}>
             <label>{label}</label>
-            <Cascader options={options} {...input} />
+            <Cascader ref={(component) => cascader = component} showSearch={true} allowClear={true} options={options} onPopupVisibleChange={onPopupVisibleChange} onChange={input.onChange} value={input.value} />
             {field.meta.touched && field.meta.error && <span className="form-control-feedback">{field.meta.error}</span>}
         </div>
     </div>;
@@ -143,13 +155,13 @@ type AntdSelectProps = {
     label: string;
     col: string;
     options: any;
-    mode: "default" | "multiple" | "tags" | "combobox" ;
+    mode: "default" | "multiple" | "tags" | "combobox";
     componentStyle: React.CSSProperties;
     placeholder: string;
     filterOption: any;
 } & WrappedFieldProps;
 
-export const AntdSelectComponent : React.StatelessComponent<AntdSelectProps> = (field: AntdSelectProps) => {
+export const AntdSelectComponent: React.StatelessComponent<AntdSelectProps> = (field: AntdSelectProps) => {
 
     const { input, label, options, col, mode, hideLabel, componentStyle, placeholder, filterOption } = field;
 
@@ -169,7 +181,7 @@ export const AntdSelectComponent : React.StatelessComponent<AntdSelectProps> = (
                 onChange={(value) => { mode === null ? input.onChange([value]) : input.onChange(value); }}>
                 {
                     options.map((option, index) => {
-                        return <Option title={option.name} value={option.value}>{option.child? option.child: option.name}</Option>;
+                        return <Option title={option.name} value={option.value}>{option.child ? option.child : option.name}</Option>;
                     })
                 }
             </Select>

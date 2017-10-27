@@ -16,6 +16,8 @@ import * as Api from "../../../api";
 
 import * as _ from "lodash";
 
+const formName: string = "product-form";
+
 export interface IProductFormData {
     id: number;
     title: string;
@@ -289,7 +291,7 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
 
         const errors: FormErrors<IProductFormData, string> = {};
 
-        if (!values.category) {
+        if (!values.category || (Array.isArray(values.category) && values.category.length === 0)) {
             errors.category = "Category is required";
         }
 
@@ -360,21 +362,20 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
         return errors;
     }
 
-    componentWillReceiveProps(props: IProductFormProps & IAdditionalFormProps): void {
+    componentWillMount(): void {
 
-        if (props.editing && props.initialValues && props.pristine) {
-            console.log('initial the value of editing....');
-            this.selectCategory(props.initialValues.category, props.initialValues.category);
+        if (this.props.editing && this.props.initialValues) {
+            this.selectCategory(this.props.initialValues.category, this.props.initialValues.category, false);
             this.setState({
-                files: _.map(props.initialValues.images, (image) => {
+                files: _.map(this.props.initialValues.images, (image) => {
                     return {
                         uid: image.id,
                         id: image.id,
                         name: image.name,
                         status: 'done',
                         url: Api.getImageAssets(image.name, 200, 200),
-                        response : {
-                            fileList : [image.name]
+                        response: {
+                            fileList: [image.name]
                         }
                     }
                 })
@@ -404,13 +405,13 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
             files: response.fileList,
         });
 
-        this.props.dispatch(arrayRemoveAll('product-form', 'images'));
+        this.props.dispatch(arrayRemoveAll(formName, 'images'));
 
         _.map(this.state.files,
             (file) => {
 
                 if (file.response && file.response.fileList && file.response.fileList[0] != null) {
-                    this.props.dispatch(arrayPush('product-form', 'images', { id: file.id, name: file.response.fileList[0] }));
+                    this.props.dispatch(arrayPush(formName, 'images', { id: file.id, name: file.response.fileList[0] }));
                 }
 
             });
@@ -429,9 +430,16 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
         });
     }
 
-    public selectCategory(value, selectedOptions) {
+    public selectCategory(value, selectedOptions, removeVariants) {
+
+        if (removeVariants) {
+            this.props.dispatch(arrayRemoveAll(formName, 'productVariants'));
+        }
 
         if (!selectedOptions || selectedOptions.length === 0) {
+            this.setState({
+                categoryAttributes: [],
+            });
             return;
         }
 
@@ -467,8 +475,8 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
                         <h6>Product Details</h6>
                         <br />
                         <div className="row">
-                            <Field name="id" component="input" type="hidden" />
-                            <Field name="category" searchPromptText="Select category" showSearch={true} component={SelectCascader} label="Category" options={categories} onChange={this.selectCategory} col="col-md-6" />
+                            <Field name="id" component="input" type="hidden" /> 
+                            <Field name="category" searchPromptText="Select category" showSearch={true} component={SelectCascader} label="Category" options={categories} onChange={(value, option) => this.selectCategory(value, option, true)} col="col-md-6" allowClear={false} />
                             <Field name="vendor" component={InputComponent} label="Vendor" col="col-md-6" />
                             <Field type="text" name="title" component={InputComponent} label="Title" col="col-md-12" />
                             <Field name="description" rows="4" cols="50" component={TextAreaComponent} label="Description" col="col-md-12" />
@@ -477,7 +485,7 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
                 </div>
 
                 <br className="margin-bottom-1x" />
-
+                
                 <div className="card">
                     <div className="card-block">
                         <div className="row">
@@ -670,7 +678,7 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
 }
 
 const form = reduxForm<IProductFormData, IProductFormProps & IAdditionalFormProps>({
-    form: "product-form",
+    form: formName,
     validate: ProductForm.validate,
 })(ProductForm);
 
