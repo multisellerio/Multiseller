@@ -4,7 +4,7 @@ import { parse } from 'qs';
 import { RouteComponentProps } from 'react-router-dom';
 import { ApplicationState } from "../../../store";
 import * as ProductState from "../../../store/products";
-import { Alert, Spin, Pagination } from "antd";
+import { Alert, Spin, Pagination, Popconfirm, Button } from "antd";
 import { IProductListModel } from "../../../models/product-models";
 import * as _ from 'lodash';
 import { Link } from "react-router-dom";
@@ -59,7 +59,8 @@ class ProductsComponent extends React.Component<ProductsProps, IProductComponent
 
         this.props.getProducts({
             page: page,
-            pageSize: pageSize
+            pageSize: pageSize,
+            force: false,
         });
     }
 
@@ -94,7 +95,11 @@ class ProductsComponent extends React.Component<ProductsProps, IProductComponent
                             </div>
                         </div>
                     </td>
-                    <td className="text-center"><a className="remove-from-cart" href="#" data-toggle="tooltip" title="Remove item"><i className="icon-cross"></i></a></td>
+                    <td className="text-center">
+                        <Popconfirm title="Are you sure delete this product?" onConfirm={() => { this.props.deleteProduct(product.id) }} okText="Yes" cancelText="No">
+                            <a className="remove-from-cart" data-toggle="tooltip" title="Remove item"><i className="icon-cross"></i></a>
+                        </Popconfirm>
+                    </td>
                 </tr>;
             });
 

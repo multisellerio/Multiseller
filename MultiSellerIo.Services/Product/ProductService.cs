@@ -17,6 +17,7 @@ namespace MultiSellerIo.Services.Product
         Task<Dal.Entity.Product> UpdateProduct(Dal.Entity.Product product);
         Task<PaginationResult<ProductModel>> GetProductsAsync(ProductQuery query);
         Task<Dal.Entity.Product> GetById(long id);
+        Task Delete(long id, long userId);
     }
 
     public class ProductQuery
@@ -195,6 +196,21 @@ namespace MultiSellerIo.Services.Product
             }
 
             return currentProduct;
+        }
+
+        public async Task Delete(long id, long userId)
+        {
+            var product = await _unitOfWork.ProductRepository.Get(id);
+
+            if (product.UserId != userId)
+            {
+                throw new ServiceException("Unauthorized action");
+            }
+
+            product.IsDeleted = true;
+
+            _unitOfWork.ProductRepository.Update(product);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         private void ValidateProduct(Dal.Entity.Product product)

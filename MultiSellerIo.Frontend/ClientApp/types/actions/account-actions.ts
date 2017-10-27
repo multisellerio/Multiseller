@@ -14,6 +14,7 @@ export const REQUEST_CURRENT_USER: string = "REQUEST_CURRENT_USER";
 export const GET_CURRENT_USER_SUCCESSFULLY: string = "GET_CURRENT_USER_SUCCESSFULLY";
 export const GET_CURRENT_USER_UNSUCCESSFULLY: string = "GET_CURRENT_USER_UNSUCCESSFULLY";
 
+
 /*************************
  *** REGISTER ACTIONS
  *************************/

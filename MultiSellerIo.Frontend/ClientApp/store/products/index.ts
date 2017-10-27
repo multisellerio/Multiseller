@@ -13,7 +13,9 @@ import {
     FETCH_PRODUCT, FETCH_PRODUCT_SUCCESSFULLY, FETCH_PRODUCT_UNSUCCESSFULLY,
     IFetchProduct, IFetchProductSuccessfully, IFetchProductUnSuccessfully,
     UPDATE_PRODUCT, UPDATE_PRODUCT_SUCCESSFULLY, UPDATE_PRODUCT_UNSUCCESSFULLY,
-    IUpdateProduct, IUpdateProductSuccessfully, IUpdateProductUnsuccessfully
+    IUpdateProduct, IUpdateProductSuccessfully, IUpdateProductUnsuccessfully,
+    REQUEST_DELETE_PRODUCT, DELETE_SUCCESSFULLY_PRODUCT, DELETE_UNSUCCESSFULLY_PRODUCT,
+    IRequestDeleteProduct, IDeleteProductSuccessfully, IDeleteProductUnsuccessfully
 } from "../../types/actions/product-actions";
 import { IProductFormData } from '../../components/portal/products/product-form';
 import ProductUtil from '../../util/product/product-util';
@@ -59,6 +61,7 @@ type KnownAction = IRequestProductsMetadata | IReceivedProductsMetaDataSuccessfu
     | IRequestProducts | IReceivedProductsSuccessfully | IReceivedProductsUnsuccessfully
     | IFetchProduct | IFetchProductSuccessfully | IFetchProductUnSuccessfully
     | IUpdateProduct | IUpdateProductSuccessfully | IUpdateProductUnsuccessfully
+    | IRequestDeleteProduct | IDeleteProductSuccessfully | IDeleteProductUnsuccessfully
     | RouterAction;
 
 export const actionCreator = {
@@ -120,14 +123,13 @@ export const actionCreator = {
 
     },
 
-
     getProducts: (request: IProductListRequest): AppThunkAction<KnownAction> => async (dispatch, getState) => {
 
         let state = getState();
 
         if (state.products.productListData &&
             state.products.productListData.productList &&
-            state.products.productListData.productList.currentPage === request.page) {
+            state.products.productListData.productList.currentPage === request.page && !request.force) {
             return;
         }
 
@@ -167,6 +169,38 @@ export const actionCreator = {
         }
 
         addTask(getProductTask());
+
+    },
+
+    deleteProduct: (id: number): AppThunkAction<KnownAction> => async (dispatch, getState) => {
+
+        let state = getState();
+
+        dispatch({ type: REQUEST_DELETE_PRODUCT, payload: null });
+
+        try {
+
+            await ProductService.deleteProduct(id);
+
+            dispatch({ type: REQUEST_PRODUCTS, payload: null });
+
+            try {
+
+                const productsResponse = await ProductService.getProducts({
+                    page: state.products.productListData.productList.currentPage,
+                    pageSize: state.products.productListData.productList.pageSize,
+                    force: true
+                });
+
+                dispatch({ type: RECEIVED_PRODUCTS_SUCCESSFULLY, payload: productsResponse });
+
+            } catch (getProductsErr) {
+                dispatch({ type: RECEIVED_PRODUCTS_UNSUCCESSFULLY, payload: getProductsErr.message });
+            }
+
+        } catch (err) {
+            dispatch({ type: DELETE_UNSUCCESSFULLY_PRODUCT, payload: err.message });
+        }
 
     },
 
@@ -352,7 +386,7 @@ export const reducer: Reducer<IProductsState> = (state: IProductsState, incoming
                     dataLoading: false,
                 }
             }
-        
+
         case UPDATE_PRODUCT_UNSUCCESSFULLY:
 
             let updateProductUnsuccessfully = action as IUpdateProductUnsuccessfully;
@@ -364,6 +398,34 @@ export const reducer: Reducer<IProductsState> = (state: IProductsState, incoming
                     error: updateProductUnsuccessfully.payload,
                     loading: false,
                     dataLoading: false,
+                }
+            }
+
+        case REQUEST_DELETE_PRODUCT:
+            return {
+                ...state,
+                productListData: {
+                    productList: state.productListData ? state.productListData.productList : null,
+                    loading: true,
+                    error: null
+                }
+            }
+        case DELETE_SUCCESSFULLY_PRODUCT:
+            return {
+                ...state,
+                productListData: {
+                    productList: state.productListData ? state.productListData.productList : null,
+                    loading: false,
+                    error: null
+                }
+            }
+        case DELETE_UNSUCCESSFULLY_PRODUCT:
+            return {
+                ...state,
+                productListData: {
+                    productList: state.productListData ? state.productListData.productList : null,
+                    loading: false,
+                    error: null
                 }
             }
     }

@@ -79,6 +79,15 @@ namespace MultiSellerIo.Api.Controllers
             return Ok(Mapper.Map<ProductBindingModel>(product));
         }
 
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Delete(long id)
+        {
+            var user = await _userService.GetUser(User);
+            await _productService.Delete(id, user.Id);
+            return Ok();
+        }
+
         [HttpGet]
         [Route("meta")]
         public async Task<IActionResult> GetProductMetaData()

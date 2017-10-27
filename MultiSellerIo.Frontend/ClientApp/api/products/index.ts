@@ -139,6 +139,32 @@ export const ProductService = {
             throw err;
         }
 
+    },
+
+    deleteProduct: async(id: number): Promise<void> => {
+
+        try {
+            let token = getToken();
+            const response = await fetch(API_URL + "products/" + id,
+                {
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + token,
+                    },
+                    method: "delete"
+                });
+
+
+            if (response.status !== 200) {
+                const responseData = await response.json();
+                throw new Error(responseData.error);
+            }
+
+        } catch (err) {
+            throw err;
+        }
+
     }
 
 };

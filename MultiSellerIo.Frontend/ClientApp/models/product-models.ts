@@ -92,6 +92,7 @@ export interface IProductListModel {
 export interface IProductListRequest {
     page: number;
     pageSize: number;
+    force: boolean;
 }
 
 export interface IProductList {
