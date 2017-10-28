@@ -63,7 +63,7 @@ class AddProductComponents extends React.Component<AddProductProps, {}> {
                 type="error"
                 showIcon
             /><br /></div>}
-            <ProductForm loading={this.props.currentProductData.loading} metaData={this.props.meta.metaData} onSubmit={this.onSubmit} editing={false} />
+            {!this.props.currentProductData.error && <ProductForm loading={this.props.currentProductData.loading} metaData={this.props.meta.metaData} onSubmit={this.onSubmit} editing={false} />}
         </div>;
     }
 

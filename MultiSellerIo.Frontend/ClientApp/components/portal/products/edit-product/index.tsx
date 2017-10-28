@@ -76,7 +76,7 @@ class EditProductComponent extends React.Component<EditProductProps, IEditProduc
             <div className="text-center">
                 {this.props.currentProductData.dataLoading && <Spin size="large" spinning={this.props.currentProductData.dataLoading} />}
             </div>
-            {!this.props.currentProductData.dataLoading && <ProductForm loading={this.props.currentProductData.loading} metaData={this.props.meta.metaData} onSubmit={this.onSubmit} editing={true} initialValues={this.props.currentProductData.product} />}
+            {!this.props.currentProductData.dataLoading && !this.props.currentProductData.error && <ProductForm loading={this.props.currentProductData.loading} metaData={this.props.meta.metaData} onSubmit={this.onSubmit} editing={true} initialValues={this.props.currentProductData.product} />}
         </div>;
     }
 
