@@ -38,3 +38,9 @@ export interface IUser {
     email: string;
     gender: Gender;
 }
+
+export interface IExternalSigninMeta {
+    facebookAuthUrl: string;
+    twitterAuthUrl: string;
+    googleAuthUrl: string;
+}

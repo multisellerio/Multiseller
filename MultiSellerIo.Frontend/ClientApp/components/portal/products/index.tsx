@@ -4,7 +4,7 @@ import { parse } from 'qs';
 import { RouteComponentProps } from 'react-router-dom';
 import { ApplicationState } from "../../../store";
 import * as ProductState from "../../../store/products";
-import { Alert, Spin, Pagination, Popconfirm, Button } from "antd";
+import { Alert, Spin, Pagination, Popconfirm } from "antd";
 import { IProductListModel } from "../../../models/product-models";
 import * as _ from 'lodash';
 import { Link } from "react-router-dom";

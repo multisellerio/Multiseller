@@ -66,22 +66,15 @@ namespace MultiSellerIo.Services.User
             }
         }
 
-        public async Task<Dal.Entity.User> RegisterUser(Dal.Entity.User user, ExternalLoginInfo externalLoginInfo, string role)
+        public async Task<Dal.Entity.User> RegisterUser(Dal.Entity.User user, string role, UserLoginInfo userLoginInfo)
         {
             using (var transaction = await _unitOfWork.GetTransaction())
             {
                 try
                 {
-                    var userCreatedResult = await _userManager.CreateAsync(user);
+                    var userCreatedResult = await _userManager.AddLoginAsync(user, userLoginInfo);
 
                     if (!userCreatedResult.Succeeded)
-                    {
-                        throw new ServiceException(GenerateMessage(userCreatedResult));
-                    }
-
-                    var addLoginResult = await _userManager.AddLoginAsync(user, externalLoginInfo);
-
-                    if (!addLoginResult.Succeeded)
                     {
                         throw new ServiceException(GenerateMessage(userCreatedResult));
                     }
@@ -96,6 +89,57 @@ namespace MultiSellerIo.Services.User
                     transaction.Commit();
 
                     return user;
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        public async Task<Dal.Entity.User> RegisterUser(Dal.Entity.User user, ExternalLoginInfo externalLoginInfo, string role)
+        {
+            using (var transaction = await _unitOfWork.GetTransaction())
+            {
+                try
+                {
+                    Dal.Entity.User currentUser = null;
+
+                    currentUser = await _userManager.FindByEmailAsync(user.Email);
+
+                    if (currentUser == null)
+                    {
+                        var userCreatedResult = await _userManager.CreateAsync(user);
+
+                        if (!userCreatedResult.Succeeded)
+                        {
+                            throw new ServiceException(GenerateMessage(userCreatedResult));
+                        }
+
+                        currentUser = user;
+                    }
+
+                    var addLoginResult = await _userManager.AddLoginAsync(currentUser, externalLoginInfo);
+
+                    if (!addLoginResult.Succeeded && addLoginResult.Errors.All(err => err.Code != "LoginAlreadyAssociated"))
+                    {
+                        throw new ServiceException(GenerateMessage(addLoginResult));
+                    }
+
+                    if (!await _userManager.IsInRoleAsync(currentUser, role))
+                    {
+                        var addRoleResult = await _userManager.AddToRoleAsync(currentUser, role);
+
+                        if (!addRoleResult.Succeeded)
+                        {
+                            throw new ServiceException(GenerateMessage(addRoleResult));
+                        }
+                    }
+
+                    transaction.Commit();
+
+                    return currentUser;
                 }
                 catch
                 {

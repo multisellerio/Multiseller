@@ -1,14 +1,14 @@
-﻿ import * as React from "React";
- import { connect } from "react-redux";
- import { FormErrors, InjectedFormProps, reduxForm } from "redux-form";
+﻿import * as React from "React";
+import { connect } from "react-redux";
+import { FormErrors, InjectedFormProps, reduxForm } from "redux-form";
 
- import { ApplicationState } from "../../../store";
- import * as AccountState from "../../../store/account";
+import { ApplicationState } from "../../../store";
+import * as AccountState from "../../../store/account";
 
- import { Alert } from "../../shared/util/alert";
- import { InputComponent, SelectComponent, Field } from "../../shared/util/form-components";
+import { Alert } from "../../shared/util/alert";
+import { InputComponent, SelectComponent, Field } from "../../shared/util/form-components";
 
- interface IRegisterFormData {
+interface IRegisterFormData {
     firstName: string;
     lastName: string;
     gender: number;
@@ -18,10 +18,10 @@
     email: string;
 }
 
- interface IRegisterFormProps extends InjectedFormProps<IRegisterFormData, {}> {
+interface IRegisterFormProps extends InjectedFormProps<IRegisterFormData, {}> {
 }
 
- const ErrorMessageComponent = (error) => {
+const ErrorMessageComponent = (error) => {
     const { message } = error;
 
     if (!message)
@@ -95,22 +95,26 @@ class Form extends React.Component<IRegisterFormProps, {}> {
         </form>;
     }
 
- }
+}
 
- const RegisterForm = reduxForm<IRegisterFormData, {}>({
-     form: "register",
-     validate: Form.validate,
- })(Form);
+const RegisterForm = reduxForm<IRegisterFormData, {}>({
+    form: "register",
+    validate: Form.validate,
+})(Form);
 
- type RegisterFormProps =
+type RegisterFormProps =
     AccountState.IAccountState
     & typeof AccountState.actionCreator;
 
- class Register extends React.Component<RegisterFormProps, {}> {
+class Register extends React.Component<RegisterFormProps, {}> {
 
     constructor(props: RegisterFormProps) {
         super(props);
         this.onSubmit = this.onSubmit.bind(this);
+    }
+
+    componentWillMount(): void {
+        this.props.setExternalLogin();
     }
 
     private onSubmit(user: IRegisterFormData) {
@@ -133,9 +137,9 @@ class Form extends React.Component<IRegisterFormProps, {}> {
                     <h3 className="margin-bottom-1x text-center">Signup with GoodLook</h3>
                     <h6 className="sub-header margin-bottom-1x">- Easily using -</h6>
                     <div className="row margin-bottom-1x social-btn-section">
-                        <div className="col-xl-4 col-md-6 col-sm-4 social-btn"><a className="btn btn-sm btn-block facebook-btn" href="#"><i className="socicon-facebook"></i>&nbsp;Facebook</a></div>
-                        <div className="col-xl-4 col-md-6 col-sm-4 social-btn"><a className="btn btn-sm btn-block twitter-btn" href="#"><i className="socicon-twitter"></i>&nbsp;Twitter</a></div>
-                        <div className="col-xl-4 col-md-6 col-sm-4 social-btn"><a className="btn btn-sm btn-block google-btn" href="#"><i className="socicon-googleplus"></i>&nbsp;Google+</a></div>
+                        <div className="col-xl-4 col-md-6 col-sm-4 social-btn"><a className="btn btn-sm btn-block facebook-btn" href={this.props.externalLogin.facebookAuthUrl}><i className="socicon-facebook"></i>&nbsp;Facebook</a></div>
+                        <div className="col-xl-4 col-md-6 col-sm-4 social-btn"><a className="btn btn-sm btn-block twitter-btn" href={this.props.externalLogin.twitterAuthUrl}><i className="socicon-twitter"></i>&nbsp;Twitter</a></div>
+                        <div className="col-xl-4 col-md-6 col-sm-4 social-btn"><a className="btn btn-sm btn-block google-btn" href={this.props.externalLogin.googleAuthUrl}><i className="socicon-googleplus"></i>&nbsp;Google+</a></div>
                     </div>
                     <h6 className="sub-header margin-bottom-1x">- Or -</h6>
                     <ErrorMessageComponent message={this.props.errorMessage} />
@@ -147,7 +151,7 @@ class Form extends React.Component<IRegisterFormProps, {}> {
 
 }
 
- export default connect(
+export default connect(
     (state: ApplicationState) => state.account,
     AccountState.actionCreator,
 )(Register) as typeof Register;

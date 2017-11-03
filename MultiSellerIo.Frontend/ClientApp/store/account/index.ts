@@ -11,6 +11,8 @@ import {
     IUserRegisterRequest, IUserRegistrationFailed, REQUEST_CURRENT_USER,
     REQUEST_USER_REGISTER, USER_LOGIN_FAILED, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,
     USER_LOGOFF, USER_REGISTERED, USER_REGISTRATION_FAILED,
+    SET_TOKEN, SET_EXTERNAL_LOGIN,
+    ISetToken, ISetExternalLogin
 } from "../../types/actions/account-actions";
 import { Cookies } from "../../util/cookies";
 import { AppThunkAction } from ".././";
@@ -19,12 +21,19 @@ import { AppThunkAction } from ".././";
  *** STORE
  *************************/
 
+export interface IExternalLogin {
+    facebookAuthUrl: string;
+    twitterAuthUrl: string;
+    googleAuthUrl: string;
+}
+
 export interface IAccountState {
     isLoading: boolean;
     errorMessage: string;
     isAuthorize: boolean;
     token: string;
     user: IUser;
+    externalLogin: IExternalLogin;
 }
 
 /*************************
@@ -41,6 +50,7 @@ type KnownAction = IUserRegisterRequest |
     IGetCurrentUserSuccessfully |
     IGetCurrentUserUnsuccessfully |
     IUserLogoff |
+    ISetToken |
     RouterAction;
 
 export const actionCreator = {
@@ -101,6 +111,26 @@ export const actionCreator = {
         Cookies.write("ms-token", null);
         dispatch(push("/"));
     },
+    setToken: (token: string): AppThunkAction<KnownAction> => async (dispatch, getState) => {
+        dispatch({ type: SET_TOKEN, payload: token });
+        actionCreator.getCurrentUser();
+        dispatch(push("/"));
+    },
+    setExternalLogin: (): AppThunkAction<KnownAction> => async (dispatch, getState) => {
+
+        const getExternalLogin = async () => {
+            try {
+                const externalLoginMeta = await UserService.getExternalSigninMeta();
+                console.log(externalLoginMeta);
+                dispatch({ type: SET_EXTERNAL_LOGIN, payload: externalLoginMeta });
+            } catch (err) {
+                console.log(err);
+            }
+        };
+
+        addTask(getExternalLogin());
+
+    }
 };
 
 /*************************
@@ -108,7 +138,14 @@ export const actionCreator = {
  *************************/
 
 const unloadedState: IAccountState =
-    { isLoading: false, errorMessage: null, token: null, user: null, isAuthorize: false };
+    {
+        isLoading: false, errorMessage: null, token: null, user: null, isAuthorize: false,
+        externalLogin: {
+            facebookAuthUrl: null,
+            googleAuthUrl: null,
+            twitterAuthUrl: null
+        }
+    };
 
 export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAction: KnownAction) => {
 
@@ -117,6 +154,7 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAc
     switch (action.type) {
         case REQUEST_USER_REGISTER:
             return {
+                ...state,
                 isLoading: true,
                 errorMessage: null,
                 token: null,
@@ -125,6 +163,7 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAc
             };
         case USER_REGISTERED:
             return {
+                ...state,
                 isLoading: false,
                 errorMessage: null,
                 token: null,
@@ -134,6 +173,7 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAc
         case USER_REGISTRATION_FAILED:
             const userRegistrationFailedAction = action as IUserRegistrationFailed;
             return {
+                ...state,
                 isLoading: false,
                 errorMessage: userRegistrationFailedAction.payload,
                 token: null,
@@ -142,6 +182,7 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAc
             };
         case USER_LOGIN_REQUEST:
             return {
+                ...state,
                 isLoading: true,
                 errorMessage: null,
                 token: null,
@@ -151,6 +192,7 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAc
         case USER_LOGIN_SUCCESS:
             const userLoginSuccessAction = action as IUserLoginSuccess;
             return {
+                ...state,
                 isLoading: false,
                 errorMessage: null,
                 token: userLoginSuccessAction.payload.token,
@@ -160,6 +202,7 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAc
         case USER_LOGIN_FAILED:
             const userLoginFailedAction = action as IUserLoginFailed;
             return {
+                ...state,
                 isLoading: false,
                 errorMessage: userLoginFailedAction.payload,
                 token: null,
@@ -168,6 +211,7 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAc
             };
         case REQUEST_CURRENT_USER:
             return {
+                ...state,
                 isLoading: true,
                 errorMessage: null,
                 token: state.token,
@@ -177,6 +221,7 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAc
         case GET_CURRENT_USER_SUCCESSFULLY:
             const currentUserSuccessfullyAction = action as IGetCurrentUserSuccessfully;
             return {
+                ...state,
                 isLoading: false,
                 errorMessage: null,
                 token: state.token,
@@ -185,6 +230,7 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAc
             };
         case GET_CURRENT_USER_UNSUCCESSFULLY:
             return {
+                ...state,
                 isLoading: false,
                 errorMessage: null,
                 token: null,
@@ -193,12 +239,33 @@ export const reducer: Reducer<IAccountState> = (state: IAccountState, incomingAc
             };
         case USER_LOGOFF:
             return {
+                ...state,
                 isLoading: false,
                 errorMessage: null,
                 token: null,
                 user: null,
                 isAuthorize: false,
             };
+        case SET_TOKEN:
+            const setTokenAction = action as ISetToken;
+            return {
+                ...state,
+                isLoading: false,
+                errorMessage: null,
+                token: setTokenAction.payload,
+                user: null,
+                isAuthorize: true,
+            }
+        case SET_EXTERNAL_LOGIN:
+            const setExternaLoginAction = action as ISetExternalLogin;
+            return {
+                ...state,
+                externalLogin: {
+                    facebookAuthUrl: setExternaLoginAction.payload.facebookAuthUrl,
+                    googleAuthUrl: setExternaLoginAction.payload.googleAuthUrl,
+                    twitterAuthUrl: setExternaLoginAction.payload.twitterAuthUrl
+                }
+            }
     }
 
     return state || unloadedState;

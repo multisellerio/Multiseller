@@ -33,12 +33,6 @@ const ErrorMessageComponent = (error) => {
 
 class Form extends React.Component<ILoginFormProps & IAdditionalLoginFormProps, {}> {
 
-    public genderOptions = [
-        { name: "Male", value: 1 },
-        { name: "Female", value: 2 },
-        { name: "Unspecifed", value: 3 },
-    ];
-
     public static validate(values: ILoginFormData) {
         const errors: FormErrors<ILoginFormData> = {};
 
@@ -86,6 +80,10 @@ class Login extends React.Component<LoginFormProps, {}> {
         this.onSubmit = this.onSubmit.bind(this);
     }
 
+    componentWillMount(): void {
+        this.props.setExternalLogin();
+    }
+
     private onSubmit(user: ILoginFormData) {
         this.props.login({
             username: user.username,
@@ -94,15 +92,16 @@ class Login extends React.Component<LoginFormProps, {}> {
     }
 
     public render() {
+
         return <div>
             <div className="animated fadeIn registration-box-wrapper container padding-bottom-3x mb-2">
-                <div className="registration-box">
+                <div className="login-box">
                     <h3 className="text-center">Login to GoodLook</h3>
                     <br />
                     <div className="row social-btn-section">
-                        <div className="col-xl-4 col-md-6 col-sm-4 social-btn"><a className="btn btn-sm btn-block facebook-btn" href="#"><i className="socicon-facebook"></i>&nbsp;Facebook</a></div>
-                        <div className="col-xl-4 col-md-6 col-sm-4 social-btn"><a className="btn btn-sm btn-block twitter-btn" href="#"><i className="socicon-twitter"></i>&nbsp;Twitter</a></div>
-                        <div className="col-xl-4 col-md-6 col-sm-4 social-btn"><a className="btn btn-sm btn-block google-btn" href="#"><i className="socicon-googleplus"></i>&nbsp;Google+</a></div>
+                        <div className="col-xl-4 col-md-6 col-sm-4 social-btn"><a className="btn btn-sm btn-block facebook-btn" href={this.props.externalLogin.facebookAuthUrl}><i className="socicon-facebook"></i>&nbsp;Facebook</a></div>
+                        <div className="col-xl-4 col-md-6 col-sm-4 social-btn"><a className="btn btn-sm btn-block twitter-btn" href={this.props.externalLogin.twitterAuthUrl}><i className="socicon-twitter"></i>&nbsp;Twitter</a></div>
+                        <div className="col-xl-4 col-md-6 col-sm-4 social-btn"><a className="btn btn-sm btn-block google-btn" href={this.props.externalLogin.googleAuthUrl}><i className="socicon-googleplus"></i>&nbsp;Google+</a></div>
                     </div>
                     <ErrorMessageComponent message={this.props.errorMessage} />
                     <LoginForm onSubmit={this.onSubmit} loading={this.props.isLoading} />

@@ -40,12 +40,14 @@ namespace MultiSellerIo.Api
         public void ConfigureServices(IServiceCollection services)
         {
             var storageConfig = Configuration.GetSection("Storage");
+            var externalAuthConfig = Configuration.GetSection("ExternalAuth");
 
             services.AddOptions();
 
             services.AddCors();
 
             services.Configure<TokenConfiguration>(Configuration.GetSection("Token"));
+            services.Configure<FacebookConfiguration>(externalAuthConfig.GetSection("Facebook"));
 
             services.AddDbContextPool<MultiSellerIoContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
@@ -58,6 +60,8 @@ namespace MultiSellerIo.Api
             {
                 options.Configuration = Configuration.GetValue<string>("RedisConnection");
             });
+
+            services.AddTransient<string>(provider => Configuration["UiHost"]);
 
             services.AddScoped<IMultiSellerIoContext, MultiSellerIoContext>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -76,6 +80,10 @@ namespace MultiSellerIo.Api
 
             var authorizationConfiguration = Configuration.GetSection("Token");
 
+            var facebookConfig = externalAuthConfig.GetSection("Facebook");
+            var googleConfig = externalAuthConfig.GetSection("Google");
+            var twitterConfig = externalAuthConfig.GetSection("Twitter");
+
             services.AddAuthentication()
                 .AddJwtBearer(options =>
                 {
@@ -86,8 +94,26 @@ namespace MultiSellerIo.Api
                     {
                         ValidIssuer = authorizationConfiguration["Issuer"],
                         ValidAudience = authorizationConfiguration["Issuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authorizationConfiguration["Key"]))
+                        IssuerSigningKey =
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authorizationConfiguration["Key"]))
                     };
+                })
+                .AddFacebook(options =>
+                {
+                    options.AppId = facebookConfig["AppId"];
+                    options.AppSecret = facebookConfig["AppSecret"];
+                    options.Fields.Add("email");
+                })
+                .AddGoogle(options =>
+                {
+                    options.ClientId = googleConfig["ClientId"];
+                    options.ClientSecret = googleConfig["ClientSecret"];
+                 })
+                .AddTwitter(options =>
+                {
+                    options.ConsumerKey = twitterConfig["ConsumerKey"];
+                    options.ConsumerSecret = twitterConfig["ConsumerSecret"];
+                    options.RetrieveUserDetails = true;
                 });
 
             // Add framework services.
@@ -120,12 +146,14 @@ namespace MultiSellerIo.Api
             app.UseStaticFiles();
 
             app.UseCors(builder =>
-                builder.WithOrigins("http://localhost:61334")
+                builder.WithOrigins(Configuration["UiHost"])
                 .AllowAnyHeader()
                 .AllowAnyMethod()
             );
 
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+
+            app.UseAuthentication();
 
             app.UseMvc();
 

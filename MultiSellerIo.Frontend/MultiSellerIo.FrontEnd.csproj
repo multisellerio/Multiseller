@@ -96,6 +96,7 @@
     <None Include="wwwroot\img\shop\widget\10.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="ClientApp\components\account\util\" />
     <Folder Include="ClientApp\dist\" />
     <Folder Include="wwwroot\assets\" />
   </ItemGroup>

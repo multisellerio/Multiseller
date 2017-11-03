@@ -26,6 +26,11 @@ export default createServerRenderer((params) => {
                 isLoading: false,
                 errorMessage: null,
                 user: null,
+                externalLogin: {
+                    facebookAuthUrl: null,
+                    googleAuthUrl: null,
+                    twitterAuthUrl: null
+                }
             },
             products: null,
         };

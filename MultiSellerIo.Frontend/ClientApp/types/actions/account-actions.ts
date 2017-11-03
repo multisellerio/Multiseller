@@ -1,5 +1,5 @@
 ﻿import { Action } from "redux";
-import { ILoginRequest, ILoginResponse, IRegisterRequest, IUser } from "../../models/account-models";
+import { ILoginRequest, ILoginResponse, IRegisterRequest, IUser, IExternalSigninMeta } from "../../models/account-models";
 
 export const REQUEST_USER_REGISTER: string = "REQUEST_USER_REGISTER";
 export const USER_REGISTERED: string = "USER_REGISTERED";
@@ -13,6 +13,10 @@ export const USER_LOGOFF: string = "USER_LOGOFF";
 export const REQUEST_CURRENT_USER: string = "REQUEST_CURRENT_USER";
 export const GET_CURRENT_USER_SUCCESSFULLY: string = "GET_CURRENT_USER_SUCCESSFULLY";
 export const GET_CURRENT_USER_UNSUCCESSFULLY: string = "GET_CURRENT_USER_UNSUCCESSFULLY";
+
+export const SET_TOKEN = "SET_TOKEN";
+
+export const SET_EXTERNAL_LOGIN = "SET_EXTERNAL_LOGIN";
 
 
 /*************************
@@ -72,4 +76,22 @@ export interface IGetCurrentUserSuccessfully extends Action {
 
 export interface IGetCurrentUserUnsuccessfully extends Action {
     type: typeof GET_CURRENT_USER_UNSUCCESSFULLY;
+}
+
+/*************************
+ *** SET TOKEN ACTION
+ *************************/
+
+export interface ISetToken extends Action {
+    type: typeof SET_TOKEN;
+    payload: string;
+}
+
+/*************************
+ *** SET EXTERNAL LOGIN
+ *************************/
+
+export interface ISetExternalLogin extends Action {
+    type: typeof SET_EXTERNAL_LOGIN;
+    payload: IExternalSigninMeta;
 }

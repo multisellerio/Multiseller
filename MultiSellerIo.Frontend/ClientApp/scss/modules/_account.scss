@@ -158,6 +158,15 @@
     .registration-box {
         margin-left: auto;
         margin-right: auto;
+        width: 500px;
+        box-shadow: 0 2px 15px rgba(0,0,0,.1);
+        background-color: $body-bg;
+        padding: 20px 20px;
+    }
+
+    .login-box {
+        margin-left: auto;
+        margin-right: auto;
         width: 400px;
         box-shadow: 0 2px 15px rgba(0,0,0,.1);
         background-color: $body-bg;
@@ -178,9 +187,9 @@
         font-size: $font-size-base * .8125
     }
 
-    .submit-button{
+    .submit-button {
         width: 100%;
-        margin-left : 0;
+        margin-left: 0;
         margin-right: 0;
     }
 }
