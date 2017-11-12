@@ -154,6 +154,24 @@ namespace MultiSellerIo.Dal.Migrations
                     b.ToTable("CategoryAttributes");
                 });
 
+            modelBuilder.Entity("MultiSellerIo.Dal.Entity.EmailTemplate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Content");
+
+                    b.Property<string>("From");
+
+                    b.Property<string>("Subject");
+
+                    b.Property<string>("Type");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmailTemplates");
+                });
+
             modelBuilder.Entity("MultiSellerIo.Dal.Entity.Product", b =>
                 {
                     b.Property<long>("Id")

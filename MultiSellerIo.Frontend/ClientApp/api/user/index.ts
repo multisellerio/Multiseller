@@ -1,5 +1,5 @@
 ﻿import { API_URL, getToken } from "../";
-import { ILoginRequest, ILoginResponse, IRegisterRequest, IUser, IExternalSigninMeta } from "../../models/account-models";
+import { ILoginRequest, ILoginResponse, IRegisterRequest, IUser, IExternalSigninMeta, IResetPasswordRequest, IEmailConfirmationRequest } from "../../models/account-models";
 
 export const UserService = {
     registerUser: async (request: IRegisterRequest): Promise<IUser> => {
@@ -101,6 +101,103 @@ export const UserService = {
             }
 
             return responseData as IExternalSigninMeta;
+
+        } catch (err) {
+            throw err;
+        }
+
+    },
+
+    forgetPassword: async (email: string): Promise<void> => {
+
+        try {
+            const response = await fetch(API_URL + "account/forget-password",
+                {
+                    method: "post",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email: email
+                    }),
+                });
+
+            if (response.status !== 200) {
+                const responseData = await response.json();
+                throw new Error(responseData.error);
+            }
+
+        } catch (err) {
+            throw err;
+        }
+        
+    },
+
+    resetPassword: async(request: IResetPasswordRequest): Promise<void> => {
+
+        try {
+            const response = await fetch(API_URL + "account/reset-password",
+                {
+                    method: "post",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(request),
+                });
+
+            if (response.status !== 200) {
+                const responseData = await response.json();
+                throw new Error(responseData.error);
+            }
+
+        } catch (err) {
+            throw err;
+        }
+
+    },
+    sendEmailConfirmation: async (): Promise<void> => {
+
+        try {
+            let token = getToken();
+            const response = await fetch(API_URL + "account/send-email-confirmation",
+                {
+                    method: "post",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + token,
+                    }
+                });
+
+            if (response.status !== 200) {
+                const responseData = await response.json();
+                throw new Error(responseData.error);
+            }
+
+        } catch (err) {
+            throw err;
+        }
+
+    },
+    emailConfirmation: async (request: IEmailConfirmationRequest): Promise<void> => {
+
+        try {
+            const response = await fetch(API_URL + "account/email-confirmation",
+                {
+                    method: "post",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(request),
+                });
+
+            if (response.status !== 200) {
+                const responseData = await response.json();
+                throw new Error(responseData.error);
+            }
 
         } catch (err) {
             throw err;

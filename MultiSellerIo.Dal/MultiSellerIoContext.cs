@@ -30,6 +30,7 @@ namespace MultiSellerIo.Dal
         public DbSet<ProductVariant> ProductVariants { get; set; }
         public DbSet<ProductAttribute> ProductAttributes { get; set; }
         public DbSet<ProductAttributeValue> ProductAttributeValues { get; set; }
+        public DbSet<EmailTemplate> EmailTemplates { get; set; }
         public DbSet<ProductVariantSpecificationAttributeMapping> ProductVariantSpecificationAttributeMappings { get; set; }
     }
 }

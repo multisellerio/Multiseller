@@ -30,6 +30,26 @@ export default createServerRenderer((params) => {
                     facebookAuthUrl: null,
                     googleAuthUrl: null,
                     twitterAuthUrl: null
+                },
+                resetPasswordState: {
+                    isLoading: false,
+                    message: null,
+                    success: false
+                },
+                forgetPasswordState: {
+                    isLoading: false,
+                    message: null,
+                    success: false
+                },
+                emailConfirmationRequestState: {
+                    isLoading: false,
+                    message: null,
+                    success: false,
+                },
+                emailConfirmationState: {
+                    isLoading: false,
+                    message: null,
+                    success: false,
                 }
             },
             products: null,

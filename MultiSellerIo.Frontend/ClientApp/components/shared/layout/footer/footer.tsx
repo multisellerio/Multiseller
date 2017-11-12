@@ -4,7 +4,7 @@
 
     public render() {
 
-        return <div className="site-footer">
+        return <div className="site-footer footer-light">
             <div className="container">
                 <div className="row">
                     <div className="col-lg-3 col-md-6">

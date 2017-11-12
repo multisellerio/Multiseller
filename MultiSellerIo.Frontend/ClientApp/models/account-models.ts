@@ -37,10 +37,23 @@ export interface IUser {
     username: string;
     email: string;
     gender: Gender;
+    emailConfirmed: boolean;
 }
 
 export interface IExternalSigninMeta {
     facebookAuthUrl: string;
     twitterAuthUrl: string;
     googleAuthUrl: string;
+}
+
+export interface IResetPasswordRequest {
+    email: string;
+    token: string;
+    password: string;
+    confirmationPassword: string;
+}
+
+export interface IEmailConfirmationRequest {
+    token: string;
+    email: string;
 }

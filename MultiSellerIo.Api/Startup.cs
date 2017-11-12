@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -10,11 +11,13 @@ using Microsoft.IdentityModel.Tokens;
 using MultiSellerIo.Api.Util.Configurations.Options;
 using MultiSellerIo.Api.Util.Mapper;
 using MultiSellerIo.Api.Util.Middlewares;
+using MultiSellerIo.Api.Util.Token;
 using MultiSellerIo.Dal;
 using MultiSellerIo.Dal.Entity;
 using MultiSellerIo.Dal.Repository;
 using MultiSellerIo.Intergrations.Azure;
 using MultiSellerIo.Services.Cache;
+using MultiSellerIo.Services.Email;
 using MultiSellerIo.Services.Images;
 using MultiSellerIo.Services.Product;
 using MultiSellerIo.Services.User;
@@ -54,7 +57,7 @@ namespace MultiSellerIo.Api
 
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<MultiSellerIoContext>()
-                .AddDefaultTokenProviders();
+                .AddTokenProvider<TokenProvider>("Default");
 
             services.AddDistributedRedisCache(options =>
             {
@@ -71,6 +74,10 @@ namespace MultiSellerIo.Api
             services.AddScoped<IImageStorageService, ImageStorageService>(provider => new ImageStorageService(new AzureStorageService(storageConfig["ConnectionString"], storageConfig["ImagesContainerName"])));
             services.AddScoped<IImageResizeService, ImageResizeService>();
             services.AddScoped<IImageService, ImageService>();
+
+            services.AddScoped<IEmailService>(provider => new EmailService(Configuration["SendGridToken"]));
+            services.AddScoped<IEmailTemplateService, EmailTemplateService>();
+            services.AddScoped<IEmailSendingService, EmailSendingService>();
 
             services.AddScoped<IUserService, UserService>();
 
@@ -116,6 +123,9 @@ namespace MultiSellerIo.Api
                     options.RetrieveUserDetails = true;
                 });
 
+            services.AddHangfire(config =>
+                config.UseSqlServerStorage(Configuration.GetConnectionString("DbConnection")));
+
             // Add framework services.
             services.AddMvc();
 
@@ -154,6 +164,9 @@ namespace MultiSellerIo.Api
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
             app.UseAuthentication();
+
+            app.UseHangfireServer();
+            app.UseHangfireDashboard();
 
             app.UseMvc();
 

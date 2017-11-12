@@ -10,7 +10,6 @@
                     <Menu className="portal-menu" mode="inline">
                         <SubMenu title={<span><Icon type="bars" /><span>Products</span></span>}>
                             <Menu.Item>
-                                <Icon type="plus-circle-o" />
                                 New Product
                                 </Menu.Item>
                             <Menu.Item>

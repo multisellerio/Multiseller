@@ -4,9 +4,7 @@
 .portal-menu {
     border-right: none !important;
 
-    .ant-menu-submenu {
-        .ant-menu-submenu-title {
-            font-size: $font-size-sm;
-        }
+    .ant-menu li, .ant-menu-submenu-title {
+        font-size: $font-size-sm;
     }
 }

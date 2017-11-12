@@ -1,10 +1,15 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Hangfire;
 using Microsoft.AspNetCore.Identity;
+using MultiSellerIo.Common.String;
 using MultiSellerIo.Core.Exception;
 using MultiSellerIo.Dal.Entity;
 using MultiSellerIo.Dal.Repository;
+using MultiSellerIo.Services.Email;
 
 namespace MultiSellerIo.Services.User
 {
@@ -14,7 +19,11 @@ namespace MultiSellerIo.Services.User
         Task<Dal.Entity.User> RegisterUser(Dal.Entity.User user, ExternalLoginInfo externalLoginInfo, string role);
         Task<Dal.Entity.User> Login(string username, string password);
         Task<bool> IsInRole(Dal.Entity.User user, string role);
+        Task ResetPassword(string email, string token, string password);
         long GetUserId(ClaimsPrincipal user);
+        Task ForgotPassword(string returnUrl, string email);
+        Task SendEmailConfirmationEmail(Dal.Entity.User user, string returnUrl);
+        Task ConfirmEmail(string email, string token);
         Task<Dal.Entity.User> GetUser(ClaimsPrincipal user);
         Task InitialRoles();
     }
@@ -168,9 +177,81 @@ namespace MultiSellerIo.Services.User
             return user;
         }
 
+        public async Task ForgotPassword(string returnUrl, string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                throw new ServiceException("Unable to find user from email " + email);
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var url = $"{returnUrl}?token={WebUtility.UrlEncode(token)}&email={WebUtility.UrlEncode(email)}";
+
+            //Sending email to user to reset password
+            BackgroundJob.Enqueue((IEmailSendingService emailSendingService) =>
+                emailSendingService.SendResetPasswordEmail(new ResetPasswordEmailDetails()
+                {
+                    To = user.Email,
+                    ReturnUrl = url,
+                    LastName = user.Email
+                }));
+
+        }
+
+        public async Task ResetPassword(string email, string token, string password)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                throw new ServiceException("Unable to find user from email " + email);
+            }
+
+            var resetPasswordResult = await _userManager.ResetPasswordAsync(user, token, password);
+
+            if (!resetPasswordResult.Succeeded)
+            {
+                throw new ServiceException(GenerateMessage(resetPasswordResult));
+            }
+        }
+
         public async Task<bool> IsInRole(Dal.Entity.User user, string role)
         {
             return await _userManager.IsInRoleAsync(user, role);
+        }
+
+        public async Task SendEmailConfirmationEmail(Dal.Entity.User user, string returnUrl)
+        {
+            var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var url = $"{returnUrl}?token={WebUtility.UrlEncode(emailConfirmationToken)}&email={WebUtility.UrlEncode(user.Email)}";
+
+            //Sending email to user to confirm email address
+            BackgroundJob.Enqueue((IEmailSendingService emailSendingService) =>
+                emailSendingService.SendEmailConfirmationEmail(new EmailConfirmationEmailDetails()
+                {
+                    To = user.Email,
+                    ReturnUrl = url,
+                    LastName = user.Email
+                }));
+        }
+
+        public async Task ConfirmEmail(string email, string token)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                throw new ServiceException("Unable to find user from email " + email);
+            }
+
+            var emailConfirmationResult = await _userManager.ConfirmEmailAsync(user, token);
+
+            if (!emailConfirmationResult.Succeeded)
+            {
+                throw new ServiceException(GenerateMessage(emailConfirmationResult));
+            }
         }
 
         public long GetUserId(ClaimsPrincipal user)

@@ -21,7 +21,7 @@ class ExternalLogin extends React.Component<ExternalLoginProps, {}> {
     }
 
     public render() {
-        return <div className="container padding-bottom-3x mb-2 text-center">
+        return <div className="container padding-bottom-2x mb-2 text-center">
             <Spin size="large" />
         </div>;
     }

@@ -102,6 +102,45 @@ namespace MultiSellerIo.Api.Controllers
             });
         }
 
+        [Route("api/account/send-email-confirmation")]
+        [HttpPost]
+        public async Task<IActionResult> SendEmailConfirmation([FromServices]string uiHost)
+        { 
+            var retrunUrl = $"{uiHost}/email-confirm";
+            var user = await _userService.GetUser(User);
+            await _userService.SendEmailConfirmationEmail(user, retrunUrl);
+            return Ok();
+        }
+
+        [Route("api/account/email-confirmation")]
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> EmailConfirmation([FromBody]EmailConfirmationBindingModel model)
+        {
+            await _userService.ConfirmEmail(model.Email, model.Token);
+            return Ok();
+        }
+
+        [Route("api/account/forget-password")]
+        [HttpPost]
+        [ModelValidation]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgetPassword([FromServices]string uiHost, [FromBody]ResetPasswordRequestBindingModel model)
+        {
+            await _userService.ForgotPassword($"{uiHost}/account/reset-password", model.Email);
+            return Ok();
+        }
+
+        [Route("api/account/reset-password")]
+        [HttpPost]
+        [ModelValidation]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordBindingModel model)
+        {
+            await _userService.ResetPassword(model.Email, model.Token, model.Password);
+            return Ok();
+        }
+
         [AllowAnonymous]
         [Route("account/external-login")]
         [HttpGet]

@@ -1,4 +1,5 @@
 ﻿import * as React from "React";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { FormErrors, InjectedFormProps, reduxForm } from "redux-form";
 
@@ -54,10 +55,21 @@ class Form extends React.Component<ILoginFormProps & IAdditionalLoginFormProps, 
         return <form onSubmit={handleSubmit}>
             <Field type="text" name="username" component={InputComponent} label="Username" col="col-md-12" />
             <Field type="password" name="password" component={InputComponent} label="Password" col="col-md-12" />
-            <div className="col-12 text-center text-sm-right">
-                <Button type="primary" size="large" onClick={handleSubmit} loading={this.props.loading}>
-                    Login
-                </Button>
+            <div className="col-md-12">
+                <div className="row">
+                    <div className="col-md-6">
+                        <div className="text-left">
+                            <Link to="/account/forget">Forget Password</Link>
+                        </div>
+                    </div>
+                    <div className="col-md-6">
+                        <div className="text-right">
+                            <Button type="primary" size="large" onClick={handleSubmit} loading={this.props.loading}>
+                                Login
+                        </Button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </form>;
     }
