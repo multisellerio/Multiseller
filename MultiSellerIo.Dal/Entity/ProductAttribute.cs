@@ -8,7 +8,8 @@ namespace MultiSellerIo.Dal.Entity
         public string Description { get; set; }
         //Metadata for product attribute
         public string Meta { get; set; }
-        public virtual IList<ProductAttributeValue> ProductAttributeValues { get; set; }
-
+        public virtual List<ProductAttributeValue> ProductAttributeValues { get; set; }
+        //Soft delete
+      //  public bool IsDeleted { get; set; }
     }
 }
