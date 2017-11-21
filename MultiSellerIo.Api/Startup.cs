@@ -120,7 +120,7 @@ namespace MultiSellerIo.Api
             app.UseStaticFiles();
 
             app.UseCors(builder =>
-                builder.WithOrigins("http://localhost:61334")
+                builder.WithOrigins("http://localhost:61334", "http://localhost:49801")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
             );
