@@ -20,7 +20,7 @@ export const routes =
         <Route exact path="/email-confirm" component={EmailConfirm} />
         <Route exact path="/account/reset-password" component={ResetPassword} />
         <Route exact path="/account/forget" component={ForgetPassword} />
-        <Route path="/products" component={Products} />
+        <Route path="/products/:category" component={Products} />
         <Route path="/account/register" component={Register} />
         <Route path="/account/login" component={Login} />
         <Route path="/portal" component={Portal} />

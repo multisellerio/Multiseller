@@ -23,7 +23,7 @@ namespace MultiSellerIo.FrontEnd.Controllers
         [HttpGet("{height}/{width}/{filename}")]
         public async Task<IActionResult> Get(int height, int width, string fileName)
         {
-            var file = await _imageService.GetImage(fileName, height, width);
+            var file = await _imageService.GetImage(fileName, width, height);
             return File(file.Stream, file.ContentType);
         }
     }

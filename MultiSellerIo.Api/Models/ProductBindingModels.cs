@@ -1,10 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
 using MultiSellerIo.Core.Enum;
 
 namespace MultiSellerIo.Api.Models
 {
+
+    public class ProductSearchBindingModel
+    {
+        public int Page { get; set; }
+        public int PageSize { get; set; }
+        public string SearchText { get; set; }
+        public decimal? PriceMin { get; set; }
+        public decimal? PriceMax { get; set; }
+        public string Category { get; set; }
+    }
 
     public class ProductQueryModel
     {

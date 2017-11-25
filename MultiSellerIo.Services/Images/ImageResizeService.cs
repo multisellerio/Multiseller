@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using ImageSharp;
-using ImageSharp.Formats;
-using ImageSharp.Processing;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Processing;
 
 namespace MultiSellerIo.Services.Images
 {
@@ -18,14 +18,14 @@ namespace MultiSellerIo.Services.Images
 
             using (Image<Rgba32> image = Image.Load<Rgba32>(imageStream))
             {
-                image.Resize(new ResizeOptions()
+
+                image.Mutate(img => img.Resize(new ResizeOptions()
                 {
                     Size = new SixLabors.Primitives.Size(width, height),
-                    Mode = ResizeMode.Max,
-                }).SaveAsJpeg(outputStream, new JpegEncoder()
-                {
-                    Quality = 100,
-                });
+                    Mode = ResizeMode.Crop,
+                }).BackgroundColor(Rgba32.White));
+
+                image.SaveAsJpeg(outputStream);
             }
 
             outputStream.Position = 0;

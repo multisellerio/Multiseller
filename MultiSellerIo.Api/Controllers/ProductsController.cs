@@ -1,11 +1,14 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MultiSellerIo.Api.Models;
 using MultiSellerIo.Api.Util;
+using MultiSellerIo.Api.Util.Filters;
 using MultiSellerIo.Dal.Entity;
 using MultiSellerIo.Services.Product;
+using MultiSellerIo.Services.Product.Core;
 using MultiSellerIo.Services.User;
 
 namespace MultiSellerIo.Api.Controllers
@@ -19,7 +22,8 @@ namespace MultiSellerIo.Api.Controllers
         private readonly IProductService _productService;
         private readonly IUserService _userService;
 
-        public ProductsController(IProductAttributeService productAttributeService, IProductCategoryService productCategoryService,
+        public ProductsController(IProductAttributeService productAttributeService, 
+            IProductCategoryService productCategoryService,
             IProductService productService, IUserService userService)
         {
             _productAttributeService = productAttributeService;
@@ -42,6 +46,28 @@ namespace MultiSellerIo.Api.Controllers
                 UserId = user.Id
             });
 
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("search")]
+        [ArrayInput("attributeValues", typeof(long))]
+        [ArrayInput("vendors", typeof(string))]
+        [AllowAnonymous]
+        public async Task<IActionResult> Search(string[] vendors, long[] attributeValues,
+            [FromQuery]ProductSearchBindingModel model)
+        {
+            var result = await _productService.SearchProductAsync(new SearchProductCriteria()
+            {
+                PageSize = model.PageSize,
+                Page = model.Page,
+                AttributeValues = attributeValues,
+                Category = model.Category,
+                SearchText = model.SearchText,
+                PriceMin = model.PriceMin,
+                PriceMax = model.PriceMax,
+                Vendors = vendors
+            });
             return Ok(result);
         }
 
@@ -90,6 +116,7 @@ namespace MultiSellerIo.Api.Controllers
 
         [HttpGet]
         [Route("meta")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetProductMetaData()
         {
             var productAttributes = await _productAttributeService.GetProductAttributes();

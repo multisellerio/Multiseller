@@ -78,9 +78,10 @@ export interface IProduct {
 }
 
 export interface IProductListModel {
-    id: number,
-    categoryId: number,
-    categoryName: string,
+    id: number;
+    slug: string;
+    categoryId: number;
+    categoryName: string;
     title: string;
     description: string;
     vendor: string;
@@ -95,12 +96,38 @@ export interface IProductListRequest {
     force: boolean;
 }
 
+export interface IProductQuery {
+    page: number;
+    pageSize: number;
+    searchtext: string;
+    category: string;
+    priceMin?: number;
+    priceMax?: number;
+    vendors: string[];
+    attributeValues: number[];
+}
+
 export interface IProductList {
     count: number;
     currentPage: number;
     pageSize: number;
-    page: number;
+    pages: number;
     result: IProductListModel[];
+}
+
+export interface IProductSearchMeta {
+    searchText: string;
+    priceMin?: number;
+    priceMax?: number;
+    categoryId: number;
+    categoryName: string;
+    vendors: string[];
+    attributeValues: number[];
+}
+
+export interface IProductSearchResult {
+    products: IProductList;
+    meta: IProductSearchMeta;
 }
 
 

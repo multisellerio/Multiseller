@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MultiSellerIo.Common.Pagination;
-using MultiSellerIo.Common.Util;
+using MultiSellerIo.Common.String;
 using MultiSellerIo.Core.Exception;
 using MultiSellerIo.Dal.Repository;
+using MultiSellerIo.Services.Product.Core;
 
 namespace MultiSellerIo.Services.Product
 {
@@ -16,32 +15,9 @@ namespace MultiSellerIo.Services.Product
         Task<Dal.Entity.Product> AddProduct(Dal.Entity.Product product);
         Task<Dal.Entity.Product> UpdateProduct(Dal.Entity.Product product);
         Task<PaginationResult<ProductModel>> GetProductsAsync(ProductQuery query);
+        Task<ProductSearchResult> SearchProductAsync(SearchProductCriteria criteria);
         Task<Dal.Entity.Product> GetById(long id);
         Task Delete(long id, long userId);
-    }
-
-    public class ProductQuery
-    {
-        public int Page { get; set; }
-        public int PageSize { get; set; }
-        public string SearchText { get; set; }
-        public long? CategoryId { get; set; }
-        public long UserId { get; set; }
-    }
-
-    public class ProductModel
-    {
-        public long Id { get; set; }
-        public string Slug { get; set; }
-        public long CategoryId { get; set; }
-        public string CategoryName { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public string Vendor { get; set; }
-        public int Quantity { get; set; }
-        public decimal Price { get; set; }
-        public List<string> Images { get; set; }
-
     }
 
     public class ProductService : IProductService
@@ -53,27 +29,101 @@ namespace MultiSellerIo.Services.Product
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<PaginationResult<ProductModel>> GetProductsAsync(ProductQuery query)
+        public async Task<ProductSearchResult> SearchProductAsync(SearchProductCriteria criteria)
         {
 
-            Expression<Func<Dal.Entity.Product, bool>> productQuery = product =>
-                product.UserId == query.UserId && !product.IsDeleted;
+            var categorySlug = criteria.Category.ToLower();
+            var category = await _unitOfWork.CategoryRepository.GetAll().Where(c => c.Slug.ToLower() == categorySlug)
+                .FirstOrDefaultAsync();
 
-            if (!string.IsNullOrEmpty(query.SearchText))
+            if (category == null)
             {
-                Expression<Func<Dal.Entity.Product, bool>> searchTextQuery =
-                    product => product.Title.ToLower().Contains(query.SearchText);
-
-                productQuery = productQuery.And(searchTextQuery);
+                throw new ServiceException("Unable to find category");
             }
 
-            if (query.CategoryId.HasValue)
-            {
-                var categoryId = query.CategoryId.Value;
-                Expression<Func<Dal.Entity.Product, bool>> categoryFilter = product => product.CategoryId == categoryId;
+            var productQuery = criteria.GenerateQuery();
 
-                productQuery = productQuery.And(categoryFilter);
-            }
+            var count = await _unitOfWork.ProductRepository.GetAll()
+                .CountAsync(productQuery);
+
+            var metaQuery = criteria.GenerateQueryForMeta();
+
+            var maxPrice = await _unitOfWork.ProductRepository.GetAll()
+                .Where(metaQuery)
+                .Include(product => product.Category)
+                .Include(product => product.ProductVariants)
+                .MaxAsync(product => product.ProductVariants.Max(variant => variant.Price));
+
+            var minPrice = await _unitOfWork.ProductRepository.GetAll()
+                .Where(metaQuery)
+                .Include(product => product.Category)
+                .Include(product => product.ProductVariants)
+                .MinAsync(product => product.ProductVariants.Min(variant => variant.Price));
+
+            var vendors = await _unitOfWork.ProductRepository.GetAll()
+                .Where(metaQuery)
+                .Include(product => product.Category)
+                .Select(product => product.Vendor)
+                .Distinct()
+                .Select(vendor => vendor.ToTitleCase())
+                .ToListAsync();
+
+            var productAttributes = await _unitOfWork.ProductRepository.GetAll()
+                .Where(metaQuery)
+                .Include(product => product.Category)
+                .Include(product => product.ProductVariants)
+                .ThenInclude(productVariant => productVariant.ProductVariantSpecificationAttributeMappings)
+                .SelectMany(product => product.ProductVariants.SelectMany(variant =>
+                    variant.ProductVariantSpecificationAttributeMappings.Select(variantSpecification =>
+                        variantSpecification.ProductAttributeValueId)))
+                .Distinct()
+                .ToListAsync();
+
+            var productMeta = new ProductFilterMeta
+            {
+                PriceMax = maxPrice,
+                PriceMin = minPrice,
+                SearchText = criteria.SearchText,
+                CategoryId = category.Id,
+                CategoryName = category.Name,
+                AttributeValues = productAttributes.ToArray(),
+                Vendors = vendors.ToArray()
+            };
+
+            var result = await _unitOfWork.ProductRepository.GetAll()
+                .Where(productQuery)
+                .Skip((criteria.Page - 1) * criteria.PageSize)
+                .Take(criteria.PageSize)
+                .Include(product => product.Images)
+                .Include(product => product.Category)
+                .Include(product => product.ProductVariants)
+                .Select(product => new ProductModel()
+                {
+                    Id = product.Id,
+                    CategoryId = product.CategoryId,
+                    CategoryName = product.Category.Name,
+                    Slug = product.Slug,
+                    Title = product.Title,
+                    Description = product.Description,
+                    Vendor = product.Vendor,
+                    Price = product.ProductVariants.Min(variation => variation.Price),
+                    Quantity = product.ProductVariants.Sum(variant => variant.Quantity),
+                    Images = product.Images.Select(img => img.Name).ToList()
+                }).ToListAsync();
+
+
+            var productResult = new PaginationResult<ProductModel>(count, criteria.Page, criteria.PageSize, result);
+
+            return new ProductSearchResult()
+            {
+                Meta = productMeta,
+                Products = productResult
+            };
+        }
+
+        public async Task<PaginationResult<ProductModel>> GetProductsAsync(ProductQuery query)
+        {
+            var productQuery = query.GenerateQuery();
 
             var count = await _unitOfWork.ProductRepository.GetAll()
                 .Where(productQuery)
@@ -168,7 +218,7 @@ namespace MultiSellerIo.Services.Product
                 //Remove, removed attribute mappings
                 productVariant.ProductVariantSpecificationAttributeMappings.RemoveAll(
                     attributeMapping => updatedProductVariant.ProductVariantSpecificationAttributeMappings.All(
-                        currentAttributeMapping => attributeMapping.ProductAttributeValueId != currentAttributeMapping.ProductAttributeValueId) );
+                        currentAttributeMapping => attributeMapping.ProductAttributeValueId != currentAttributeMapping.ProductAttributeValueId));
             });
 
 

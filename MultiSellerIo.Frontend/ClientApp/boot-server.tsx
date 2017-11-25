@@ -53,6 +53,7 @@ export default createServerRenderer((params) => {
                 }
             },
             products: null,
+            catelog: null,
         };
 
         // Prepare Redux store with in-memory history, and dispatch a navigation event

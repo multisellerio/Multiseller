@@ -6,9 +6,10 @@
 
   <ItemGroup>
     <PackageReference Include="HangFire.Core" Version="1.6.17" />
-    <PackageReference Include="ImageSharp" Version="1.0.0-alpha9-00194" />
     <PackageReference Include="Mustache" Version="1.0.1" />
     <PackageReference Include="Sendgrid" Version="9.9.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0002" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0002" />
   </ItemGroup>
 
   <ItemGroup>

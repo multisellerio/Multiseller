@@ -1,5 +1,5 @@
 ﻿import { API_URL, getToken } from "../";
-import { IProductMetaData, IProduct, IProductList, IProductListRequest } from "../../models/product-models";
+import { IProductMetaData, IProduct, IProductList, IProductListRequest, IProductQuery, IProductSearchResult } from "../../models/product-models";
 
 export const ProductService = {
 
@@ -160,6 +160,57 @@ export const ProductService = {
                 const responseData = await response.json();
                 throw new Error(responseData.error);
             }
+
+        } catch (err) {
+            throw err;
+        }
+
+    },
+
+    searchProduct: async(productQuery: IProductQuery) => {
+
+        try {
+
+            let requestUrl = `${API_URL}products/search?page=${productQuery.page}&pageSize=${productQuery.pageSize}`;
+
+            requestUrl = `${requestUrl}&category=${productQuery.category}`;
+
+            if (productQuery.priceMax) {
+                requestUrl = `${requestUrl}&priceMax=${productQuery.priceMax}`;
+            }
+
+            if (productQuery.vendors && productQuery.vendors.length > 0) {
+                requestUrl = `${requestUrl}&vendors=${productQuery.vendors.join(',')}`;
+            }
+
+            if (productQuery.priceMin) {
+                requestUrl = `${requestUrl}&priceMin=${productQuery.priceMin}`;
+            }
+
+            if (productQuery.priceMax) {
+                requestUrl = `${requestUrl}&priceMin=${productQuery.priceMin}`;
+            }
+
+            if (productQuery.attributeValues && productQuery.attributeValues.length > 0) {
+                requestUrl = `${requestUrl}&attributeValues=${productQuery.attributeValues.join(',')}`;
+            }
+
+            const response = await fetch(requestUrl,
+                {
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    method: "get"
+                });
+
+            const responseData = await response.json();
+
+            if (response.status !== 200) {
+                throw new Error(responseData.error);
+            }
+
+            return responseData as IProductSearchResult;
 
         } catch (err) {
             throw err;
