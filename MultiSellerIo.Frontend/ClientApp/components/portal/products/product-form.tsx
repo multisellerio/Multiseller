@@ -1,5 +1,5 @@
 ﻿import * as React from "React";
-import { FormErrors, reduxForm, InjectedFormProps, arrayPush, arrayRemoveAll } from "redux-form";
+import { FormErrors, reduxForm, InjectedFormProps , arrayPush, arrayRemoveAll } from "redux-form";
 
 import {
     IProductCategory, IProductMetaData, ICategoryAttribute,
@@ -34,11 +34,11 @@ export interface IProductImage {
 }
 
 interface IProductFormProps extends InjectedFormProps<IProductFormData, {}> {
+    dispatch?: any;
 }
 
 interface IAdditionalFormProps {
     metaData: IProductMetaData;
-    dispatch: any;
     loading: boolean;
     editing: boolean;
 }
@@ -55,7 +55,7 @@ export interface IProductVairation {
     sku: string,
     upc: string,
     price: string,
-    defaultImage: number,
+    defaultImage: string,
     attributes: IProductVariationAttribute[],
 }
 
@@ -188,7 +188,7 @@ const renderProductVariant: React.StatelessComponent<IProductVariantFieldArray> 
                     }));
 
                     const imageOptions = _.filter(_.map(files,
-                        (image) => {
+                        (image: any) => {
 
                             if (image.response == null) {
                                 return null;
@@ -287,9 +287,9 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
         this.selectCategory = this.selectCategory.bind(this);
     }
 
-    public static validate(values: IProductFormData,  props: any) {
+    public static validate(values: IProductFormData, props: any): FormErrors<IProductFormData> {
 
-        const errors: FormErrors<IProductFormData, string> = {};
+        const errors: FormErrors<IProductFormData> = {};
 
         if (!values.category || (Array.isArray(values.category) && values.category.length === 0)) {
             errors.category = "Category is required";
@@ -351,12 +351,12 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
             errors.productVariants = productVariationErrors;
 
         } else {
-            errors.productVariants = { _error: "At least one variant must be entered" }
+            errors.productVariants = "At least one variant must be entered";
         }
 
         if (values.images == null || values.images.length === 0) {
 
-            errors.images = { _error: "At least one image must be entered" }
+            errors.images = "At least one image must be entered";
         }
 
         return errors;
@@ -408,7 +408,7 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
         this.props.dispatch(arrayRemoveAll(formName, 'images'));
 
         _.map(this.state.files,
-            (file) => {
+            (file: any) => {
 
                 if (file.response && file.response.fileList && file.response.fileList[0] != null) {
                     this.props.dispatch(arrayPush(formName, 'images', { id: file.id, name: file.response.fileList[0] }));
@@ -677,7 +677,7 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
 
 }
 
-const form = reduxForm<IProductFormData, IProductFormProps & IAdditionalFormProps>({
+const form = reduxForm<IProductFormData, IAdditionalFormProps>({
     form: formName,
     validate: ProductForm.validate,
 })(ProductForm);

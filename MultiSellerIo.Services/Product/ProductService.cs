@@ -161,7 +161,7 @@ namespace MultiSellerIo.Services.Product
 
             await _unitOfWork.ProductRepository.Add(product);
             await _unitOfWork.SaveChangesAsync();
-            return product;
+            return await GetById(product.Id);
         }
 
         public async Task<Dal.Entity.Product> UpdateProduct(Dal.Entity.Product product)

@@ -220,6 +220,7 @@ button:focus { outline: none; }
 // Scroll to Top Button
 .scroll-to-top-btn {
   display: block;
+  cursor: pointer;
   position: fixed;
   right: 16px;
   bottom: -($btn-height * 2);

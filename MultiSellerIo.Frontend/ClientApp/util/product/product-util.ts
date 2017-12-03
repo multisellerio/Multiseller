@@ -87,6 +87,8 @@ const productUtil = {
                     (
                         (attribute: IProductVariantSpecificationAttributeMapping) => {
                             return {
+                                name: '',
+                                isGroup: false,
                                 attributeId: attribute.productVariantId,
                                 values: attribute.productAttributeValues
                             };

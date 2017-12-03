@@ -19190,6 +19190,7 @@ button:focus {
 
 .scroll-to-top-btn {
   display: block;
+  cursor: pointer;
   position: fixed;
   right: 16px;
   bottom: -88px;
@@ -22001,7 +22002,7 @@ video {
   min-height: 180px;
 }
 
-.isotope-grid > .grid-item {
+.isotope-grid .grid-item {
   display: inline-block;
   margin-left: 10px;
   margin-right: 10px;
@@ -22444,8 +22445,7 @@ video {
 }
 
 .site-logo {
-  width: 132px;
-  padding: 10px 0 14px 30px;
+  width: 200px;
   text-decoration: none;
 }
 
@@ -22811,7 +22811,7 @@ video {
     width: 56px;
   }
   .site-logo {
-    width: 118px;
+    width: 186px;
     padding-left: 16px;
   }
 }
@@ -23296,6 +23296,9 @@ video {
   transition: color .3s;
   color: #374250;
   text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .product-card .product-title > a:hover {

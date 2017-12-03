@@ -32,8 +32,10 @@ class AddProductComponents extends React.Component<AddProductProps, {}> {
                 return {
                     id: variant.id,
                     sku: variant.sku,
+                    compareAtPrice: 0,
+                    barcode: null,
                     //Todo this currency is coming to backend
-                    price: variant.price.replace("Rs. ", "").replace(",", ""),
+                    price: Number(variant.price.replace("Rs. ", "").replace(",", "")),
                     quantity: variant.quantity,
                     defaultImage: variant.defaultImage,
                     productVariantSpecificationAttributeMappings: _.map(variant.attributes, (attribute) => {

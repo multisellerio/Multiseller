@@ -61,7 +61,7 @@ namespace MultiSellerIo.Services.Product.Core
             {
                 var vendors = Vendors.ToList();
                 Expression<Func<Dal.Entity.Product, bool>> vendorQuery =
-                    product => vendors.Any(vendor => product.Vendor == vendor);
+                    product => vendors.Any(vendor => product.Vendor.ToLower() == vendor.ToLower());
 
                 productQuery = productQuery.And(vendorQuery);
             }
@@ -73,7 +73,7 @@ namespace MultiSellerIo.Services.Product.Core
 
                 Expression<Func<Dal.Entity.Product, bool>> priceRangeQuery =
                     product => product.ProductVariants.Any(variant =>
-                        variant.Price <= priceMin && variant.Price >= priceMax);
+                        variant.Price >= priceMin && variant.Price <= priceMax);
 
                 productQuery = productQuery.And(priceRangeQuery);
             }

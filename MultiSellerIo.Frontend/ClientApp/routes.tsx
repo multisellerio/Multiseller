@@ -1,6 +1,8 @@
 import * as React from "react";
 import { Route } from "react-router-dom";
 
+import PrivateRoute from './util/routes/private-route';
+
 import ExternalLogin from "./components/external-login";
 import EmailConfirm from "./components/email-confirm";
 import Login from "./components/account/login";
@@ -23,5 +25,5 @@ export const routes =
         <Route path="/products/:category" component={Products} />
         <Route path="/account/register" component={Register} />
         <Route path="/account/login" component={Login} />
-        <Route path="/portal" component={Portal} />
+        <PrivateRoute path="/portal" component={Portal} />
     </Layout>;

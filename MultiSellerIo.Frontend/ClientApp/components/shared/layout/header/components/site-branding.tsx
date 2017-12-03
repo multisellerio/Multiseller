@@ -7,7 +7,7 @@
             <div className="inner">
                 <a className="offcanvas-toggle cats-toggle" href="#shop-categories" data-toggle="offcanvas"></a>
                 <a className="offcanvas-toggle menu-toggle" href="#mobile-menu" data-toggle="offcanvas"></a>
-                <a className="site-logo"><img src="/assets/images/Logo.png" alt="GoodLook" /></a>
+                <a className="site-logo"><img src="/assets/images/Logo.jpg" alt="GoodLook" /></a>
             </div>
         </div>;
     }

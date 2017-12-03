@@ -2,7 +2,7 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div id="react-app" asp-prerender-module="ClientApp/assets/main-server" asp-prerender-data="new { token = ViewBag.Token }"
+<div id="react-app" asp-prerender-module="ClientApp/assets/main-server" asp-prerender-data="new { token = ViewBag.Token, api = ViewBag.Api, cdn = ViewBag.Cdn }"
 >Loading...</div>
 
 @section scripts {

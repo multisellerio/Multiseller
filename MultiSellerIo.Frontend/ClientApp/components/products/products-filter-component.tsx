@@ -2,7 +2,7 @@
 
 import * as _ from 'lodash';
 
-import { Slider, Button, Checkbox } from "antd";
+import { Slider, Checkbox, Button } from "antd";
 import CircleColorPicker from "react-circle-color-picker";
 
 interface IVendorItem {
@@ -26,18 +26,28 @@ export interface IAttributeItem {
 
 export interface IProductFilterChangeEvent {
     vendors: string[],
-    attributes: number[]
+    attributes: number[],
+    maxPrice: number,
+    minPrice: number,
 }
 
 interface IProductsFilterComponentProps {
     vendors: IVendorItem[];
     attributeFilters: IAttributeFilterItem[];
+    maxPrice: number,
+    minPrice: number,
+    currentMaxPrice: number,
+    currentMinPrice: number,
     onChange?: (event: IProductFilterChangeEvent) => void;
 }
 
 interface IProductsFilterState {
     vendors: IVendorItem[];
     attributeFilters: IAttributeFilterItem[];
+    maxPrice: number,
+    minPrice: number,
+    currentMaxPrice: number,
+    currentMinPrice: number,
 }
 
 export default class ProductsFilterComponent extends React.Component<IProductsFilterComponentProps, IProductsFilterState> {
@@ -46,7 +56,11 @@ export default class ProductsFilterComponent extends React.Component<IProductsFi
         super(props);
         this.state = {
             vendors: this.props.vendors,
-            attributeFilters: this.props.attributeFilters
+            attributeFilters: this.props.attributeFilters,
+            maxPrice: this.props.maxPrice,
+            minPrice: this.props.minPrice,
+            currentMaxPrice: this.props.currentMaxPrice,
+            currentMinPrice: this.props.currentMinPrice
         }
     }
 
@@ -96,9 +110,7 @@ export default class ProductsFilterComponent extends React.Component<IProductsFi
 
         this.setState({
             attributeFilters: attributeFilters
-        });
-
-        this.callToOnChange();
+        }, () => this.callToOnChange());
 
     }
 
@@ -121,9 +133,7 @@ export default class ProductsFilterComponent extends React.Component<IProductsFi
 
         this.setState({
             attributeFilters: attributeFilters
-        });
-
-        this.callToOnChange();
+        }, () => this.callToOnChange());
 
     }
 
@@ -138,9 +148,16 @@ export default class ProductsFilterComponent extends React.Component<IProductsFi
 
         this.setState({
             vendors: vendros
-        });
+        }, () => this.callToOnChange());
 
-        this.callToOnChange();
+    }
+
+    onPriceChange(values: number | number[]) {
+       
+        this.setState({
+            currentMinPrice: values[0],
+            currentMaxPrice: values[1]
+        });
 
     }
 
@@ -151,7 +168,7 @@ export default class ProductsFilterComponent extends React.Component<IProductsFi
         }
 
         let vendors = _.map(_.filter(this.state.vendors, { checked: true }), (item) => {
-            return item.name
+            return item.name;
         });
 
         let attributeValues: number[] = [];
@@ -166,7 +183,9 @@ export default class ProductsFilterComponent extends React.Component<IProductsFi
 
         let event: IProductFilterChangeEvent = {
             vendors: vendors,
-            attributes: attributeValues
+            attributes: attributeValues,
+            maxPrice: this.state.currentMaxPrice,
+            minPrice: this.state.currentMinPrice,
         }
 
         this.props.onChange(event);
@@ -176,7 +195,7 @@ export default class ProductsFilterComponent extends React.Component<IProductsFi
 
         let vendorsCheckbox = _.map(this.state.vendors,
             (vendor: IVendorItem) => {
-                return <div className="d-block">
+                return <div key={vendor.name} className="d-block">
                     <Checkbox value={vendor.name}><b>{vendor.name}</b></Checkbox>
                 </div>;
             });
@@ -209,7 +228,7 @@ export default class ProductsFilterComponent extends React.Component<IProductsFi
                             }
                         });
 
-                    return <section className="widget">
+                    return <section key={attributeFilter.id} className="widget">
                         <h3 className="widget-title">Filter by {attributeFilter.name}</h3>
                         <CircleColorPicker colors={colors} onChange={(value) => this.onColorValueChange(attributeFilter.id, value)} />
                     </section>;
@@ -218,13 +237,13 @@ export default class ProductsFilterComponent extends React.Component<IProductsFi
                 let filterItems = _.map(attributeFilter.filterItems,
                     (filterItem: IAttributeItem) => {
 
-                        return <div className="d-block">
+                        return <div key={filterItem.id} className="d-block">
                             <Checkbox value={filterItem.id}><b>{filterItem.name}</b></Checkbox>
                         </div>;
 
                     });
 
-                return <section className="widget">
+                return <section key={attributeFilter.id} className="widget">
                     <h3 className="widget-title">Filter by {attributeFilter.name}</h3>
                     <Checkbox.Group defaultValue={this.getAttributeValues(attributeFilter.id)} onChange={(values: number[]) => this.onAttributeValueChange(attributeFilter.id, values)}>
                         {
@@ -241,17 +260,17 @@ export default class ProductsFilterComponent extends React.Component<IProductsFi
                 <h3 className="widget-title">Price Range</h3>
                 <div className="price-range-slider">
                     <div>
-                        <Slider range defaultValue={[20, 50]} />
+                        <Slider range max={this.state.maxPrice} min={this.state.minPrice} defaultValue={[this.state.currentMinPrice, this.state.currentMaxPrice]} step={100} onChange={(value) => this.onPriceChange(value)} />
                     </div>
                     <div className="ui-range-slider-footer">
                         <div className="column">
-                            <Button type="primary">Filter</Button>
+                            <Button type={"primary"} onClick={() => this.callToOnChange()}>Filter</Button>
                         </div>
                         <div className="column">
                             <div className="ui-range-values">
-                                <div className="ui-range-value-min">$50<span></span>
+                                <div className="ui-range-value-min">Rs. {this.state.currentMinPrice}<span></span>
                                 </div>&nbsp;-&nbsp;
-                                       <div className="ui-range-value-max">$200<span></span>
+                                       <div className="ui-range-value-max">Rs. {this.state.currentMaxPrice} <span></span>
                                 </div>
                             </div>
                         </div>

@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
 
 namespace MultiSellerIo.Services.Images
@@ -22,7 +21,7 @@ namespace MultiSellerIo.Services.Images
                 image.Mutate(img => img.Resize(new ResizeOptions()
                 {
                     Size = new SixLabors.Primitives.Size(width, height),
-                    Mode = ResizeMode.Crop,
+                    Mode = ResizeMode.Pad,
                 }).BackgroundColor(Rgba32.White));
 
                 image.SaveAsJpeg(outputStream);

@@ -31,6 +31,8 @@ namespace MultiSellerIo.FrontEnd
         {
             var storageConfig = Configuration.GetSection("Storage");
 
+            services.AddScoped<IConfiguration>(provider => Configuration);
+
             services.AddScoped<IImageStorageService, ImageStorageService>(provider => new ImageStorageService(new AzureStorageService(storageConfig["ConnectionString"], storageConfig["ImagesContainerName"])));
             services.AddScoped<IImageResizeService, ImageResizeService>();
             services.AddScoped<IImageService, ImageService>();
@@ -51,7 +53,12 @@ namespace MultiSellerIo.FrontEnd
                 app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
                     HotModuleReplacement = true,
                     ReactHotModuleReplacement = true,
+                    HotModuleReplacementEndpoint = "/assets/__webpack_hmr"
                 });
+            }
+            else if (env.IsStaging())
+            {
+                app.UseDeveloperExceptionPage();
             }
             else
             {

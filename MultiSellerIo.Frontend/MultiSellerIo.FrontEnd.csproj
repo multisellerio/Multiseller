@@ -1,106 +1,59 @@
-﻿<Project ToolsVersion="15.0" Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <IsPackable>false</IsPackable>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <!-- Files not to show in IDE -->
-    <None Remove="ClientApp\api\index.ts" />
-    <None Remove="ClientApp\api\user\index.ts" />
-    <None Remove="ClientApp\components\account\login.tsx" />
-    <None Remove="ClientApp\components\shared\util\alert.tsx" />
-    <None Remove="ClientApp\components\shared\util\form-components.tsx" />
-    <None Remove="yarn.lock" />
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
     <Content Remove="ClientApp\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Properties\PublishProfiles\good-look-dev-front - Web Deploy.pubxml" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\MultiSellerIo.Common\MultiSellerIo.Common.csproj" />
     <ProjectReference Include="..\MultiSellerIo.Core\MultiSellerIo.Core.csproj" />
+    <ProjectReference Include="..\MultiSellerIo.Dal\MultiSellerIo.Dal.csproj" />
     <ProjectReference Include="..\MultiSellerIo.Intergrations.Azure\MultiSellerIo.Intergrations.Azure.csproj" />
     <ProjectReference Include="..\MultiSellerIo.Services\MultiSellerIo.Services.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\api\index.ts" />
-    <TypeScriptCompile Include="ClientApp\api\user\index.ts" />
-    <TypeScriptCompile Include="ClientApp\components\account\login\index.tsx" />
-    <TypeScriptCompile Include="ClientApp\components\shared\util\alert.tsx" />
-    <TypeScriptCompile Include="ClientApp\components\shared\util\form-components.tsx" />
-    <TypeScriptCompile Include="ClientApp\util\cookies\index.ts" />
+    <None Update="deploy.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="wwwroot\img\payment_methods.png" />
-    <None Include="wwwroot\img\shop\cart\01.jpg" />
-    <None Include="wwwroot\img\shop\cart\02.jpg" />
-    <None Include="wwwroot\img\shop\cart\03.jpg" />
-    <None Include="wwwroot\img\shop\categories\01.jpg" />
-    <None Include="wwwroot\img\shop\categories\02.jpg" />
-    <None Include="wwwroot\img\shop\categories\03.jpg" />
-    <None Include="wwwroot\img\shop\categories\04.jpg" />
-    <None Include="wwwroot\img\shop\categories\05.jpg" />
-    <None Include="wwwroot\img\shop\categories\06.jpg" />
-    <None Include="wwwroot\img\shop\categories\07.jpg" />
-    <None Include="wwwroot\img\shop\categories\08.jpg" />
-    <None Include="wwwroot\img\shop\categories\09.jpg" />
-    <None Include="wwwroot\img\shop\categories\10.jpg" />
-    <None Include="wwwroot\img\shop\categories\11.jpg" />
-    <None Include="wwwroot\img\shop\categories\12.jpg" />
-    <None Include="wwwroot\img\shop\categories\13.jpg" />
-    <None Include="wwwroot\img\shop\categories\14.jpg" />
-    <None Include="wwwroot\img\shop\categories\15.jpg" />
-    <None Include="wwwroot\img\shop\categories\16.jpg" />
-    <None Include="wwwroot\img\shop\categories\17.jpg" />
-    <None Include="wwwroot\img\shop\categories\18.jpg" />
-    <None Include="wwwroot\img\shop\products\01.jpg" />
-    <None Include="wwwroot\img\shop\products\02.jpg" />
-    <None Include="wwwroot\img\shop\products\03.jpg" />
-    <None Include="wwwroot\img\shop\products\04.jpg" />
-    <None Include="wwwroot\img\shop\products\05.jpg" />
-    <None Include="wwwroot\img\shop\products\06.jpg" />
-    <None Include="wwwroot\img\shop\products\07.jpg" />
-    <None Include="wwwroot\img\shop\products\08.jpg" />
-    <None Include="wwwroot\img\shop\products\09.jpg" />
-    <None Include="wwwroot\img\shop\products\10.jpg" />
-    <None Include="wwwroot\img\shop\products\11.jpg" />
-    <None Include="wwwroot\img\shop\products\12.jpg" />
-    <None Include="wwwroot\img\shop\products\13.jpg" />
-    <None Include="wwwroot\img\shop\products\14.jpg" />
-    <None Include="wwwroot\img\shop\products\15.jpg" />
-    <None Include="wwwroot\img\shop\products\16.jpg" />
-    <None Include="wwwroot\img\shop\single\01.jpg" />
-    <None Include="wwwroot\img\shop\single\02.jpg" />
-    <None Include="wwwroot\img\shop\single\03.jpg" />
-    <None Include="wwwroot\img\shop\single\04.jpg" />
-    <None Include="wwwroot\img\shop\single\05.jpg" />
-    <None Include="wwwroot\img\shop\single\th01.jpg" />
-    <None Include="wwwroot\img\shop\single\th02.jpg" />
-    <None Include="wwwroot\img\shop\single\th03.jpg" />
-    <None Include="wwwroot\img\shop\single\th04.jpg" />
-    <None Include="wwwroot\img\shop\single\th05.jpg" />
-    <None Include="wwwroot\img\shop\widget\01.jpg" />
-    <None Include="wwwroot\img\shop\widget\02.jpg" />
-    <None Include="wwwroot\img\shop\widget\03.jpg" />
-    <None Include="wwwroot\img\shop\widget\04.jpg" />
-    <None Include="wwwroot\img\shop\widget\05.jpg" />
-    <None Include="wwwroot\img\shop\widget\06.jpg" />
-    <None Include="wwwroot\img\shop\widget\07.jpg" />
-    <None Include="wwwroot\img\shop\widget\08.jpg" />
-    <None Include="wwwroot\img\shop\widget\09.jpg" />
-    <None Include="wwwroot\img\shop\widget\10.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ClientApp\components\account\util\" />
-    <Folder Include="ClientApp\dist\" />
-    <Folder Include="wwwroot\assets\" />
-  </ItemGroup>
-  <Target Name="RunWebpack" AfterTargets="ComputeFilesToPublish">
+
+  <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">
+    <!-- Ensure Node.js is installed -->
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+
+    <!-- In development, the dist files won't exist on the first run or when cloning to
+         a different machine, so rebuild them if not already present. -->
+    <Message Importance="high" Text="Performing first-run Webpack build..." />
+    <Exec Command="node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js" />
+    <Exec Command="node node_modules/webpack/bin/webpack.js" />
+  </Target>
+
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
     <Exec Command="npm install" />
     <Exec Command="node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js --env.prod" />
@@ -115,4 +68,5 @@
       </ResolvedFileToPublish>
     </ItemGroup>
   </Target>
+
 </Project>

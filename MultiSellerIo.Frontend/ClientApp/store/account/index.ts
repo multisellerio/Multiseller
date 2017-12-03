@@ -2,7 +2,6 @@
 import { push, RouterAction } from "react-router-redux";
 import { Reducer } from "redux";
 import { UserService } from "../../api/user";
-import { setToken } from "../../api";
 import { ILoginRequest, IRegisterRequest, IUser, IResetPasswordRequest, IEmailConfirmationRequest } from "../../models/account-models";
 import {
     GET_CURRENT_USER_SUCCESSFULLY, GET_CURRENT_USER_UNSUCCESSFULLY, IGetCurrentUserSuccessfully,
@@ -24,6 +23,7 @@ import {
 } from "../../types/actions/account-actions";
 import { Cookies } from "../../util/cookies";
 import { AppThunkAction } from ".././";
+import { setToken } from '../../api';
 
 /*************************
  *** STORE

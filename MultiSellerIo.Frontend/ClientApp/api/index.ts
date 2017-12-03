@@ -1,20 +1,25 @@
-﻿import { Cookies } from '../util/cookies';
-import { ApplicationState } from "./../store";
-const ApiHost = "http://localhost:50564/";
+﻿
+//Dev Env
+//const api = 'http://good-look-dev-api.azurewebsites.net/';
+//const cdn = 'http://good-look-dev.azureedge.net/images/';
 
-let currentToken = null;
+//Local Env
+const api = 'http://localhost:50564/';
+const cdn = 'http://good-look-dev.azureedge.net/images/';
 
-export const API_URL = ApiHost + "api/";
+var currentToken: string = null;
 
-export const ImageUploadUrl = ApiHost + "images/upload";
+export var API_URL = api + "api/";
+
+export const ImageUploadUrl = api + "images/upload";
 
 export const getImageAssets = (image: string, width?: number, height?: number) => {
 
     if (width === null || height === null) {
-        return "/assets/images/" + image;
+        return cdn + image;
     }
 
-    return "/assets/images/" + height + "/" + width + "/" + image;
+    return cdn + height + "/" + width + "/" + image;
 
 };
 
