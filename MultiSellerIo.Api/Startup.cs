@@ -1,8 +1,11 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 using Hangfire;
+using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +23,7 @@ using MultiSellerIo.Services.Cache;
 using MultiSellerIo.Services.Email;
 using MultiSellerIo.Services.Images;
 using MultiSellerIo.Services.Product;
+using MultiSellerIo.Services.Store;
 using MultiSellerIo.Services.User;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -84,6 +88,8 @@ namespace MultiSellerIo.Api
             services.AddScoped<IProductAttributeService, ProductAttributeService>();
             services.AddScoped<IProductCategoryService, ProductCategoryService>();
             services.AddScoped<IProductService, ProductService>();
+
+            services.AddScoped<IStoreService, StoreService>();
 
             var authorizationConfiguration = Configuration.GetSection("Token");
 
@@ -166,7 +172,10 @@ namespace MultiSellerIo.Api
             app.UseAuthentication();
 
             app.UseHangfireServer();
-            app.UseHangfireDashboard();
+            app.UseHangfireDashboard(options:new DashboardOptions()
+            {
+                Authorization = Enumerable.Empty<IDashboardAuthorizationFilter>()
+            });
 
             app.UseMvc();
 

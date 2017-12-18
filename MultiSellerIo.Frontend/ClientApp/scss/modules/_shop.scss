@@ -363,12 +363,6 @@
       }
     }
     .product-title {
-      margin-bottom: floor($grid-vertical-step / 4);
-      padding-top: 5px;
-      font: {
-        size: $font-size-base;
-        weight: 500;
-      }
       > a {
         transition: color .3s;
         color: $product-title-color;

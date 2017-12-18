@@ -94,6 +94,7 @@ export interface IProductListRequest {
     page: number;
     pageSize: number;
     force: boolean;
+    searchText: string;
 }
 
 export interface IProductQuery {
@@ -108,6 +109,7 @@ export interface IProductQuery {
 }
 
 export interface IProductList {
+    searchText: string;
     count: number;
     currentPage: number;
     pageSize: number;

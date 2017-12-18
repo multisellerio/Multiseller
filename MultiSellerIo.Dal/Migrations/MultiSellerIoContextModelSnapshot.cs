@@ -154,6 +154,36 @@ namespace MultiSellerIo.Dal.Migrations
                     b.ToTable("CategoryAttributes");
                 });
 
+            modelBuilder.Entity("MultiSellerIo.Dal.Entity.City", b =>
+                {
+                    b.Property<long>("CityId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CityName");
+
+                    b.Property<long>("StateId");
+
+                    b.Property<string>("ZipPostalCode");
+
+                    b.HasKey("CityId");
+
+                    b.HasIndex("StateId");
+
+                    b.ToTable("Cities");
+                });
+
+            modelBuilder.Entity("MultiSellerIo.Dal.Entity.Country", b =>
+                {
+                    b.Property<long>("CountryId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CountryName");
+
+                    b.HasKey("CountryId");
+
+                    b.ToTable("Countries");
+                });
+
             modelBuilder.Entity("MultiSellerIo.Dal.Entity.EmailTemplate", b =>
                 {
                     b.Property<int>("Id")
@@ -346,6 +376,77 @@ namespace MultiSellerIo.Dal.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
+            modelBuilder.Entity("MultiSellerIo.Dal.Entity.ShippingCost", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<long?>("CityId");
+
+                    b.Property<decimal>("Cost");
+
+                    b.Property<DateTimeOffset>("Created");
+
+                    b.Property<int>("ShippingCostType");
+
+                    b.Property<long>("StoreId");
+
+                    b.Property<DateTimeOffset>("Updated");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("StoreId");
+
+                    b.ToTable("ShippingCosts");
+                });
+
+            modelBuilder.Entity("MultiSellerIo.Dal.Entity.State", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<long>("CountryId");
+
+                    b.Property<string>("StateName");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
+
+                    b.ToTable("States");
+                });
+
+            modelBuilder.Entity("MultiSellerIo.Dal.Entity.Store", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTimeOffset>("Created");
+
+                    b.Property<string>("PaymentAndRefundPolicies");
+
+                    b.Property<string>("ShippingInformation");
+
+                    b.Property<string>("Slug");
+
+                    b.Property<string>("StoreName");
+
+                    b.Property<DateTimeOffset>("Updated");
+
+                    b.Property<long>("UserId");
+
+                    b.Property<bool>("Verified");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Stores");
+                });
+
             modelBuilder.Entity("MultiSellerIo.Dal.Entity.User", b =>
                 {
                     b.Property<long>("Id")
@@ -384,6 +485,8 @@ namespace MultiSellerIo.Dal.Migrations
                     b.Property<bool>("PhoneNumberConfirmed");
 
                     b.Property<string>("SecurityStamp");
+
+                    b.Property<long?>("StoreId");
 
                     b.Property<bool>("TwoFactorEnabled");
 
@@ -468,6 +571,14 @@ namespace MultiSellerIo.Dal.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("MultiSellerIo.Dal.Entity.City", b =>
+                {
+                    b.HasOne("MultiSellerIo.Dal.Entity.State", "State")
+                        .WithMany()
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("MultiSellerIo.Dal.Entity.Product", b =>
                 {
                     b.HasOne("MultiSellerIo.Dal.Entity.Category", "Category")
@@ -514,6 +625,34 @@ namespace MultiSellerIo.Dal.Migrations
                     b.HasOne("MultiSellerIo.Dal.Entity.ProductVariant", "ProductVariant")
                         .WithMany("ProductVariantSpecificationAttributeMappings")
                         .HasForeignKey("ProductVariantId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("MultiSellerIo.Dal.Entity.ShippingCost", b =>
+                {
+                    b.HasOne("MultiSellerIo.Dal.Entity.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId");
+
+                    b.HasOne("MultiSellerIo.Dal.Entity.Store", "Store")
+                        .WithMany("ShippingCosts")
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("MultiSellerIo.Dal.Entity.State", b =>
+                {
+                    b.HasOne("MultiSellerIo.Dal.Entity.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("MultiSellerIo.Dal.Entity.Store", b =>
+                {
+                    b.HasOne("MultiSellerIo.Dal.Entity.User", "User")
+                        .WithOne("Store")
+                        .HasForeignKey("MultiSellerIo.Dal.Entity.Store", "UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

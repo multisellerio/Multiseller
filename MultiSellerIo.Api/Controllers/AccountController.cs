@@ -62,7 +62,7 @@ namespace MultiSellerIo.Api.Controllers
         public async Task<IActionResult> GetUser()
         {
             var user = await _userService.GetUser(User);
-            return Ok(Mapper.Map<UserResponseBindingModel>(user));
+            return Ok(Mapper.Map<UserBindingModel>(user));
         }
 
         [Route("api/account/register")]
@@ -77,7 +77,7 @@ namespace MultiSellerIo.Api.Controllers
                 UserName = model.Username,
             }, model.Password, UserService.UserRole);
 
-            return Ok(Mapper.Map<UserResponseBindingModel>(user));
+            return Ok(Mapper.Map<UserBindingModel>(user));
         }
 
         [Route("api/account/login")]
@@ -98,7 +98,7 @@ namespace MultiSellerIo.Api.Controllers
             return Ok(new
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
-                user = Mapper.Map<UserResponseBindingModel>(user)
+                user = Mapper.Map<UserBindingModel>(user)
             });
         }
 

@@ -32,5 +32,27 @@ namespace MultiSellerIo.Dal
         public DbSet<ProductAttributeValue> ProductAttributeValues { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
         public DbSet<ProductVariantSpecificationAttributeMapping> ProductVariantSpecificationAttributeMappings { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<State> States { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Store> Stores { get; set; }
+        public DbSet<ShippingCost> ShippingCosts { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<User>()
+                .HasOne(user => user.Store)
+                .WithOne(store => store.User)
+                .HasForeignKey<User>(user => user.StoreId)
+                .IsRequired(false);
+
+            builder.Entity<Store>()
+                .HasOne(store => store.User)
+                .WithOne(user => user.Store)
+                .HasForeignKey<Store>(store => store.UserId)
+                .IsRequired(true);
+
+            base.OnModelCreating(builder);
+        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿import * as React from "React";
-import { Link } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { parse } from 'qs';

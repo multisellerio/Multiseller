@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiSellerIo.Api", "MultiSellerIo.Api\MultiSellerIo.Api.csproj", "{2AA5DAAA-FC56-4E2E-BE18-13D89067DAF2}"
 EndProject
@@ -29,6 +29,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiSellerIo.FrontEnd", "MultiSellerIo.Frontend\MultiSellerIo.FrontEnd.csproj", "{A6E31078-88D3-4654-9858-DF2D603102C8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{8F42F41C-815B-4684-90C2-68BFC63C3E2F}"
+	ProjectSection(SolutionItems) = preProject
+		sri-lanka-provinces-districts-cities.sql = sri-lanka-provinces-districts-cities.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

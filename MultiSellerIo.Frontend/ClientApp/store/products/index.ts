@@ -99,7 +99,7 @@ export const actionCreator = {
 
             const response = await ProductService.createProduct(product);
             dispatch({ type: CREATED_PRODUCT_SUCCESSFULLY, payload: response });
-            dispatch(push("/portal/products"));
+            dispatch(push("/portal/selling/products"));
 
         } catch (err) {
             dispatch({ type: CREATED_PRODUCT_UNSUCCESSFULLY, payload: err.message });
@@ -115,7 +115,7 @@ export const actionCreator = {
 
             const response = await ProductService.updateProduct(product);
             dispatch({ type: UPDATE_PRODUCT_SUCCESSFULLY, payload: response });
-            dispatch(push("/portal/products"));
+            dispatch(push("/portal/selling/products"));
 
         } catch (err) {
             dispatch({ type: UPDATE_PRODUCT_UNSUCCESSFULLY, payload: err.message });
@@ -129,6 +129,7 @@ export const actionCreator = {
 
         if (state.products.productListData &&
             state.products.productListData.productList &&
+            state.products.productListData.productList.searchText === request.searchText &&
             state.products.productListData.productList.currentPage === request.page && !request.force) {
             return;
         }
@@ -189,7 +190,8 @@ export const actionCreator = {
                 const productsResponse = await ProductService.getProducts({
                     page: state.products.productListData.productList.currentPage,
                     pageSize: state.products.productListData.productList.pageSize,
-                    force: true
+                    force: true,
+                    searchText: state.products.productListData.productList.searchText
                 });
 
                 dispatch({ type: RECEIVED_PRODUCTS_SUCCESSFULLY, payload: productsResponse });
@@ -204,8 +206,8 @@ export const actionCreator = {
 
     },
 
-    navigateToProductsPage: (page: number, pageSize: number): AppThunkAction<KnownAction> => async (dispatch, getState) => {
-        dispatch(push(`/portal/products?page=${page}&pageSize=${pageSize}`));
+    navigateToProductsPage: (searchText: string, page: number, pageSize: number): AppThunkAction<KnownAction> => async (dispatch, getState) => {
+        dispatch(push(`/portal/selling/products?search=${searchText}&page=${page}&pageSize=${pageSize}`));
     }
 
 };

@@ -7,9 +7,7 @@ import { StaticRouter } from "react-router-dom";
 import { replace } from "react-router-redux";
 import configureStore from "./configureStore";
 import { routes } from "./routes";
-import { LocaleProvider } from 'antd';
 import { setToken } from './api/';
-import * as enUS from 'antd/lib/locale-provider/en_US';
 
 export default createServerRenderer((params) => {
     return new Promise<RenderResult>((resolve, reject) => {
@@ -66,9 +64,7 @@ export default createServerRenderer((params) => {
         const routerContext: any = {};
         const app = (
             <Provider store={store}>
-                <LocaleProvider locale={enUS}>
-                    <StaticRouter context={routerContext} location={params.location.path} children={routes} />
-                </LocaleProvider>
+                <StaticRouter context={routerContext} location={params.location.path} children={routes} />
             </Provider>
         );
         renderToString(app);

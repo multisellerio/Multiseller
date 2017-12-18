@@ -23,7 +23,7 @@ export const InputComponent: React.StatelessComponent<TextInputProps> = (field: 
 
     if (hideLabel) {
         return <div className={field.meta.touched && field.meta.error ? "has-error has-danger" : ""}>
-            <Input {...input} {...field} />
+            <Input {...input}/>
             {field.meta.touched &&
                 field.meta.error &&
                 <span className="form-control-feedback">{field.meta.error}</span>}
@@ -33,7 +33,7 @@ export const InputComponent: React.StatelessComponent<TextInputProps> = (field: 
     return <div className={col}>
         <div className={field.meta.touched && field.meta.error ? "form-group has-error has-danger" : "form-group"}>
             <label>{label}</label>
-            <Input {...input} {...field} />
+            <Input {...input}/>
             {field.meta.touched && field.meta.error && <span className="form-control-feedback">{field.meta.error}</span>}
         </div>
     </div>;
@@ -53,7 +53,7 @@ export const InputNumberComponent: React.StatelessComponent<InputNumberProps> = 
 
     if (hideLabel) {
         return <div className={field.meta.touched && field.meta.error ? "has-error has-danger" : ""}>
-            <InputNumber {...input} {...field} />
+            <InputNumber {...input} />
             {field.meta.touched && field.meta.error && <span className="form-control-feedback">{field.meta.error}</span>}
         </div>;
     }
@@ -61,7 +61,7 @@ export const InputNumberComponent: React.StatelessComponent<InputNumberProps> = 
     return <div className={col}>
         <div className={field.meta.touched && field.meta.error ? "form-group has-error has-danger" : "form-group"}>
             <label>{label}</label>
-            <InputNumber {...input} {...field} />
+            <InputNumber {...input} />
             {field.meta.touched && field.meta.error && <span className="form-control-feedback">{field.meta.error}</span>}
         </div>
     </div>;
@@ -81,7 +81,7 @@ export const TextAreaComponent: React.StatelessComponent<TextAreaProps> = (field
     return <div className={col}>
         <div className={field.meta.touched && field.meta.error ? "form-group has-error has-danger" : "form-group"}>
             <label>{label}</label>
-            <Input.TextArea {...input} {...field} />
+            <Input.TextArea {...input}/>
             {field.meta.touched && field.meta.error && <span className="form-control-feedback">{field.meta.error}</span>}
         </div>
     </div>;

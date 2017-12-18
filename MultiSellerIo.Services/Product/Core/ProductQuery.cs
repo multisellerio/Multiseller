@@ -17,7 +17,7 @@ namespace MultiSellerIo.Services.Product.Core
             Expression<Func<Dal.Entity.Product, bool>> productQuery = product =>
                 product.UserId == UserId && !product.IsDeleted;
 
-            if (!string.IsNullOrEmpty(SearchText))
+            if (!string.IsNullOrEmpty(SearchText) && !string.IsNullOrWhiteSpace(SearchText))
             {
                 Expression<Func<Dal.Entity.Product, bool>> searchTextQuery =
                     product => product.Title.ToLower().Contains(SearchText);

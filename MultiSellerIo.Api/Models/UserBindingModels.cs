@@ -23,7 +23,7 @@ namespace MultiSellerIo.Api.Models
         public string Email { get; set; }
     }
 
-    public class UserResponseBindingModel
+    public class UserBindingModel
     {
         public long Id { get; set; }
         public string Username { get; set; }

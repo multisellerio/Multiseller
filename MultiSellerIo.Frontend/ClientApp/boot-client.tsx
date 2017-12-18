@@ -14,8 +14,6 @@ import * as RoutesModule from "./routes";
 import "./scss/styles.scss";
 import { ApplicationState } from "./store";
 let routes = RoutesModule.routes;
-import { LocaleProvider } from 'antd';
-import * as enUS from 'antd/lib/locale-provider/en_US';
 import { setToken } from './api/';
 
 // Create browser history to use in the Redux store
@@ -33,9 +31,7 @@ function renderApp() {
     ReactDOM.render(
         <AppContainer>
             <Provider store={store}>
-                <LocaleProvider locale={enUS}>
-                    <ConnectedRouter history={history} children={routes} />
-                </LocaleProvider>
+                <ConnectedRouter history={history} children={routes} />
             </Provider>
         </AppContainer>,
         document.getElementById("react-app"),

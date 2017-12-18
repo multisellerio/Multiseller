@@ -8,7 +8,7 @@
         return <nav className="site-menu">
             <ul>
                 <NavItem exact={true} to="/"><span>Home</span></NavItem>
-                <NavItem to="/portal/products"><span>My Account</span></NavItem>
+                <NavItem to="/portal/selling/products"><span>My Account</span></NavItem>
                 <MegaMenu />
             </ul>
         </nav>;

@@ -21,7 +21,7 @@ namespace MultiSellerIo.Api.Util.Mapper
                 config.CreateMap<CategoryAttribute, CategoryAttributeBindingModel>();
                 config.CreateMap<Category, CategoryBindingModel>();
                 config.CreateMap<CategoryBindingModel, Category>();
-                config.CreateMap<User, UserResponseBindingModel>();
+                config.CreateMap<User, UserBindingModel>();
                 config.CreateMap<ProductAttributeValueBindingModel, ProductAttributeValue>();
                 config.CreateMap<ProductAttributeBindingModel, ProductAttribute>();
                 config.CreateMap<ProductImageBindingModel, ProductImage>();
@@ -65,6 +65,15 @@ namespace MultiSellerIo.Api.Util.Mapper
 
                 config.CreateMap<ProductBindingModel, Product>();
                 config.CreateMap<Product, ProductBindingModel>();
+
+                config.CreateMap<ShippingCost, ShippingCostBindingModel>();
+                config.CreateMap<ShippingCostBindingModel, ShippingCost>();
+
+                config.CreateMap<StoreBindingModel, Store>();
+                config.CreateMap<Store, StoreBindingModel>();
+
+                config.CreateMap<CreateOrUpdateStoreBindingModel, Store>();
+                config.CreateMap<Store, CreateOrUpdateStoreBindingModel>();
 
             });
         }

@@ -10,5 +10,6 @@ namespace MultiSellerIo.Dal.Repository.Core
         Task Add(T entity);
         Task Remove<TKey>(TKey id);
         void Update(T entity);
+        void SetCurrentValues(T entity, object valueObject);
     }
 }

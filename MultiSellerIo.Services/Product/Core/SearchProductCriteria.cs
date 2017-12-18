@@ -32,6 +32,11 @@ namespace MultiSellerIo.Services.Product.Core
             return Vendors != null && Vendors.Any();
         }
 
+        public bool IsFilterBySearchText()
+        {
+            return !string.IsNullOrWhiteSpace(SearchText) && !string.IsNullOrEmpty(SearchText);
+        }
+
         public Expression<Func<Dal.Entity.Product, bool>> GenerateQuery()
         {
 
@@ -49,7 +54,7 @@ namespace MultiSellerIo.Services.Product.Core
 
             productQuery = productQuery.And(categoryQuery);
 
-            if (!string.IsNullOrWhiteSpace(SearchText))
+            if (IsFilterBySearchText())
             {
                 Expression<Func<Dal.Entity.Product, bool>> searchTextQuery =
                     product => product.Title.ToLower().Contains(SearchText);

@@ -5,7 +5,7 @@
     public render() {
         return  <div className="topbar">
                     <div className="topbar-column">
-                        <a className="hidden-md-down" href="mailto:support@goodlook.com">
+                        <a className="hidden-md-down" href="mailto:support@goodlook.lk">
                             <i className="icon-mail"></i>&nbsp; support@goodlook.lk
                         </a>
                         <a className="hidden-md-down" href="tel:+94773781850"><i className="icon-bell">
