@@ -20,6 +20,7 @@ using MultiSellerIo.Dal.Entity;
 using MultiSellerIo.Dal.Repository;
 using MultiSellerIo.Intergrations.Azure;
 using MultiSellerIo.Services.Cache;
+using MultiSellerIo.Services.Directory;
 using MultiSellerIo.Services.Email;
 using MultiSellerIo.Services.Images;
 using MultiSellerIo.Services.Product;
@@ -82,6 +83,8 @@ namespace MultiSellerIo.Api
             services.AddScoped<IEmailService>(provider => new EmailService(Configuration["SendGridToken"]));
             services.AddScoped<IEmailTemplateService, EmailTemplateService>();
             services.AddScoped<IEmailSendingService, EmailSendingService>();
+
+            services.AddScoped<ICountryService, CountryService>();
 
             services.AddScoped<IUserService, UserService>();
 

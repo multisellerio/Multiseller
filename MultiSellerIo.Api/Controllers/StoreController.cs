@@ -22,8 +22,23 @@ namespace MultiSellerIo.Api.Controllers
             _userService = userService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            var user = await _userService.GetUser(User);
+            var store = await _storeService.GetStoreByUserId(user.Id);
+
+            if (store == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(Mapper.Map<StoreBindingModel>(store));
+        }
+
         [HttpPost]
-        public async Task<IActionResult> AddOrUpdate([FromBody]CreateOrUpdateStoreBindingModel model)
+        [Route("store-policies")]
+        public async Task<IActionResult> StorePolicies([FromBody]CreateOrUpdateStoreBindingModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -36,6 +51,24 @@ namespace MultiSellerIo.Api.Controllers
             store.UserId = user.Id;
 
             var createdOrUpdatedStore = await _storeService.AddOrUpdateStore(store);
+            return Ok(Mapper.Map<StoreBindingModel>(createdOrUpdatedStore));
+        }
+
+        [HttpPost]
+        [Route("shipping")]
+        public async Task<IActionResult> Shipping([FromBody]CreateOrUpdateShippingBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var store = Mapper.Map<Store>(model);
+
+            var user = await _userService.GetUser(User);
+            store.UserId = user.Id;
+
+            var createdOrUpdatedStore = await _storeService.AddOrUpdateShipping(store);
             return Ok(Mapper.Map<StoreBindingModel>(createdOrUpdatedStore));
         }
     }

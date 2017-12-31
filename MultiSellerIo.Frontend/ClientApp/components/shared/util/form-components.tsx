@@ -45,23 +45,25 @@ type InputNumberProps = {
     hideLabel: boolean;
     label: string;
     col: string;
+    formatter?: (value: number | string) => string;
+    precision?: number;
 } & WrappedFieldProps;
 
-export const InputNumberComponent: React.StatelessComponent<InputNumberProps> = (field: TextInputProps) => {
+export const InputNumberComponent: React.StatelessComponent<InputNumberProps> = (field: InputNumberProps) => {
 
-    const { input, label, col, hideLabel } = field;
+    const { input, label, col, hideLabel, formatter, precision } = field;
 
     if (hideLabel) {
         return <div className={field.meta.touched && field.meta.error ? "has-error has-danger" : ""}>
-            <InputNumber {...input} />
+            <InputNumber {...input} formatter={formatter} precision={precision} />
             {field.meta.touched && field.meta.error && <span className="form-control-feedback">{field.meta.error}</span>}
         </div>;
     }
 
     return <div className={col}>
         <div className={field.meta.touched && field.meta.error ? "form-group has-error has-danger" : "form-group"}>
-            <label>{label}</label>
-            <InputNumber {...input} />
+            <label>{label}</label><br/>
+            <InputNumber {...input} formatter={formatter} precision={precision} />
             {field.meta.touched && field.meta.error && <span className="form-control-feedback">{field.meta.error}</span>}
         </div>
     </div>;
@@ -159,16 +161,38 @@ type AntdSelectProps = {
     componentStyle: React.CSSProperties;
     placeholder: string;
     filterOption: any;
+    showSearch?: boolean;
+    onSelectChange?: any;
 } & WrappedFieldProps;
 
 export const AntdSelectComponent: React.StatelessComponent<AntdSelectProps> = (field: AntdSelectProps) => {
 
-    const { input, label, options, col, mode, hideLabel, componentStyle, placeholder, filterOption } = field;
+    const { input, label, options, col, mode, hideLabel, componentStyle, placeholder, filterOption, onSelectChange } = field;
 
     let value = input.value;
 
-    if (!value || value == '') {
+    if (!value) {
         value = undefined;
+    }
+
+    let search: boolean = false;
+
+    if (field.showSearch) {
+        search = field.showSearch;
+    }
+
+    const selectOnChange = (value: any) => {
+
+        if (mode === null) {
+            input.onChange([value]);
+        } else {
+            input.onChange(value);
+        }
+
+        if (onSelectChange) {
+            onSelectChange(value);
+        }
+
     }
 
     if (hideLabel) {
@@ -178,7 +202,8 @@ export const AntdSelectComponent: React.StatelessComponent<AntdSelectProps> = (f
                 style={componentStyle}
                 filterOption={filterOption}
                 value={value}
-                onChange={(value) => { mode === null ? input.onChange([value]) : input.onChange(value); }}>
+                showSearch={search}
+                onChange={(value) => { selectOnChange(value); }}>
                 {
                     options.map((option, index) => {
                         return <Option title={option.name} value={option.value}>{option.child ? option.child : option.name}</Option>;
@@ -193,7 +218,12 @@ export const AntdSelectComponent: React.StatelessComponent<AntdSelectProps> = (f
     return <div className={col}>
         <div className={field.meta.touched && field.meta.error ? "form-group has-danger has-error" : "form-group"}>
             <label>{label}</label>
-            <Select placeholder={placeholder} style={componentStyle} mode={mode} value={value} filterOption={filterOption} onChange={(value) => { input.onChange(value); }}>
+            <Select placeholder={placeholder} mode={mode}
+                    style={componentStyle}
+                    filterOption={filterOption}
+                    value={value}
+                    showSearch={search}
+                    onChange={(value) => { selectOnChange(value); }}>
                 {
                     options.map((option, index) => {
                         return <Option title={option.name} value={option.value}>{option.child ? option.child : option.name}</Option>;

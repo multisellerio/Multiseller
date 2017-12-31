@@ -13,6 +13,8 @@ namespace MultiSellerIo.Dal.Repository
         IRepository<ProductAttribute> ProductAttributeRepository { get; }
         IRepository<EmailTemplate> EmailTemplateRepository { get; }
         IRepository<Store> StoreRepository { get; }
+        IRepository<City> CitiesRepository { get; }
+        IRepository<State> StatesRepository { get; }
         Task<int> SaveChangesAsync();
     }
 
@@ -25,6 +27,8 @@ namespace MultiSellerIo.Dal.Repository
         private IRepository<ProductAttribute> _productAttributeRepository;
         private IRepository<EmailTemplate> _emailTemplateRepository;
         private IRepository<Store> _storeRepository;
+        private IRepository<State> _statesRepository;
+        private IRepository<City> _citiesRepository;
 
         public UnitOfWork(IMultiSellerIoContext context)
         {
@@ -50,6 +54,12 @@ namespace MultiSellerIo.Dal.Repository
 
         public IRepository<Store> StoreRepository => _storeRepository ??
                                                                      new GenericRepository<Store>(_context);
+
+        public IRepository<State> StatesRepository => _statesRepository ??
+                                                     new GenericRepository<State>(_context);
+
+        public IRepository<City> CitiesRepository => _citiesRepository ??
+                                                     new GenericRepository<City>(_context);
 
         public async Task<int> SaveChangesAsync()
         {

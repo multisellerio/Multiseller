@@ -38,6 +38,7 @@ export interface IUser {
     email: string;
     gender: Gender;
     emailConfirmed: boolean;
+    profileImage: string;
 }
 
 export interface IExternalSigninMeta {
@@ -56,4 +57,13 @@ export interface IResetPasswordRequest {
 export interface IEmailConfirmationRequest {
     token: string;
     email: string;
+}
+
+export interface IUpdateUserRequest {
+    firstName: string;
+    lastName: string;
+    username: string;
+    email: string;
+    gender: Gender;
+    profileImage: string;
 }

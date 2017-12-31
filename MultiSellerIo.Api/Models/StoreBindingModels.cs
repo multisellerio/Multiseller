@@ -12,6 +12,10 @@ namespace MultiSellerIo.Api.Models
         public string ShippingInformation { get; set; }
         [Required]
         public string PaymentAndRefundPolicies { get; set; }
+    }
+
+    public class CreateOrUpdateShippingBindingModel
+    {
         public ICollection<ShippingCostBindingModel> ShippingCosts { get; set; }
     }
 

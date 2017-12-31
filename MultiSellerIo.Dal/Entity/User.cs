@@ -6,8 +6,9 @@ namespace MultiSellerIo.Dal.Entity
     public class User : IdentityUser<long>
     {
         public long? StoreId { get; set; }
+        public string ProfileImage { get; set; }
         public virtual Store Store { get; set; }
-        public string FirstName{ get; set; }
+        public string FirstName { get; set; }
         public string LastName { get; set; }
         public Gender Gender { get; set; }
     }

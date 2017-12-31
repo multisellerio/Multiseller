@@ -1,5 +1,5 @@
 ﻿import * as React from "React";
-import { FormErrors, reduxForm, InjectedFormProps , arrayPush, arrayRemoveAll } from "redux-form";
+import { FormErrors, reduxForm, InjectedFormProps, arrayPush, arrayRemoveAll, ErrorOther } from "redux-form";
 
 import {
     IProductCategory, IProductMetaData, ICategoryAttribute,
@@ -16,7 +16,7 @@ import * as Api from "../../../api";
 
 import * as _ from "lodash";
 
-const formName: string = "product-form";
+export const formName: string = "product-form";
 
 export interface IProductFormData {
     id: number;
@@ -41,6 +41,7 @@ interface IAdditionalFormProps {
     metaData: IProductMetaData;
     loading: boolean;
     editing: boolean;
+    formValues: IProductFormData;
 }
 
 interface IReduxFormProps {
@@ -94,7 +95,28 @@ interface IFieldImageArraryProps {
 
 const renderProductVariant: React.StatelessComponent<IProductVariantFieldArray> = (fieldArray: IProductVariantFieldArray) => {
 
-    const { fields, variantCategories, change, files } = fieldArray;
+    const { fields, variantCategories, files } = fieldArray;
+
+    const addProductVarient = () => {
+
+        let productVariant = {
+            price: 0,
+            quantity: 0,
+            attributes: []
+        }
+
+        _.map(variantCategories,
+            ((categoryAttribute: ICategoryAttribute, index: number) => {
+                productVariant.attributes.push({
+                    attributeId: categoryAttribute.productAttribute.id,
+                    name: categoryAttribute.productAttribute.name,
+                    isGroup: categoryAttribute.isGroup
+                });
+
+            }));
+
+        fields.push(productVariant);
+    };
 
     return <div>
 
@@ -108,7 +130,7 @@ const renderProductVariant: React.StatelessComponent<IProductVariantFieldArray> 
         </div>}
 
         <div className="margin-bottom-1x">
-            <Button onClick={() => fields.push({ price: 0, quantity: 0 })}><Icon type="plus" />Add a variant product</Button>
+            <Button onClick={addProductVarient}><Icon type="plus" />Add a variant product</Button>
         </div>
 
         <table className="table table-hover">
@@ -119,7 +141,7 @@ const renderProductVariant: React.StatelessComponent<IProductVariantFieldArray> 
                     {
                         _.map(variantCategories, ((categoryAttribute: ICategoryAttribute) => {
                             const labelName = `${categoryAttribute.productAttribute.name}${categoryAttribute.isGroup ? ' (S)' : ''}`;
-                            return <th>{labelName}</th>;
+                            return <th key={categoryAttribute.productAttribute.id}>{labelName}</th>;
                         }))
                     }
                     <th>Sku</th>
@@ -128,107 +150,103 @@ const renderProductVariant: React.StatelessComponent<IProductVariantFieldArray> 
                     <th></th>
                 </tr>
             </thead>
+            <tbody>
+                {
+                    fields.map((variant, index) => {
 
-            {
-                fields.map((variant, index) => {
+                        const attributes = _.map(variantCategories, ((categoryAttribute: ICategoryAttribute, index: number) => {
 
-                    const attributes = _.map(variantCategories, ((categoryAttribute: ICategoryAttribute, index: number) => {
+                            let options;
 
-                        let options;
+                            if (categoryAttribute.productAttribute.meta != null &&
+                                categoryAttribute.productAttribute.meta.component === 'color') {
 
-                        if (categoryAttribute.productAttribute.meta != null &&
-                            categoryAttribute.productAttribute.meta.component === 'color') {
+                                let valueName = categoryAttribute.productAttribute.meta.valueName;
 
-                            let valueName = categoryAttribute.productAttribute.meta.valueName;
+                                options = _.map(categoryAttribute.productAttribute.productAttributeValues,
+                                    (productAttributeValue: IProductAttributeValue) => {
+                                        let color = productAttributeValue.meta[valueName];
+                                        let value = productAttributeValue.value;
+                                        return {
+                                            name: value,
+                                            child: <div key={productAttributeValue.id} className="select-color-option"><Badge dot={true} style={{ backgroundColor: color, boxShadow: `${color} 0px 0px 0px 14px inset` }}></Badge><span className="color-name">{value}</span></div>,
+                                            value: productAttributeValue.id
+                                        }
+                                    });
 
-                            options = _.map(categoryAttribute.productAttribute.productAttributeValues,
-                                (productAttributeValue: IProductAttributeValue) => {
-                                    let color = productAttributeValue.meta[valueName];
-                                    let value = productAttributeValue.value;
+                            } else {
+
+                                options = _.map(categoryAttribute.productAttribute.productAttributeValues, (productAttributeValue: IProductAttributeValue) => {
                                     return {
-                                        name: value,
-                                        child: <div className="select-color-option"><Badge dot={true} style={{ backgroundColor: color, boxShadow: `${color} 0px 0px 0px 14px inset` }}></Badge><span className="color-name">{value}</span></div>,
+                                        name: productAttributeValue.value,
                                         value: productAttributeValue.id
                                     }
                                 });
+                            }
 
-                        } else {
+                            const labelName = `${categoryAttribute.productAttribute.name}${categoryAttribute.isGroup ? ' (S)' : ''}`;
 
-                            options = _.map(categoryAttribute.productAttribute.productAttributeValues, (productAttributeValue: IProductAttributeValue) => {
-                                return {
-                                    name: productAttributeValue.value,
-                                    value: productAttributeValue.id
+                            return <td key={index}>
+                                <Field component="input" type="hidden" name={`${variant}.attributes[${index}].attributeId`} value={categoryAttribute.productAttribute.id} />
+                                <Field component="input" type="hidden" name={`${variant}.attributes[${index}].name`} value={categoryAttribute.productAttribute.name} />
+                                <Field component="input" type="hidden" name={`${variant}.attributes[${index}].isGroup`} value={categoryAttribute.isGroup} />
+                                <Field
+                                    component={AntdSelectComponent}
+                                    filterOption={(value, option) => {
+                                        return option.props.title && option.props.title.toLowerCase().includes(value.toLowerCase());
+                                    }}
+                                    hideLabel={true}
+                                    placeholder={`Select ${labelName}`}
+                                    name={`${variant}.attributes[${index}].values`}
+                                    mode={categoryAttribute.isGroup ? "multiple" : null}
+                                    options={options}
+                                    componentStyle={{ width: !categoryAttribute.isGroup ? '50px' : '200px' }}
+                                />
+                            </td>;
+                        }));
+
+                        const imageOptions = _.filter(_.map(files,
+                            (image: any) => {
+
+                                if (image.response == null) {
+                                    return null;
                                 }
-                            });
-                        }
 
-                        const labelName = `${categoryAttribute.productAttribute.name}${categoryAttribute.isGroup ? ' (S)' : ''}`;
+                                let fileName = image.response.fileList[0];
+                                let imageUrl = Api.getImageAssets(fileName, 200, 200);
+                                return {
+                                    value: fileName,
+                                    name: <Avatar className="image-select-option" src={imageUrl}></Avatar>
+                                }
+                            }), (option) => option != null);
 
-                        change(`${variant}.attributes[${index}].attributeId`, categoryAttribute.productAttribute.id);
-                        change(`${variant}.attributes[${index}].name`, categoryAttribute.productAttribute.name);
-                        change(`${variant}.attributes[${index}].isGroup`, categoryAttribute.isGroup);
-
-                        return <td>
-                            <Field component="input" type="hidden" name={`${variant}.attributes[${index}].attributeId`} value={categoryAttribute.productAttribute.id} />
-                            <Field component="input" type="hidden" name={`${variant}.attributes[${index}].name`} value={categoryAttribute.productAttribute.name} />
-                            <Field component="input" type="hidden" name={`${variant}.attributes[${index}].isGroup`} value={categoryAttribute.isGroup} />
-                            <Field
-                                component={AntdSelectComponent}
-                                filterOption={(value, option) => {
-                                    return option.props.title && option.props.title.toLowerCase().includes(value.toLowerCase());
-                                }}
-                                hideLabel={true}
-                                placeholder={`Select ${labelName}`}
-                                name={`${variant}.attributes[${index}].values`}
-                                mode={categoryAttribute.isGroup ? "multiple" : null}
-                                options={options}
-                                componentStyle={{ width: !categoryAttribute.isGroup ? '50px' : '200px' }}
-                            />
-                        </td>;
-                    }));
-
-                    const imageOptions = _.filter(_.map(files,
-                        (image: any) => {
-
-                            if (image.response == null) {
-                                return null;
-                            }
-
-                            let fileName = image.response.fileList[0];
-                            let imageUrl = Api.getImageAssets(fileName, 200, 200);
-                            return {
-                                value: fileName,
-                                name: <Avatar className="image-select-option" src={imageUrl}></Avatar>
-                            }
-                        }), (option) => option != null);
-
-                    return <tr key={index}>
-                        <td>
-                            <Field name={`${variant}.defaultImage`} component={AntdSelectComponent} hideLabel={true} options={imageOptions} />
-                        </td>
-                        {attributes}
-                        <td>
-                            <Field name={`${variant}.sku`} style={{ width: '70px' }} component={InputComponent} hideLabel={true} onFocus={(event) => event.target.select()} />
-                        </td>
-                        <td>
-                            <Field style={{ width: '50px' }} precision={0} name={`${variant}.quantity`} min={0} component={InputNumberComponent} hideLabel={true} onFocus={(event) => event.target.select()} />
-                        </td>
-                        <td>
-                            <Field style={{ width: '100px' }} precision={2} name={`${variant}.price`} min={0}
-                                onFocus={(event) => event.target.select()}
-                                component={InputNumberComponent}
-                                formatter={value => { return `Rs. ${value && typeof value.replace === "function" ? value.replace(/\Rs.\s?|(,*)/g, '') : value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }}
-                                hideLabel={true} />
-                        </td>
-                        <td>
-                            <Popconfirm placement="topRight" title="Are you sure delete this product variant?" okText="Delete" onConfirm={() => { fields.remove(index); }} cancelText="Cancel">
-                                <Button icon="delete" size="large"></Button>
-                            </Popconfirm>
-                        </td>
-                    </tr>;
-                })
-            }
-
+                        return <tr key={index}>
+                            <td>
+                                <Field name={`${variant}.defaultImage`} component={AntdSelectComponent} hideLabel={true} options={imageOptions} />
+                            </td>
+                            {attributes}
+                            <td>
+                                <Field name={`${variant}.sku`} style={{ width: '70px' }} component={InputComponent} hideLabel={true} onFocus={(event) => event.target.select()} />
+                            </td>
+                            <td>
+                                <Field style={{ width: '50px' }} precision={0} name={`${variant}.quantity`} min={0} component={InputNumberComponent} hideLabel={true} onFocus={(event) => event.target.select()} />
+                            </td>
+                            <td>
+                                <Field style={{ width: '100px' }} precision={2} name={`${variant}.price`} min={0}
+                                    onFocus={(event) => event.target.select()}
+                                    component={InputNumberComponent}
+                                    formatter={value => { return `Rs. ${value && typeof value.replace === "function" ? value.replace(/\Rs.\s?|(,*)/g, '') : value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }}
+                                    hideLabel={true} />
+                            </td>
+                            <td>
+                                <Popconfirm placement="topRight" title="Are you sure delete this product variant?" okText="Delete" onConfirm={() => { fields.remove(index); }} cancelText="Cancel">
+                                    <Button icon="delete" size="large"></Button>
+                                </Popconfirm>
+                            </td>
+                        </tr>;
+                    })
+                }
+            </tbody>
         </table>
     </div>;
 
@@ -237,7 +255,7 @@ const renderProductVariant: React.StatelessComponent<IProductVariantFieldArray> 
 
 const renderImages: React.StatelessComponent<IFieldImageArraryProps> = (fieldArray: IFieldImageArraryProps) => {
 
-    const { fields, change } = fieldArray;
+    const { fields } = fieldArray;
 
     return <div>
 
@@ -254,10 +272,7 @@ const renderImages: React.StatelessComponent<IFieldImageArraryProps> = (fieldArr
         {
             fields.map((image, index) => {
 
-                change(`images[${index}].id`, image.id);
-                change(`images[${index}].name`, image.name);
-
-                return <div>
+                return <div key={index}>
                     <Field component="input" type="hidden" name={`images[${index}].id`} value={image.id} />
                     <Field component="input" type="hidden" name={`images[${index}].name`} value={image.name} />
                 </div>;
@@ -287,9 +302,9 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
         this.selectCategory = this.selectCategory.bind(this);
     }
 
-    public static validate(values: IProductFormData, props: any): FormErrors<IProductFormData> {
+    public static validate(values: Readonly<IProductFormData>): FormErrors<IProductFormData, any> {
 
-        const errors: FormErrors<IProductFormData> = {};
+        const errors: FormErrors<IProductFormData, any> = {};
 
         if (!values.category || (Array.isArray(values.category) && values.category.length === 0)) {
             errors.category = "Category is required";
@@ -303,14 +318,11 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
             errors.description = "Description is required";
         }
 
-
         if (values.productVariants != null && values.productVariants.length > 0) {
-
-            errors.productVariants = [];
 
             let productVariationErrors = [];
 
-            values.productVariants.forEach((productVariant: IProductVairation) => {
+            values.productVariants.forEach((productVariant: IProductVairation, index: number) => {
 
                 let productVariantError = {
                     price: null,
@@ -348,15 +360,14 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
 
             });
 
-            errors.productVariants = productVariationErrors;
+            errors.productVariants = productVariationErrors as ErrorOther<any>;
 
         } else {
-            errors.productVariants = "At least one variant must be entered";
+            errors.productVariants = { _error: "At least one variant must be entered" };
         }
 
         if (values.images == null || values.images.length === 0) {
-
-            errors.images = "At least one image must be entered";
+            errors.images = { _error: "At least one image must be entered" };
         }
 
         return errors;
@@ -475,7 +486,7 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
                         <h6>Product Details</h6>
                         <br />
                         <div className="row">
-                            <Field name="id" component="input" type="hidden" /> 
+                            <Field name="id" component="input" type="hidden" />
                             <Field name="category" searchPromptText="Select category" showSearch={true} component={SelectCascader} label="Category" options={categories} onChange={(value, option) => this.selectCategory(value, option, true)} col="col-md-6" allowClear={false} />
                             <Field name="vendor" component={InputComponent} label="Vendor" col="col-md-6" />
                             <Field type="text" name="title" component={InputComponent} label="Title" col="col-md-12" />
@@ -485,7 +496,7 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
                 </div>
 
                 <br className="margin-bottom-1x" />
-                
+
                 <div className="card">
                     <div className="card-block">
                         <div className="row">

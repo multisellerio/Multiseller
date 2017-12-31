@@ -5,6 +5,7 @@ namespace MultiSellerIo.Dal.Entity
     public class Store : BaseEntity
     {
         public long UserId { get; set; }
+        public string ProfileImage { get; set; }
         public virtual User User { get; set; }
         public string StoreName { get; set; }
         public string Slug { get; set; }

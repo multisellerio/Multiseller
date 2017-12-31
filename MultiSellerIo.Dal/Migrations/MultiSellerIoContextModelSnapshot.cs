@@ -427,6 +427,8 @@ namespace MultiSellerIo.Dal.Migrations
 
                     b.Property<string>("PaymentAndRefundPolicies");
 
+                    b.Property<string>("ProfileImage");
+
                     b.Property<string>("ShippingInformation");
 
                     b.Property<string>("Slug");
@@ -483,6 +485,8 @@ namespace MultiSellerIo.Dal.Migrations
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("ProfileImage");
 
                     b.Property<string>("SecurityStamp");
 

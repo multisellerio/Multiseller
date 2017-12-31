@@ -117,7 +117,7 @@ class ProductsComponent extends React.Component<ProductsProps, IProductComponent
 
                 let imageUrl = Api.getImageAssets(product.images[0], 300, 300);
 
-                return <tr>
+                return <tr key={product.id}>
                     <td>
                         <div className="product-item"><Link className="product-thumb" to={`/portal/selling/products/edit-product/${product.id}`}><img src={imageUrl} alt="Product" /></Link>
                             <div className="product-info">

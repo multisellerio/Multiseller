@@ -5,11 +5,13 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Hangfire;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using MultiSellerIo.Common.String;
 using MultiSellerIo.Core.Exception;
 using MultiSellerIo.Dal.Entity;
 using MultiSellerIo.Dal.Repository;
 using MultiSellerIo.Services.Email;
+using MultiSellerIo.Services.User.Core;
 
 namespace MultiSellerIo.Services.User
 {
@@ -26,6 +28,7 @@ namespace MultiSellerIo.Services.User
         Task ConfirmEmail(string email, string token);
         Task<Dal.Entity.User> GetUser(ClaimsPrincipal user);
         Task InitialRoles();
+        Task<Dal.Entity.User> UpdateProfile(long userId, UpdateProfileData data);
     }
 
     public class UserService : IUserService
@@ -172,6 +175,45 @@ namespace MultiSellerIo.Services.User
             if (!isSuccess)
             {
                 throw new ServiceException("Invalid password");
+            }
+
+            return user;
+        }
+
+        public async Task<Dal.Entity.User> UpdateProfile(long userId, UpdateProfileData data)
+        {
+            var user = await GetUserById(userId);
+
+            if (user.Email != data.Email)
+            {
+                user.EmailConfirmed = false;
+            }
+
+            user.FirstName = data.FirstName;
+            user.LastName = data.LastName;
+            user.Gender = data.Gender;
+            user.Email = data.Email;
+            user.ProfileImage = data.ProfileImage;
+
+            user.UserName = data.Username;
+
+            var updateUserResult = await _userManager.UpdateAsync(user);
+
+            if (!updateUserResult.Succeeded)
+            {
+                throw new ServiceException(GenerateMessage(updateUserResult));
+            }
+
+            return user;
+        }
+
+        public async Task<Dal.Entity.User> GetUserById(long id)
+        {
+            var user = await _userManager.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                throw new ServiceException("Unable to find user");
             }
 
             return user;

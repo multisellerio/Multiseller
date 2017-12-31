@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Heebo);/* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
+@import url(https://fonts.googleapis.com/css?family=Roboto);/* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
 /* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
 /* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
@@ -18458,7 +18458,7 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   color: #606975;
-  font-family: "Heebo", sans-serif;
+  font-family: "Roboto";
   font-size: 14px;
   font-weight: Regular;
   text-transform: none;
@@ -19660,7 +19660,7 @@ kbd {
   border: 1px solid #dbe2e8;
   background-color: #ffffff;
   color: #606975;
-  font-family: "Heebo", sans-serif;
+  font-family: "Roboto";
   font-size: 14px;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -20134,7 +20134,7 @@ select.form-control.form-control-sm:not([size]):not([multiple]) {
   background-color: transparent;
   background-image: none;
   color: #606975;
-  font-family: "Heebo", sans-serif;
+  font-family: "Roboto";
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -21572,7 +21572,7 @@ button:focus {
 }
 
 .tooltip {
-  font-family: "Heebo", sans-serif;
+  font-family: "Roboto";
 }
 
 .tooltip.tooltip-top .tooltip-inner::before, .tooltip.bs-tether-element-attached-bottom .tooltip-inner::before {
@@ -21605,7 +21605,7 @@ button:focus {
 .popover {
   border-radius: 7px;
   border-color: #e1e7ec;
-  font-family: "Heebo", sans-serif;
+  font-family: "Roboto";
 }
 
 .popover.bs-tether-element-attached-bottom::before, .popover.popover-top::before {
@@ -23732,7 +23732,6 @@ video {
   box-shadow: 0 1px 3px #e1e7ec;
   min-height: 84px;
   background-color: #ffffff;
-  z-index: 9000;
   padding: 0;
 }
 

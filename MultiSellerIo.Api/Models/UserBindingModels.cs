@@ -23,9 +23,26 @@ namespace MultiSellerIo.Api.Models
         public string Email { get; set; }
     }
 
+    public class UpdateUserDetailsBindingModel
+    {
+        public string ProfileImage { get; set; }
+        [Required]
+        public string Username { get; set; }
+        [Required]
+        public string FirstName { get; set; }
+        [Required]
+        public string LastName { get; set; }
+        [Required]
+        public Gender Gender { get; set; }
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+    }
+
     public class UserBindingModel
     {
         public long Id { get; set; }
+        public string ProfileImage { get; set; }
         public string Username { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

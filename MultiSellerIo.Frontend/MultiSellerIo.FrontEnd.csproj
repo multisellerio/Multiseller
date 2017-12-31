@@ -22,7 +22,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\store\common\index.ts" />
     <None Remove="Properties\PublishProfiles\good-look-dev-front - Web Deploy.pubxml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ClientApp\store\common\index.ts" />
   </ItemGroup>
 
   <ItemGroup>

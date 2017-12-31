@@ -17,6 +17,7 @@ using MultiSellerIo.Api.Util.Filters;
 using MultiSellerIo.Core.Exception;
 using MultiSellerIo.Dal.Entity;
 using MultiSellerIo.Services.User;
+using MultiSellerIo.Services.User.Core;
 
 namespace MultiSellerIo.Api.Controllers
 {
@@ -77,6 +78,16 @@ namespace MultiSellerIo.Api.Controllers
                 UserName = model.Username,
             }, model.Password, UserService.UserRole);
 
+            return Ok(Mapper.Map<UserBindingModel>(user));
+        }
+
+        [Route("api/account/update")]
+        [HttpPost]
+        [ModelValidation]
+        public async Task<IActionResult> Update([FromBody] UpdateUserDetailsBindingModel model)
+        {
+            var currentUser = await _userService.GetUser(User);
+            var user = await _userService.UpdateProfile(currentUser.Id, Mapper.Map<UpdateProfileData>(model));
             return Ok(Mapper.Map<UserBindingModel>(user));
         }
 

@@ -14,7 +14,6 @@ export default createServerRenderer((params) => {
 
         // Get the token from parameters
         const token = params.data.token;
-
         setToken(token);
 
         const initialState = {
@@ -52,6 +51,8 @@ export default createServerRenderer((params) => {
             },
             products: null,
             catelog: null,
+            settings: null,
+            common: null
         };
 
         // Prepare Redux store with in-memory history, and dispatch a navigation event

@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 import * as AccountState from "../../../store/account";
 import { ApplicationState } from '../../../store';
 
+import Message from "../common/message";
+
 import { Alert, Button } from "antd";
 
 type LayoutProps =
@@ -53,7 +55,7 @@ class Layout extends React.Component<LayoutProps, {}> {
                 {this.props.children}
                 <Footer />
             </div>
-
+            <Message />
         </div>;
     }
 }

@@ -1,10 +1,11 @@
 ﻿import * as React from "React";
 import { connect } from "react-redux";
+import { getFormValues } from "redux-form";
 import { RouteComponentProps } from "react-router-dom";
 import { ApplicationState } from "../../../../store";
 import * as ProductState from "../../../../store/products";
 import { Alert, Spin } from "antd";
-import { ProductForm, IProductFormData } from '../product-form';
+import { ProductForm, IProductFormData, formName as ProductFormName } from '../product-form';
 import * as _ from 'lodash';
 
 interface IEditParameters {
@@ -16,7 +17,7 @@ interface IEditProductState {
 }
 
 type EditProductProps =
-    ProductState.IProductsState
+    { products: ProductState.IProductsState, formValues: IProductFormData }
     & typeof ProductState.actionCreator & RouteComponentProps<IEditParameters>;
 class EditProductComponent extends React.Component<EditProductProps, IEditProductState> {
 
@@ -69,22 +70,28 @@ class EditProductComponent extends React.Component<EditProductProps, IEditProduc
                 </div>
                 <div className="col-md-4"></div>
             </div>
-            {this.props.currentProductData.error && <div><Alert
+            {this.props.products.currentProductData.error && <div><Alert
                 message="Error"
-                description={this.props.currentProductData.error}
+                description={this.props.products.currentProductData.error}
                 type="error"
                 showIcon
             /><br /></div>}
             <div className="text-center">
-                {this.props.currentProductData.dataLoading && <Spin size="large" spinning={this.props.currentProductData.dataLoading} />}
+                {this.props.products.currentProductData.dataLoading && <Spin size="large" spinning={this.props.products.currentProductData.dataLoading} />}
             </div>
-            {!this.props.currentProductData.dataLoading && !this.props.currentProductData.error && <ProductForm loading={this.props.currentProductData.loading} metaData={this.props.meta.metaData} onSubmit={this.onSubmit} editing={true} initialValues={this.props.currentProductData.product} />}
+            {!this.props.products.currentProductData.dataLoading && !this.props.products.currentProductData.error && <ProductForm loading={this.props.products.currentProductData.loading} formValues={this.props.formValues}  metaData={this.props.products.meta.metaData} onSubmit={this.onSubmit} editing={true} initialValues={this.props.products.currentProductData.product} />}
         </div>;
     }
 
 }
 
 export default connect(
-    (state: ApplicationState) => state.products,
+    (state: ApplicationState) => {
+        let formValues = getFormValues(ProductFormName)(state) || {};
+        return {
+            products: state.products,
+            formValues: formValues
+        }
+    },
     ProductState.actionCreator,
 )(EditProductComponent) as typeof EditProductComponent;

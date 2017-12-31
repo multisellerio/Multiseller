@@ -90,7 +90,16 @@ export const ProductService = {
     getProducts: async (productRequest: IProductListRequest): Promise<IProductList> => {
         try {
             let token = getToken();
-            const response = await fetch(`${API_URL}products?searchText=${productRequest.searchText}&page=${productRequest.page}&pageSize=${productRequest.pageSize}`,
+
+            if (!productRequest.searchText) {
+                productRequest.searchText = '';
+            }
+
+            let url =
+                `${API_URL}products?searchText=${productRequest.searchText}&page=${productRequest.page}&pageSize=${
+                    productRequest.pageSize}`;
+
+            const response = await fetch(url,
                 {
                     headers: {
                         Accept: "application/json",

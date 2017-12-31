@@ -5,7 +5,7 @@
 
 //Local Env
 const api = 'http://localhost:50564/';
-const cdn = 'http://good-look-dev.azureedge.net/images/';
+const cdn = 'http://localhost:61334/assets/images/';
 
 var currentToken: string = null;
 

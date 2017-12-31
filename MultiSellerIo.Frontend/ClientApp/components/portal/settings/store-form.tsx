@@ -1,22 +1,18 @@
 ﻿import * as React from "React";
-import { FormErrors, reduxForm, InjectedFormProps, arrayPush, arrayRemoveAll } from "redux-form";
+import { FormErrors, reduxForm, InjectedFormProps } from "redux-form";
 
-import { Button, Icon, Modal, Upload, Avatar, Popconfirm, Badge, Alert } from "antd";
-import {
-    AntdSelectComponent, InputComponent,
-    SelectCascader, TextAreaComponent, InputNumberComponent, Field, FieldArray
-} from "../../shared/util/form-components";
-
-import * as Api from "../../../api";
+import { Button } from "antd";
+import { InputComponent, TextAreaComponent, Field } from "../../shared/util/form-components";
 
 import * as _ from "lodash";
 
-const formName: string = "Store-form";
+const formName: string = "store-form";
 
 export interface IStoreFormData {
-
+    shippingInformation: string;
+    paymentAndRefundPolicies: string;
+    storeName: string;
 }
-
 
 interface IStoreFormProps extends InjectedFormProps<IStoreFormData, {}> {
     dispatch?: any;
@@ -25,6 +21,7 @@ interface IStoreFormProps extends InjectedFormProps<IStoreFormData, {}> {
 interface IAdditionalFormProps {
     loading: boolean;
     editing: boolean;
+    saving: boolean;
 }
 
 interface IReduxFormProps {
@@ -46,10 +43,9 @@ class StoreForm extends React.Component<IStoreFormProps & IAdditionalFormProps, 
         };
     }
 
-    public static validate(values: IStoreFormData, props: any): FormErrors<IStoreFormData> {
+    public static validate(values: IStoreFormData): FormErrors<IStoreFormData> {
 
         const errors: FormErrors<IStoreFormData> = {};
-
         return errors;
     }
 
@@ -69,13 +65,13 @@ class StoreForm extends React.Component<IStoreFormProps & IAdditionalFormProps, 
                 <form onSubmit={handleSubmit}>
 
                     <div className="row">
-                        <Field name="id" component="input" type="hidden" />
-                        <Field name="shippinginfo" component={TextAreaComponent} label="Shipping Information" col="col-md-12" />
-                        <Field name="paymentandrefoundinfo" component={TextAreaComponent} label="Payment and Refund policies" col="col-md-12" />
+                        <Field name="storeName" component={InputComponent} label="Store Name" col="col-md-12" />
+                        <Field name="shippingInformation" component={TextAreaComponent} label="Shipping Information" col="col-md-12" />
+                        <Field name="paymentAndRefundPolicies" component={TextAreaComponent} label="Payment and Refund policies" col="col-md-12" />
                     </div>
 
                     <div>
-                        <Button type="primary" onClick={handleSubmit} loading={this.props.loading} >Save Changes</Button>
+                        <Button type="primary" onClick={handleSubmit} loading={this.props.saving} >Save Changes</Button>
                     </div>
 
                 </form>
@@ -91,4 +87,4 @@ const form = reduxForm<IStoreFormData, IAdditionalFormProps>({
     validate: StoreForm.validate,
 })(StoreForm);
 
-export { form as StoreForm }
+export { form as StoreForm }                                                                                                                                                                                                                                                                                

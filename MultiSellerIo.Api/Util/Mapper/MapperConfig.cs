@@ -2,6 +2,7 @@
 using System.Linq;
 using MultiSellerIo.Api.Models;
 using MultiSellerIo.Dal.Entity;
+using MultiSellerIo.Services.User.Core;
 using Newtonsoft.Json;
 
 namespace MultiSellerIo.Api.Util.Mapper
@@ -66,6 +67,12 @@ namespace MultiSellerIo.Api.Util.Mapper
                 config.CreateMap<ProductBindingModel, Product>();
                 config.CreateMap<Product, ProductBindingModel>();
 
+                config.CreateMap<StateBindingModel, State>();
+                config.CreateMap<State, StateBindingModel>();
+
+                config.CreateMap<City, CityBindingModel>();
+                config.CreateMap<CityBindingModel, City>();
+
                 config.CreateMap<ShippingCost, ShippingCostBindingModel>();
                 config.CreateMap<ShippingCostBindingModel, ShippingCost>();
 
@@ -74,6 +81,8 @@ namespace MultiSellerIo.Api.Util.Mapper
 
                 config.CreateMap<CreateOrUpdateStoreBindingModel, Store>();
                 config.CreateMap<Store, CreateOrUpdateStoreBindingModel>();
+
+                config.CreateMap<UpdateUserDetailsBindingModel, UpdateProfileData>();
 
             });
         }

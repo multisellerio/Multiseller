@@ -1,13 +1,14 @@
 ﻿import * as React from "React";
 import { connect } from "react-redux";
+import { getFormValues } from "redux-form";
 import { ApplicationState } from "../../../../store";
 import * as ProductState from "../../../../store/products";
 import { Alert } from "antd";
-import { ProductForm, IProductFormData } from '../product-form';
+import { ProductForm, IProductFormData, formName as ProductFormName } from '../product-form';
 import * as _ from 'lodash';
 
 type AddProductProps =
-    ProductState.IProductsState
+    { products: ProductState.IProductsState, formValues: IProductFormData }
     & typeof ProductState.actionCreator;
 class AddProductComponents extends React.Component<AddProductProps, {}> {
 
@@ -59,19 +60,25 @@ class AddProductComponents extends React.Component<AddProductProps, {}> {
                 </div>
                 <div className="col-md-4"></div>
             </div>
-            {this.props.currentProductData.error && <div><Alert
+            {this.props.products.currentProductData.error && <div><Alert
                 message="Error"
-                description={this.props.currentProductData.error}
+                description={this.props.products.currentProductData.error}
                 type="error"
                 showIcon
             /><br /></div>}
-            {!this.props.currentProductData.error && <ProductForm loading={this.props.currentProductData.loading} metaData={this.props.meta.metaData} onSubmit={this.onSubmit} editing={false} />}
+            {!this.props.products.currentProductData.error && <ProductForm formValues={this.props.formValues} loading={this.props.products.currentProductData.loading} metaData={this.props.products.meta.metaData} onSubmit={this.onSubmit} editing={false} />}
         </div>;
     }
 
 }
 
 export default connect(
-    (state: ApplicationState) => state.products,
+    (state: ApplicationState) => {
+        let formValues = getFormValues(ProductFormName)(state) || {};
+        return {
+            products: state.products,
+            formValues: formValues
+        }
+    },
     ProductState.actionCreator,
 )(AddProductComponents) as typeof AddProductComponents;
