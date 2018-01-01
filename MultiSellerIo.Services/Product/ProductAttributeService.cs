@@ -31,11 +31,8 @@ namespace MultiSellerIo.Services.Product
 
         public async Task<List<ProductAttribute>> GetProductAttributesAsync()
         {
-            //  return await _cacheService.GetFromCacheIfExists("product-attributes", async () =>
-            //{
             return await _unitOfWork.ProductAttributeRepository.GetAll().Include(pa => pa.ProductAttributeValues)
                 .ToListAsync();
-            //   });
         }
 
         public async Task<ProductAttribute> GetByIdAsync(long id)
@@ -100,8 +97,7 @@ namespace MultiSellerIo.Services.Product
                 throw new ServiceException("Invalid product attribute id");
             }
 
-           // productAttribute.IsDeleted = true;
-
+            productAttribute.IsDeleted = true;
             _unitOfWork.ProductAttributeRepository.Update(productAttribute);
             await _unitOfWork.SaveChangesAsync();
         }

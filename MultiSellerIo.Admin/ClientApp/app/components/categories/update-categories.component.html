@@ -1,52 +1,155 @@
-﻿<form #updateCategoryForm="ngForm">
-    <div class="form-group">
-        <label for="parentCategoryId">Parent Category</label>
-        <select [(ngModel)]="category.parentCategoryId" name="parentCategoryId" #parentCategoryId="ngModel" class="form-control">
-            <option value="0">No parent category</option>
-            <option *ngFor="let parentCategory of parentCategories" [ngValue]="parentCategory.id">{{parentCategory.name}}</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="categoryName">Name</label>
-        <input type="text" class="form-control" name="categoryName" [(ngModel)]="category.name" required #categoryName="ngModel">
-        <small *ngIf="!categoryName.valid && updateCategoryForm._submitted" class="form-validation-error">Name is required</small>
-    </div>
-    <div class="form-group">
-        <label for="description">Description</label>
-        <textarea class="form-control" name="description" [(ngModel)]="category.description" #description="ngModel"></textarea>
-    </div>
-    <div class="form-group">
-        <label for="slug">Slug</label>
-        <textarea class="form-control" name="slug" [(ngModel)]="category.slug" #slug="ngModel"></textarea>
-    </div>
-    <h4>Category attributes</h4><hr />
-    <div *ngFor="let categoryAttribute of category.categoryAttributes; let i=index">
-        <div class="row">
-            <div class="form-group col-sm-3">
-                <label>Product Attribute</label>
-                <select [(ngModel)]="category.categoryAttributes[i].productAttributeId" class="form-control" name="productAttributeId{{i}}" #productAttributeId="ngModel">
-                    <option *ngFor="let productAttribute of attributes" [ngValue]="productAttribute.id">{{productAttribute.name}}</option>
-                </select>
+﻿<div>
+    <div class="m-subheader">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto">
+                <h3 class="m-subheader__title m-subheader__title--separator">
+                    Update Category
+                </h3>
             </div>
-            <div class="form-group col-sm-3">
-                <label>Is Required</label>
-                <input type="checkbox" [ngModel]="category.categoryAttributes[i].isRequired" name="isRequired{{i}}" #isRequired="ngModel"
-                       (change)="category.categoryAttributes[i].isRequired=!category.categoryAttributes[i].isRequired">
-            </div>
-            <div class="form-group col-sm-3">
-                <label>Is Group</label>
-                <input type="checkbox" [ngModel]="category.categoryAttributes[i].isGroup" name="isGroup{{i}}" #isGroup="ngModel"
-                       (change)="category.categoryAttributes[i].isGroup=!category.categoryAttributes[i].isGroup">
-            </div>
-            <div class="form-group col-sm-3">
-                <button (click)="removeCategoryAttribute(i)" type="button" class="btn btn-danger btn-sm">Remove</button>
-            </div>
-           
         </div>
     </div>
-    <div class="row text-center">
-        <button type="button" class="btn" (click)="addCategoryAttribute()">Add Category Attribue</button>
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="m-portlet">
+                    <form class="m-form m-form--label-align-right" #updateCategoryForm="ngForm">
+                        <div class="m-portlet__body">
+                            <div class="m-form__section m-form__section--first">
+                                <div class="m-form__heading">
+                                    <h3 class="m-form__heading-title">
+                                        Category details:
+                                    </h3>
+                                </div>
+                                <div class="form-group m-form__group row">
+                                    <label class="col-lg-2 col-form-label">
+                                        Parent Category:
+                                    </label>
+                                    <div class="col-lg-6">
+                                        <select [(ngModel)]="category.parentCategoryId" name="parentCategoryId" #parentCategoryId="ngModel" class="form-control m-input">
+                                            <option value="0">No parent category</option>
+                                            <option *ngFor="let parentCategory of parentCategories" [ngValue]="parentCategory.id">{{parentCategory.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group m-form__group row">
+                                    <label class="col-lg-2 col-form-label">
+                                        Name:
+                                    </label>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control m-input" name="categoryName" [(ngModel)]="category.name" required #categoryName="ngModel">
+                                        <small *ngIf="!categoryName.valid && updateCategoryForm._submitted" class="form-validation-error">Name is required</small>
+                                    </div>
+                                </div>
+                                <div class="form-group m-form__group row">
+                                    <label class="col-lg-2 col-form-label">
+                                        Description:
+                                    </label>
+                                    <div class="col-lg-6">
+                                        <textarea class="form-control m-input" name="description" [(ngModel)]="category.description" #description="ngModel"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group m-form__group row">
+                                    <label class="col-lg-2 col-form-label">
+                                        Slug:
+                                    </label>
+                                    <div class="col-lg-6">
+                                        <textarea class="form-control" name="slug" [(ngModel)]="category.slug" #slug="ngModel"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-form__seperator m-form__seperator--dashed"></div>
+                            <div class="m-form__section m-form__section--last">
+                                <div class="m-form__heading">
+                                    <h3 class="m-form__heading-title">
+                                        Category attributes:
+                                    </h3>
+                                </div>
+                                <div>
+                                    <div class="row">
+                                        <div class="col-md-8 col-md-offset-2">
+                                            <div class="col-sm-4">
+                                                <small>Product Attribute</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <small>Is Required</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <small>Is Group</small>
+                                            </div>
+                                            <br />  <hr />
+                                        </div>
+                                    </div>
+                                    <div class="row" *ngFor="let categoryValue of category.categoryAttributes; let i=index">
+                                        <div class="col-md-8 col-md-offset-2">
+                                            <div class="form-group m-form__group col-sm-4">
+                                                <select [(ngModel)]="category.categoryAttributes[i].productAttributeId" class="form-control" name="productAttributeId{{i}}" #productAttributeId="ngModel">
+                                                    <option *ngFor="let productAttribute of attributes" [ngValue]="productAttribute.id">{{productAttribute.name}}</option>
+                                                </select>                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="m-checkbox">
+                                                    <input type="checkbox" [ngModel]="category.categoryAttributes[i].isRequired" name="isRequired{{i}}" #isRequired="ngModel"
+                                                           (change)="category.categoryAttributes[i].isRequired=!category.categoryAttributes[i].isRequired">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <label class="m-checkbox">
+                                                    <input type="checkbox" [ngModel]="category.categoryAttributes[i].isGroup" name="isGroup{{i}}" #isGroup="ngModel"
+                                                           (change)="category.categoryAttributes[i].isGroup=!category.categoryAttributes[i].isGroup">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <button (click)="removeCategoryAttribute(i)" type="button" class="btn btn-danger btn-sm">Remove</button>
+                                            </div>
+                                        </div>
+
+
+                                        <!--<div class="form-group col-sm-3">
+                                            <label>Product Attribute</label>
+                                            <select [(ngModel)]="category.categoryAttributes[i].productAttributeId" class="form-control" name="productAttributeId{{i}}" #productAttributeId="ngModel">
+                                                <option *ngFor="let productAttribute of attributes" [ngValue]="productAttribute.id">{{productAttribute.name}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-sm-3">
+                                            <label>Is Required</label>
+                                            <input type="checkbox" [ngModel]="category.categoryAttributes[i].isRequired" name="isRequired{{i}}" #isRequired="ngModel"
+                                                   (change)="category.categoryAttributes[i].isRequired=!category.categoryAttributes[i].isRequired">
+                                        </div>
+                                        <div class="form-group col-sm-3">
+                                            <label>Is Group</label>
+                                            <input type="checkbox" [ngModel]="category.categoryAttributes[i].isGroup" name="isGroup{{i}}" #isGroup="ngModel"
+                                                   (change)="category.categoryAttributes[i].isGroup=!category.categoryAttributes[i].isGroup">
+                                        </div>
+                                        <div class="form-group col-sm-3">
+                                            <button (click)="removeCategoryAttribute(i)" type="button" class="btn btn-danger btn-sm">Remove</button>
+                                        </div>-->
+
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8 col-md-offset-2">
+                                        <br />
+                                        <button type="button" class="btn btn-metal" (click)="addCategoryAttribute()">Add Category Attribue</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-portlet__foot m-portlet__foot--fit">
+                            <div class="m-form__actions m-form__actions">
+                                <div class="row">
+                                    <div class="col-lg-2"></div>
+                                    <div class="col-lg-6">
+                                        <button type="submit" class="btn btn-primary" (click)="updateCategory()">SAVE</button>
+                                        <a [routerLink]="['/categories']" class="btn btn-secondary">CANCEL</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary" (click)="updateCategory()">SAVE</button>
-    <a [routerLink]="['/categories']" class="btn btn-primary">CANCEL</a>
-</form>
+</div>

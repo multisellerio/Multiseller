@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MultiSellerIo.Api.Models;
+using MultiSellerIo.Api.Util;
 using MultiSellerIo.Dal.Entity;
 using MultiSellerIo.Services.Product;
 using System.Linq;
@@ -8,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace MultiSellerIo.Api.Controllers
 {
+    [MultiSellerAuthorization]
     [Produces("application/json")]
     [Route("api/Attributes")]
     public class AttributesController : Controller

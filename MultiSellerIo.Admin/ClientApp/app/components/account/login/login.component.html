@@ -1,0 +1,34 @@
+﻿
+        <div class="m-grid__item m-grid__item--fluid m-grid m-grid--hor m-login m-login--singin m-login--2 m-login-2--skin-2" id="m_login">
+            <div class="m-grid__item m-grid__item--fluid	m-login__wrapper">
+                <div class="m-login__container">
+                    <div class="m-login__logo">
+                        <img style="width:40%" src="../../../assets/img/GoodLook_logo.png" />
+                    </div>
+                    <div class="m-login__signin">
+                        <div class="m-login__head">
+                            <h3 class="m-login__title">
+                                Sign In To Admin
+                            </h3>
+                        </div>
+                        <form class="m-login__form m-form" #loginForm="ngForm">
+                            <div class="form-group m-form__group text-center">
+                                <input class="form-control m-input" type="text" placeholder="Username" name="username" required
+                                    [(ngModel)]="loginModel.username"  #username="ngModel" autocomplete="off">
+                                <small *ngIf="!(username.valid) && loginForm._submitted" class="form-validation-error">Username is required</small>
+                            </div>
+                            <div class="form-group m-form__group text-center">
+                                <input class="form-control m-input m-login__form-input--last" type="password" required
+                                  [(ngModel)]="loginModel.password" #password="ngModel" placeholder="Password" name="password">
+                                <small *ngIf="!(password.valid) && loginForm._submitted" class="form-validation-error">Password is required</small>
+                            </div>
+                            <div class="m-login__form-action">
+                                <button type="submit" (click)="login()" id="m_login_signin_submit" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air m-login__btn m-login__btn--primary">
+                                    Sign In
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>

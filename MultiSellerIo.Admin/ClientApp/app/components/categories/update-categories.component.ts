@@ -6,7 +6,8 @@ import { AttributesService } from './../attributes/attributes.service';
 import { CategoryModel, CategoryAttributeModel } from './category.model';
 
 @Component({
-    templateUrl: './update-categories.component.html'
+    templateUrl: './update-categories.component.html',
+    selector: '.update-category-section.m-grid__item.m-grid__item--fluid.m-wrapper'
 })
 export class UpdateCategoriesComponent implements OnInit {
     @ViewChild('updateCategoryForm') updateCategoryForm: any;

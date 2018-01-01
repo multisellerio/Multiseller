@@ -10,6 +10,7 @@ using MultiSellerIo.Core.Exception;
 using MultiSellerIo.Dal.Entity;
 using MultiSellerIo.Dal.Repository;
 using MultiSellerIo.Services.Email;
+using System.Collections.Generic;
 
 namespace MultiSellerIo.Services.User
 {
@@ -26,6 +27,7 @@ namespace MultiSellerIo.Services.User
         Task ConfirmEmail(string email, string token);
         Task<Dal.Entity.User> GetUser(ClaimsPrincipal user);
         Task InitialRoles();
+        Task<IEnumerable<Dal.Entity.User>> GetAllUsersExceptAdminAsync();
     }
 
     public class UserService : IUserService
@@ -270,6 +272,12 @@ namespace MultiSellerIo.Services.User
         {
             var userId = GetUserId(user);
             return await _userManager.FindByIdAsync(userId.ToString());
+        }
+
+        // return all users except admins
+        public async Task<IEnumerable<Dal.Entity.User>> GetAllUsersExceptAdminAsync()
+        {
+            return await _userManager.GetUsersInRoleAsync("UserRole");
         }
 
         public async Task InitialRoles()
