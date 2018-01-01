@@ -8,11 +8,12 @@ import * as SettingState from "../../../store/settings";
 import { Alert, Spin, Card, Icon, Tabs } from "antd";
 import * as _ from 'lodash';
 
+import { IStoreModel, IShippingCostModel, ShippingCostType } from '../../../models/store-models';
 
 import { animateScroll } from 'react-scroll';
 import { AccountForm, IAccountFormData } from './account-form';
 import { StoreForm, IStoreFormData } from './store-form';
-import { ShippingForm, formName as ShippingFormName } from './shipping-form';
+import { ShippingForm, formName as ShippingFormName, IShippingFormData } from './shipping-form';
 
 import * as Api from "../../../api";
 
@@ -23,7 +24,7 @@ interface ISettingsState {
 }
 
 type SettingsProps =
-    { settings: SettingState.ISettingsState, formValues: any }
+    { settings: SettingState.ISettingsState, shippingFormValues: IShippingFormData }
     & typeof SettingState.actionCreator
     & RouteComponentProps<any>;
 class SettingsComponents extends React.Component<SettingsProps, ISettingsState> {
@@ -39,6 +40,7 @@ class SettingsComponents extends React.Component<SettingsProps, ISettingsState> 
 
         this.onSubmitAccountForm = this.onSubmitAccountForm.bind(this);
         this.onSubmitStoreForm = this.onSubmitStoreForm.bind(this);
+        this.onSubmitShippingForm = this.onSubmitShippingForm.bind(this);
 
     }
 
@@ -78,10 +80,69 @@ class SettingsComponents extends React.Component<SettingsProps, ISettingsState> 
         });
     }
 
+    onSubmitShippingForm(data: IShippingFormData) {
+        this.props.updateShipping(this.toShippingData(data));
+    }
+
+    private toShippingFormData(store: IStoreModel) : IShippingFormData {
+
+        if (store == null) {
+            return {
+                srilanka: 'Rs. 0',
+                additionalItem: 'Rs. 0',
+                additionalShippings: []
+            }
+        }
+
+        if (store.shippingInformation == null || store.shippingInformation.length === 0) {
+            return {
+                srilanka: 'Rs. 0',
+                additionalItem: 'Rs. 0',
+                additionalShippings: []
+            }
+        }
+
+        return {
+            srilanka: 'Rs. 0',
+            additionalItem: 'Rs. 0',
+            additionalShippings: []
+        }
+    }
+
+    private toShippingData(data: IShippingFormData): IShippingCostModel[] {
+        
+        if (data == null) {
+            return null;
+        }
+
+        let additionalShippings: IShippingCostModel[] = [];
+
+        //Sri lanka shipping
+        additionalShippings.push({
+            cost: Number(data.srilanka.replace("Rs. ", "").replace(",", "")),
+            cityId: null,
+            countryId: null,
+            id: 0,
+            shippingCostType: ShippingCostType.Flat
+        });
+
+        //additional shipping
+        additionalShippings.push({
+            cost: Number(data.additionalItem.replace("Rs. ", "").replace(",", "")),
+            cityId: null,
+            countryId: null,
+            id: 0,
+            shippingCostType: ShippingCostType.AdditionalItem
+        });
+
+        return additionalShippings;
+    }
+
     public render() {
 
         const profile = this.props.settings.profile ? this.props.settings.profile.data : null;
         const store = this.props.settings.store.data ? this.props.settings.store.data : null;
+        const shipping = this.toShippingFormData(this.props.settings.store.data);
 
         return <div>
             <div className="row">
@@ -115,7 +176,7 @@ class SettingsComponents extends React.Component<SettingsProps, ISettingsState> 
                                 <br />
                                 <Card type={"inner"} title={"Shipping Info"}>
                                     <p>How much will shipping cost your buyer?</p>
-                                    <ShippingForm formValues={this.props.formValues} saving={this.props.settings.store.saving} loading={false} editing={false} />
+                                    <ShippingForm initialValues={shipping} formValues={this.props.shippingFormValues} saving={this.props.settings.store.saving} loading={false} editing={false} />
                                 </Card>
                             </TabPane>
                         </Tabs>
@@ -128,10 +189,10 @@ class SettingsComponents extends React.Component<SettingsProps, ISettingsState> 
 
 export default connect(
     (state: ApplicationState) => {
-        const formValues = getFormValues(ShippingFormName)(state) || {};
+        const shippingFormValues = getFormValues(ShippingFormName)(state) || {};
         return {
             settings: state.settings,
-            formValues: formValues
+            shippingFormValues: shippingFormValues
         }
     },
     SettingState.actionCreator,

@@ -11,6 +11,7 @@ namespace MultiSellerIo.Services.Directory
     {
         Task<List<City>> GetCitiesByName(string name, long stateId);
         Task<List<State>> GetStatesByName(string name, long countryId);
+        Task<List<Country>> GetCountriesByName(string name);
     }
 
     public class CountryService : ICountryService
@@ -20,6 +21,19 @@ namespace MultiSellerIo.Services.Directory
         public CountryService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+        }
+
+        public async Task<List<Country>> GetCountriesByName(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return await _unitOfWork.CountriesRepository.GetAll()
+                    .ToListAsync();
+            }
+
+            return await _unitOfWork.CountriesRepository.GetAll()
+                .Where(country => country.CountryName.Contains(name.ToLower()))
+                .ToListAsync();
         }
 
         public async Task<List<City>> GetCitiesByName(string name, long stateId)

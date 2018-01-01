@@ -19,6 +19,14 @@ namespace MultiSellerIo.Api.Controllers
         }
 
         [HttpGet]
+        [Route("countries")]
+        public async Task<IActionResult> GetCountries(string name)
+        {
+            var countries = await _countryService.GetCountriesByName(name);
+            return Ok(countries.Select(Mapper.Map<CountryBindingModel>).ToList());
+        }
+
+        [HttpGet]
         [Route("cities/{stateId}")]
         public async Task<IActionResult> GetCities(long stateId, string name)
         {

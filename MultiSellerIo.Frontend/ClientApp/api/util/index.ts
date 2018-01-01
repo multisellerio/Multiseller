@@ -1,5 +1,5 @@
 ﻿import { API_URL, getToken } from "../";
-import { IStateModel, ICityModel } from "../../models/util-models";
+import { IStateModel, ICityModel, ICountryModel } from "../../models/util-models";
 
 export const UtilServices = {
 
@@ -25,6 +25,35 @@ export const UtilServices = {
             }
 
             return responseData as IStateModel[];
+
+        } catch (err) {
+            throw err;
+        }
+
+    },
+
+    getCountries: async (name: string): Promise<ICountryModel[]> => {
+
+        try {
+            let token = getToken();
+            let url = name ? API_URL + "util/countries/?name=" + name : API_URL + "util/countries?name=";
+            const response = await fetch(url,
+                {
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + token,
+                    },
+                    method: "get"
+                });
+
+            const responseData = await response.json();
+
+            if (response.status !== 200) {
+                throw new Error(responseData.error);
+            }
+
+            return responseData as ICountryModel[];
 
         } catch (err) {
             throw err;

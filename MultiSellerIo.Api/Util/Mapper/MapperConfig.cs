@@ -67,6 +67,9 @@ namespace MultiSellerIo.Api.Util.Mapper
                 config.CreateMap<ProductBindingModel, Product>();
                 config.CreateMap<Product, ProductBindingModel>();
 
+                config.CreateMap<CountryBindingModel, Country>();
+                config.CreateMap<Country, CountryBindingModel>();
+
                 config.CreateMap<StateBindingModel, State>();
                 config.CreateMap<State, StateBindingModel>();
 

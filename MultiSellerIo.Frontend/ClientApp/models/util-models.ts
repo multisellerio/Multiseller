@@ -10,3 +10,8 @@ export interface ICityModel {
     stateId: number;
     zipPostalCode: string;
 }
+
+export interface ICountryModel {
+    countryId: number;
+    countryName: string;
+}

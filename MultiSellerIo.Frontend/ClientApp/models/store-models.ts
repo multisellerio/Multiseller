@@ -9,6 +9,7 @@
 export interface IShippingCostModel {
     id: number;
     cityId?: number;
+    countryId?: number;
     cost: number;
     shippingCostType: ShippingCostType;
 }
@@ -18,4 +19,5 @@ export enum ShippingCostType {
     Flat = 1,
     Country = 2,
     City = 3,
+    AdditionalItem = 999
 }

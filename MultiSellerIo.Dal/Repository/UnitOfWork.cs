@@ -15,6 +15,7 @@ namespace MultiSellerIo.Dal.Repository
         IRepository<Store> StoreRepository { get; }
         IRepository<City> CitiesRepository { get; }
         IRepository<State> StatesRepository { get; }
+        IRepository<Country> CountriesRepository { get; }
         Task<int> SaveChangesAsync();
     }
 
@@ -29,6 +30,7 @@ namespace MultiSellerIo.Dal.Repository
         private IRepository<Store> _storeRepository;
         private IRepository<State> _statesRepository;
         private IRepository<City> _citiesRepository;
+        private IRepository<Country> _countiresRepository;
 
         public UnitOfWork(IMultiSellerIoContext context)
         {
@@ -60,6 +62,9 @@ namespace MultiSellerIo.Dal.Repository
 
         public IRepository<City> CitiesRepository => _citiesRepository ??
                                                      new GenericRepository<City>(_context);
+
+        public IRepository<Country> CountriesRepository => _countiresRepository ??
+                                                     new GenericRepository<Country>(_context);
 
         public async Task<int> SaveChangesAsync()
         {

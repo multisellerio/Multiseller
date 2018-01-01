@@ -10,6 +10,8 @@ namespace MultiSellerIo.Dal.Entity
         public virtual Store Store { get; set; }
         public long? CityId { get; set; }
         public virtual City City { get; set; }
+        public long? CountryId { get; set; }
+        public virtual Country Country { get; set; }
         public decimal Cost { get; set; }
     }
 }
