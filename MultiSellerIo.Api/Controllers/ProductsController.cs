@@ -119,8 +119,8 @@ namespace MultiSellerIo.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetProductMetaData()
         {
-            var productAttributes = await _productAttributeService.GetProductAttributes();
-            var categories = await _productCategoryService.GetCategories();
+            var productAttributes = await _productAttributeService.GetProductAttributesAsync();
+            var categories = await _productCategoryService.GetCategoriesAsync();
 
             return Ok(new ProductMetaDataModel()
             {

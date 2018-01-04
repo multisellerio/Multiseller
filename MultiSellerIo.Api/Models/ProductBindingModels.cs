@@ -36,6 +36,7 @@ namespace MultiSellerIo.Api.Models
         public long Id { get; set; }
         public string Value { get; set; }
         public object Meta { get; set; }
+        public long ProductAttributeId { get; set; }
     }
 
     public class CategoryBindingModel

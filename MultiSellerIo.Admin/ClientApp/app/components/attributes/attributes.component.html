@@ -1,0 +1,27 @@
+﻿<div>
+    <a [routerLink]="['/update-attribute',0]">Add New</a>
+    <p *ngIf="!attributes" class="text-center">No attributes to display</p>
+    <table class='table' *ngIf="attributes">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Values</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let attribute of attributes">
+                <td>{{attribute.name}}</td>
+                <td>
+                    <span class="label-left-space label label-info" *ngFor="let productAttributeValue of attribute.productAttributeValues">
+                        {{productAttributeValue.value}}
+                    </span>
+                </td>
+                <td>
+                    <a [routerLink]="['/update-attribute', attribute.id]">Edit</a>
+                    <a (click)="deleteAttribute(attribute.id)">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

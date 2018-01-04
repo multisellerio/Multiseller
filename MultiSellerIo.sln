@@ -21,8 +21,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intergrations", "Intergrati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiSellerIo.Intergrations.Azure", "MultiSellerIo.Intergrations.Azure\MultiSellerIo.Intergrations.Azure.csproj", "{4EC47E99-F17B-49D2-8D53-8363259CD821}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiSellerIo.Admin", "MultiSellerIo.Admin\MultiSellerIo.Admin.csproj", "{09106942-B2FE-4F2D-B158-8A2BE388329F}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7C602556-53F8-4940-8138-9B053B087526}"
 	ProjectSection(SolutionItems) = preProject
 		global.json = global.json
@@ -34,6 +32,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{8F42
 	ProjectSection(SolutionItems) = preProject
 		sri-lanka-provinces-districts-cities.sql = sri-lanka-provinces-districts-cities.sql
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiSellerIo.Admin", "MultiSellerIo.Admin\MultiSellerIo.Admin.csproj", "{BB63FF51-4D7C-4D97-86F8-6B009318A2AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +69,14 @@ Global
 		{4EC47E99-F17B-49D2-8D53-8363259CD821}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EC47E99-F17B-49D2-8D53-8363259CD821}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EC47E99-F17B-49D2-8D53-8363259CD821}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB63FF51-4D7C-4D97-86F8-6B009318A2AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB63FF51-4D7C-4D97-86F8-6B009318A2AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB63FF51-4D7C-4D97-86F8-6B009318A2AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB63FF51-4D7C-4D97-86F8-6B009318A2AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{007A84A7-2774-499E-85CD-D984E5D3B937}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{007A84A7-2774-499E-85CD-D984E5D3B937}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{007A84A7-2774-499E-85CD-D984E5D3B937}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{007A84A7-2774-499E-85CD-D984E5D3B937}.Release|Any CPU.Build.0 = Release|Any CPU
 		{09106942-B2FE-4F2D-B158-8A2BE388329F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{09106942-B2FE-4F2D-B158-8A2BE388329F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09106942-B2FE-4F2D-B158-8A2BE388329F}.Release|Any CPU.ActiveCfg = Release|Any CPU

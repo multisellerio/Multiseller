@@ -5,12 +5,19 @@ using Microsoft.EntityFrameworkCore;
 using MultiSellerIo.Dal.Entity;
 using MultiSellerIo.Dal.Repository;
 using MultiSellerIo.Services.Cache;
+using MultiSellerIo.Core.Exception;
+using System;
 
 namespace MultiSellerIo.Services.Product
 {
     public interface IProductCategoryService
     {
-        Task<List<Category>> GetCategories();
+        Task<List<Category>> GetCategoriesAsync();
+        Task<List<Category>> GetAllCategoriesAsync();
+        Task<Category> GetByIdAsync(long id);
+        Task<Category> AddCategoryAsync(Category category);
+        Task DeleteAsync(long id);
+        Task<Category> EditCategoriesAsync(Category category);
     }
 
     public class ProductCategoryService : IProductCategoryService
@@ -23,10 +30,10 @@ namespace MultiSellerIo.Services.Product
             _cacheService = cacheService;
         }
 
-        public async Task<List<Category>> GetCategories()
+        public async Task<List<Category>> GetCategoriesAsync()
         {
-            return await _cacheService.GetFromCacheIfExists("product-categories", async () =>
-            {
+           // return await _cacheService.GetFromCacheIfExists("product-categories", async () =>
+           // {
                 //Load all the categories
                 await _unitOfWork.CategoryRepository.GetAll()
                     .Include(category => category.CategoryAttributes)
@@ -36,7 +43,93 @@ namespace MultiSellerIo.Services.Product
                 return await _unitOfWork.CategoryRepository.GetAll()
                 .Where(category => category.ParentCategoryId == null)
                     .ToListAsync();
+          //  });
+        }
+
+        public async Task<List<Category>> GetAllCategoriesAsync()
+        {
+            // return await _cacheService.GetFromCacheIfExists("product-categories", async () =>
+            // {
+            //Load all the categories
+           return await _unitOfWork.CategoryRepository.GetAll()
+                .Include(category => category.CategoryAttributes)
+                .ThenInclude(categoryAttribute => categoryAttribute.ProductAttribute)
+                .ToListAsync();
+            //  });
+        }
+
+        public async Task<Category> GetByIdAsync(long id)
+        {
+            var category = await _unitOfWork.CategoryRepository.GetAll()
+                .Where(m => m.Id == id)
+                .Include(pa => pa.CategoryAttributes).FirstOrDefaultAsync();
+
+            if (category == null)
+            {
+                throw new ServiceException($"Unable to find category");
+            }
+
+            return category;
+        }
+
+        public async Task<Category> AddCategoryAsync(Category category)
+        {
+            await _unitOfWork.CategoryRepository.Add(category);
+            await _unitOfWork.SaveChangesAsync();
+            return category;
+        }
+
+        public async Task<Category> EditCategoriesAsync(Category category)
+        {
+            var currentCategory = await GetByIdAsync(category.Id);
+
+            currentCategory.Name = category.Name;
+            currentCategory.Slug = category.Slug;
+            currentCategory.Description = category.Description;
+            currentCategory.ParentCategoryId = category.ParentCategoryId;
+            currentCategory.Updated = DateTimeOffset.Now;
+
+            //---Update category attributes---
+
+            //Add new category attributes
+            currentCategory.CategoryAttributes.AddRange(category.CategoryAttributes.Where(attributes => attributes.Id == 0));
+
+            //Remove, removed category attributes
+            currentCategory.CategoryAttributes.RemoveAll(attribute =>
+                category.Id != 0 && category.CategoryAttributes.All(updatedAttribute =>
+                    updatedAttribute.Id != attribute.Id));
+
+            //Update category attributes
+            currentCategory.CategoryAttributes.ForEach(attribute =>
+            {
+                var updatedAttributeValue = category.CategoryAttributes.First(item => item.Id == attribute.Id);
+
+                attribute.ProductAttributeId = updatedAttributeValue.ProductAttributeId;
+                attribute.IsRequired = updatedAttributeValue.IsRequired;
+                attribute.IsGroup = updatedAttributeValue.IsGroup;
+                attribute.AttributeType = updatedAttributeValue.AttributeType;
+                attribute.Updated = DateTimeOffset.Now;
+
             });
+
+            _unitOfWork.CategoryRepository.Update(currentCategory);
+            await _unitOfWork.SaveChangesAsync();
+            return await GetByIdAsync(currentCategory.Id);
+        }
+
+        public async Task DeleteAsync(long id)
+        {
+            var category = await _unitOfWork.CategoryRepository.Get(id);
+
+            if (category == null)
+            {
+                throw new ServiceException("Invalid category id");
+            }
+
+            // productAttribute.IsDeleted = true;
+
+            _unitOfWork.CategoryRepository.Update(category);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }
