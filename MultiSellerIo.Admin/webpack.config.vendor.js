@@ -13,6 +13,7 @@ const treeShakableModules = [
     '@angular/platform-browser-dynamic',
     '@angular/router',
     'zone.js',
+    
 ];
 const nonTreeShakableModules = [
     'bootstrap',
@@ -21,6 +22,13 @@ const nonTreeShakableModules = [
     'es6-shim',
     'event-source-polyfill',
     'jquery',
+    'ng2-toastr/bundles/ng2-toastr.min.css',
+    'ng2-toastr/bundles/ng2-toastr.min.js',
+    './ClientApp/app/assets/demo/default/base/style.bundle.css',
+    './ClientApp/app/assets/vendors/base/vendors.bundle.css',
+    './ClientApp/app/assets/scripts/main.js',
+    './ClientApp/app/assets/scripts/layout.js',
+    './ClientApp/app/assets/css/goodlookadmin.css'
 ];
 const allModules = treeShakableModules.concat(nonTreeShakableModules);
 
@@ -29,7 +37,7 @@ module.exports = (env) => {
     const isDevBuild = !(env && env.prod);
     const sharedConfig = {
         stats: { modules: false },
-        resolve: { extensions: [ '.js' ] },
+        resolve: { extensions: ['.js'] },
         module: {
             rules: [
                 { test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/, use: 'url-loader?limit=100000' }
@@ -80,7 +88,7 @@ module.exports = (env) => {
             libraryTarget: 'commonjs2',
         },
         module: {
-            rules: [ { test: /\.css(\?|$)/, use: ['to-string-loader', isDevBuild ? 'css-loader' : 'css-loader?minimize' ] } ]
+            rules: [{ test: /\.css(\?|$)/, use: ['to-string-loader', isDevBuild ? 'css-loader' : 'css-loader?minimize'] }]
         },
         plugins: [
             new webpack.DllPlugin({

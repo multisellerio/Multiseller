@@ -17,5 +17,6 @@ export class AppModule {
 }
 
 export function getBaseUrl() {
+    debugger;
     return document.getElementsByTagName('base')[0].href;
 }

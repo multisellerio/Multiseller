@@ -10,23 +10,23 @@ export class CategoriesService {
     constructor(private http: Http) { }
 
     public getCategories(): Observable<any> {
-        return this.http.get('http://localhost:50812/api/categories').map(this.extractRequests).catch(this.handleError);
+        return this.http.get('http://localhost:50810/api/categories').map(this.extractRequests).catch(this.handleError);
     }
 
     public getCategoryById(id: number): Observable<any> {
-        return this.http.get('http://localhost:50812/api/categories/GetById/'+id).map(this.extractRequests).catch(this.handleError);
+        return this.http.get('http://localhost:50810/api/categories/GetById/'+id).map(this.extractRequests).catch(this.handleError);
     }
 
     public updateCategory(category: CategoryModel): Observable<any> {
         if (category.id == 0) {
-            return this.http.post('http://localhost:50812/api/categories', category).map(this.extractRequests).catch(this.handleError);
+            return this.http.post('http://localhost:50810/api/categories', category).map(this.extractRequests).catch(this.handleError);
         } else {
-            return this.http.put('http://localhost:50812/api/categories', category).map(this.extractRequests).catch(this.handleError);
+            return this.http.put('http://localhost:50810/api/categories', category).map(this.extractRequests).catch(this.handleError);
         }
     }
 
     public deleteCategory(id: number): Observable<any> {
-        return this.http.delete('http://localhost:50812/api/categories/Delete/' + id).map(this.extractRequests).catch(this.handleError);
+        return this.http.delete('http://localhost:50810/api/categories/Delete/' + id).map(this.extractRequests).catch(this.handleError);
     }
 
     private extractRequests(res: Response|any) {

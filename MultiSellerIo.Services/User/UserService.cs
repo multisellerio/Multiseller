@@ -314,6 +314,12 @@ namespace MultiSellerIo.Services.User
             return await _userManager.FindByIdAsync(userId.ToString());
         }
 
+        // return all users except admins
+        public async Task<IEnumerable<Dal.Entity.User>> GetAllUsersExceptAdminAsync()
+        {
+            return await _userManager.GetUsersInRoleAsync("UserRole");
+        }
+
         public async Task InitialRoles()
         {
             if (!await _roleManager.RoleExistsAsync(UserRole))

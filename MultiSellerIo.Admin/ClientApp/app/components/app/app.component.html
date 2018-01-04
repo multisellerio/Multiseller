@@ -1,10 +1,13 @@
-<div class='container-fluid'>
-    <div class='row'>
-        <div class='col-sm-3'>
-            <nav-menu></nav-menu>
-        </div>
-        <div class='col-sm-9 body-content'>
-            <router-outlet></router-outlet>
+
+<div class="m-page-loader m-page-loader--non-block" style="margin-left: -80px; margin-top: -20px;"  *ngIf="isShowLoader">
+        <div class="m-blockui">
+            <span>
+                Please wait...
+            </span>
+            <span>
+                <div class="m-loader m-loader--brand"></div>
+            </span>
         </div>
     </div>
-</div>
+
+<router-outlet></router-outlet>

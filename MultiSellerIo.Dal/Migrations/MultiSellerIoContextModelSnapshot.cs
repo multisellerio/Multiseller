@@ -245,6 +245,8 @@ namespace MultiSellerIo.Dal.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<bool>("IsDeleted");
+
                     b.Property<string>("Meta");
 
                     b.Property<string>("Name");

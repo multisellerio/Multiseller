@@ -11,7 +11,7 @@ namespace MultiSellerIo.Dal
     public interface IMultiSellerIoContext
     {
         DatabaseFacade Database { get; }
-        DbSet<T> Set<T>() where  T: class;
+        DbSet<T> Set<T>() where T : class;
         EntityEntry<T> Update<T>(T entity) where T : class;
         EntityEntry<T> Entry<T>(T entity) where T : class;
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken());
@@ -32,6 +32,7 @@ namespace MultiSellerIo.Dal
         public DbSet<ProductAttributeValue> ProductAttributeValues { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
         public DbSet<ProductVariantSpecificationAttributeMapping> ProductVariantSpecificationAttributeMappings { get; set; }
+
         public DbSet<Country> Countries { get; set; }
         public DbSet<State> States { get; set; }
         public DbSet<City> Cities { get; set; }
@@ -51,6 +52,9 @@ namespace MultiSellerIo.Dal
                 .WithOne(user => user.Store)
                 .HasForeignKey<Store>(store => store.UserId)
                 .IsRequired(true);
+
+            // remove isDeleted true items when querying
+            modelBuilder.Entity<ProductAttribute>().HasQueryFilter(item => EF.Property<bool>(item, "IsDeleted") == false);
 
             base.OnModelCreating(builder);
         }
