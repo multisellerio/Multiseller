@@ -54,7 +54,7 @@ namespace MultiSellerIo.Dal
                 .IsRequired(true);
 
             // remove isDeleted true items when querying
-            modelBuilder.Entity<ProductAttribute>().HasQueryFilter(item => EF.Property<bool>(item, "IsDeleted") == false);
+            builder.Entity<ProductAttribute>().HasQueryFilter(item => EF.Property<bool>(item, "IsDeleted") == false);
 
             base.OnModelCreating(builder);
         }

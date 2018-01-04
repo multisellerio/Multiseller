@@ -23,6 +23,17 @@ namespace MultiSellerIo.Api.Models
         public string Email { get; set; }
     }
 
+    public class UserResponseBindingModel
+    {
+        public long Id { get; set; }
+        public string Username { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public Gender Gender { get; set; }
+        public string Email { get; set; }
+        public bool EmailConfirmed { get; set; }
+    }
+
     public class UpdateUserDetailsBindingModel
     {
         public string ProfileImage { get; set; }

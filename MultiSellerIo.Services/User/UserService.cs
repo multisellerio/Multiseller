@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
@@ -29,6 +30,7 @@ namespace MultiSellerIo.Services.User
         Task<Dal.Entity.User> GetUser(ClaimsPrincipal user);
         Task InitialRoles();
         Task<Dal.Entity.User> UpdateProfile(long userId, UpdateProfileData data);
+        Task<IEnumerable<Dal.Entity.User>> GetAllUsersExceptAdminAsync();
     }
 
     public class UserService : IUserService
