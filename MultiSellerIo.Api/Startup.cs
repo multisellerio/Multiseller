@@ -165,7 +165,7 @@ namespace MultiSellerIo.Api
             app.UseStaticFiles();
 
             app.UseCors(builder =>
-                builder.WithOrigins(Configuration["UiHost"])
+                builder.WithOrigins(Configuration["UiHost"].Split(","))
                 .AllowAnyHeader()
                 .AllowAnyMethod()
             );
