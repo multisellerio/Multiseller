@@ -24,11 +24,11 @@ const nonTreeShakableModules = [
     'jquery',
     'ng2-toastr/bundles/ng2-toastr.min.css',
     'ng2-toastr/bundles/ng2-toastr.min.js',
-    './assets/demo/default/base/style.bundle.css',
-    './assets/vendors/base/vendors.bundle.css',
-    './assets/scripts/main.js',
-    './assets/scripts/layout.js',
-    './assets/css/goodlookadmin.css'
+    './ClientApp/assets/demo/default/base/style.bundle.css',
+    './ClientApp/assets/vendors/base/vendors.bundle.css',
+    './ClientApp/assets/scripts/main.js',
+    './ClientApp/assets/scripts/layout.js',
+    './ClientApp/assets/css/goodlookadmin.css'
 ];
 const allModules = treeShakableModules.concat(nonTreeShakableModules);
 

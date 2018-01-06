@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 using Hangfire;
 using Hangfire.Dashboard;
@@ -163,6 +164,8 @@ namespace MultiSellerIo.Api
             MapperConfig.Initialize();
 
             app.UseStaticFiles();
+
+            var uiHosts = Configuration["UiHost"].Split(",");
 
             app.UseCors(builder =>
                 builder.WithOrigins(Configuration["UiHost"].Split(","))

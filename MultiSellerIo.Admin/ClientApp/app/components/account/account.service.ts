@@ -7,17 +7,20 @@ import "rxjs/Rx";
 export class AccountService {
     constructor(private http: Http) { }
 
-    public login(username:string, password:string): Observable<any> {
-        return this.http.post('http://localhost:50810/api/account/login', {Username:username, Password:password}).map(this.extractRequests).catch(this.handleError);
+    public login(username: string, password: string): Observable<any> {
+
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        return this.http.post('http://localhost:50564/api/account/login', { Username: username, Password: password },
+            options).map(this.extractRequests).catch(this.handleError);
     }
 
     private extractRequests(res: Response | any) {
         if (res['_body']) {
             const data = JSON.parse(res['_body']);
-            if (data.value)
-            { return data.value; }
-            else
-            { return data; }
+            if (data.value) { return data.value; }
+            else { return data; }
         }
     }
 
@@ -30,7 +33,7 @@ export class AccountService {
         } else {
             errMsg = error.message ? error.message : error.toString();
         }
-        console.error(errMsg);
+        console.log(errMsg);
         return Observable.throw(errMsg);
     }
 }
