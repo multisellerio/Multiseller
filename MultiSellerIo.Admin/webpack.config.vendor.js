@@ -24,11 +24,11 @@ const nonTreeShakableModules = [
     'jquery',
     'ng2-toastr/bundles/ng2-toastr.min.css',
     'ng2-toastr/bundles/ng2-toastr.min.js',
-    './ClientApp/app/assets/demo/default/base/style.bundle.css',
-    './ClientApp/app/assets/vendors/base/vendors.bundle.css',
-    './ClientApp/app/assets/scripts/main.js',
-    './ClientApp/app/assets/scripts/layout.js',
-    './ClientApp/app/assets/css/goodlookadmin.css'
+    './assets/demo/default/base/style.bundle.css',
+    './assets/vendors/base/vendors.bundle.css',
+    './assets/scripts/main.js',
+    './assets/scripts/layout.js',
+    './assets/css/goodlookadmin.css'
 ];
 const allModules = treeShakableModules.concat(nonTreeShakableModules);
 
@@ -40,7 +40,7 @@ module.exports = (env) => {
         resolve: { extensions: ['.js'] },
         module: {
             rules: [
-                { test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/, use: 'url-loader?limit=100000' }
+                { test: /\.(png|woff|woff2|eot|ttf|svg|gif)(\?|$)/, use: 'url-loader?limit=100000' }
             ]
         },
         output: {

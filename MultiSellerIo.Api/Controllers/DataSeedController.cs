@@ -20,6 +20,7 @@ namespace MultiSellerIo.Api.Controllers
         }
 
         // add sample data to database
+        [HttpGet]
         public async Task<string> Start()
         {
             try
