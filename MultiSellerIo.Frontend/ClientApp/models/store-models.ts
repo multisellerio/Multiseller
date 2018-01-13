@@ -10,6 +10,7 @@ export interface IShippingCostModel {
     id: number;
     cityId?: number;
     countryId?: number;
+    stateId?: number;
     cost: number;
     shippingCostType: ShippingCostType;
 }

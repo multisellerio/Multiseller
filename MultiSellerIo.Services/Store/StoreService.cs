@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MultiSellerIo.Core.Exception;
+using MultiSellerIo.Dal.Entity;
 using MultiSellerIo.Dal.Repository;
 
 namespace MultiSellerIo.Services.Store
@@ -10,7 +12,7 @@ namespace MultiSellerIo.Services.Store
     public interface IStoreService
     {
         Task<Dal.Entity.Store> AddOrUpdateStore(Dal.Entity.Store store);
-        Task<Dal.Entity.Store> AddOrUpdateShipping(Dal.Entity.Store store);
+        Task<Dal.Entity.Store> AddOrUpdateShipping(long userId, List<ShippingCost> shippingCosts);
         Task<Dal.Entity.Store> GetStoreByUserId(long userId);
         Task SetAsVerifiedStore(long userId);
     }
@@ -63,41 +65,45 @@ namespace MultiSellerIo.Services.Store
             return store;
         }
 
-        public async Task<Dal.Entity.Store> AddOrUpdateShipping(Dal.Entity.Store store)
+        public async Task<Dal.Entity.Store> AddOrUpdateShipping(long userId, List<ShippingCost> shippingCosts)
         {
-            var storeUserId = store.UserId;
-            var storeExists = await _unitOfWork.StoreRepository.GetAll().AnyAsync(storeEntity => storeEntity.UserId == storeUserId);
+            var storeExists = await _unitOfWork.StoreRepository.GetAll().AnyAsync(storeEntity => storeEntity.UserId == userId);
 
             if (storeExists)
             {
                 //If store exists, we should update the details
-                var currentStore = await GetStoreByUserId(storeUserId);
+                var currentStore = await GetStoreByUserId(userId);
+                var currentStoreShippingCosts = currentStore.ShippingCosts;
 
-                //Set the updated store id as current store id --To ensure the update
-                store.Id = currentStore.Id;
-                store.PaymentAndRefundPolicies = currentStore.PaymentAndRefundPolicies;
-                store.ShippingInformation = currentStore.ShippingInformation;
-                store.StoreName = currentStore.StoreName;
-                store.Verified = currentStore.Verified;
-                store.Slug = currentStore.Slug;
+                foreach (var shippingCost in shippingCosts)
+                {
+                    var currentShippingCost = currentStoreShippingCosts.SingleOrDefault(s =>
+                        s.ShippingCostType == shippingCost.ShippingCostType &&
+                        s.CityId == shippingCost.CityId && s.CountryId == shippingCost.CountryId
+                    );
 
-                _unitOfWork.StoreRepository.SetCurrentValues(currentStore, store);
+                    if (currentShippingCost != null)
+                    {
+                        currentShippingCost.Cost = shippingCost.Cost;
+                        continue;
+                    }
+
+                    currentStore.ShippingCosts.Add(shippingCost);
+                }
 
                 await _unitOfWork.SaveChangesAsync();
 
-                return store;
+                return currentStore;
             }
 
-            await _unitOfWork.StoreRepository.Add(store);
-            await _unitOfWork.SaveChangesAsync();
-
-            return store;
+            throw new ServiceException("Store does not exists");
         }
 
         public async Task<Dal.Entity.Store> GetStoreByUserId(long userId)
         {
             return await _unitOfWork.StoreRepository.GetAll()
                 .Include(store => store.ShippingCosts)
+                .ThenInclude(shippingCost => shippingCost.City)
                 .FirstOrDefaultAsync(store => store.UserId == userId);
         }
 

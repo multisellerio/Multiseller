@@ -8,7 +8,7 @@ namespace MultiSellerIo.Dal
         public MultiSellerIoContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<MultiSellerIoContext>();
-            optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=m-seller-local;Integrated Security=True");
+            optionsBuilder.UseSqlServer("Data Source=.\\SQLEXPRESS;Initial Catalog=m-seller-local;Integrated Security=True");
 
             return new MultiSellerIoContext(optionsBuilder.Options);
         }

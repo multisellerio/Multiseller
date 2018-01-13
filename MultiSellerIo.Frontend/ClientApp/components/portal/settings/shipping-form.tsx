@@ -22,7 +22,7 @@ export interface IShippingFormData {
 export interface IAdditionalShippingFormData {
     stateId: number;
     cityId?: number;
-    price: number;
+    price: string;
 }
 
 

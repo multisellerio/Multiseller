@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MultiSellerIo.Api.Models;
@@ -63,12 +64,10 @@ namespace MultiSellerIo.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var store = Mapper.Map<Store>(model);
-
+            var shipingCosts = model.ShippingCosts.Select(Mapper.Map<ShippingCost>).ToList();
             var user = await _userService.GetUser(User);
-            store.UserId = user.Id;
 
-            var createdOrUpdatedStore = await _storeService.AddOrUpdateShipping(store);
+            var createdOrUpdatedStore = await _storeService.AddOrUpdateShipping(user.Id, shipingCosts);
             return Ok(Mapper.Map<StoreBindingModel>(createdOrUpdatedStore));
         }
     }

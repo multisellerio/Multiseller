@@ -38,6 +38,7 @@ namespace MultiSellerIo.Api.Models
         public ShippingCostType ShippingCostType { get; set; }
         public long? CityId { get; set; }
         public long? CountryId { get; set; }
+        public long? StateId { get; set; }
         public decimal Cost { get; set; }
     }
 

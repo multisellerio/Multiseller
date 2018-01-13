@@ -13,7 +13,7 @@ import { IStoreModel, IShippingCostModel, ShippingCostType } from '../../../mode
 import { animateScroll } from 'react-scroll';
 import { AccountForm, IAccountFormData } from './account-form';
 import { StoreForm, IStoreFormData } from './store-form';
-import { ShippingForm, formName as ShippingFormName, IShippingFormData } from './shipping-form';
+import { ShippingForm, formName as ShippingFormName, IShippingFormData, IAdditionalShippingFormData } from './shipping-form';
 
 import * as Api from "../../../api";
 
@@ -81,7 +81,8 @@ class SettingsComponents extends React.Component<SettingsProps, ISettingsState> 
     }
 
     onSubmitShippingForm(data: IShippingFormData) {
-        this.props.updateShipping(this.toShippingData(data));
+        let shippingData = this.toShippingData(data);
+        this.props.updateShipping(shippingData);
     }
 
     private toShippingFormData(store: IStoreModel) : IShippingFormData {
@@ -102,10 +103,27 @@ class SettingsComponents extends React.Component<SettingsProps, ISettingsState> 
             }
         }
 
+        let sriLankaShippingInformation = _.find(store.shippingCosts, { shippingCostType: 1, countryId: null, cityId: null });
+        let additionalShippingInformation = _.find(store.shippingCosts, { shippingCostType: 999, countryId: null, cityId: null });
+
+
+        let shippingCosts: IShippingCostModel[] = _.filter(
+            _.filter(store.shippingCosts, { shippingCostType: 1, countryId: null, cityId: null }),
+            { shippingCostType: 999, countryId: null, cityId: null });
+
+        let additionalShippings: IAdditionalShippingFormData[] = _.map(shippingCosts,
+            (shippingCost: IShippingCostModel) => {
+                return {
+                    stateId: shippingCost.stateId,
+                    cityId: shippingCost.cityId,
+                    price: `Rs. ${shippingCost.cost}`
+                }
+            });
+
         return {
-            srilanka: 'Rs. 0',
-            additionalItem: 'Rs. 0',
-            additionalShippings: []
+            srilanka: sriLankaShippingInformation? `Rs. ${sriLankaShippingInformation.cost}` : 'Rs. 0',
+            additionalItem: additionalShippingInformation? `Rs. ${additionalShippingInformation.cost}` : 'Rs. 0',
+            additionalShippings: additionalShippings
         }
     }
 
@@ -134,6 +152,19 @@ class SettingsComponents extends React.Component<SettingsProps, ISettingsState> 
             id: 0,
             shippingCostType: ShippingCostType.AdditionalItem
         });
+
+        let otherItems = _.map(data.additionalShippings,
+            (additionalShipping: IAdditionalShippingFormData) => {
+                return {
+                    cost: Number(additionalShipping.price.replace("Rs. ", "").replace(",", "")),
+                    cityId: additionalShipping.cityId,
+                    countryId: null,
+                    id: 0,
+                    shippingCostType: ShippingCostType.City
+                }
+            });
+
+        additionalShippings = additionalShippings.concat(otherItems);
 
         return additionalShippings;
     }
@@ -176,7 +207,7 @@ class SettingsComponents extends React.Component<SettingsProps, ISettingsState> 
                                 <br />
                                 <Card type={"inner"} title={"Shipping Info"}>
                                     <p>How much will shipping cost your buyer?</p>
-                                    <ShippingForm initialValues={shipping} formValues={this.props.shippingFormValues} saving={this.props.settings.store.saving} loading={false} editing={false} />
+                                    <ShippingForm initialValues={shipping} formValues={this.props.shippingFormValues} saving={this.props.settings.store.saving} onSubmit={this.onSubmitShippingForm} loading={false} editing={false} />
                                 </Card>
                             </TabPane>
                         </Tabs>

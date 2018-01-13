@@ -76,7 +76,9 @@ export const StoreService = {
                         Authorization: "Bearer " + token,
                     },
                     method: "post",
-                    body: JSON.stringify(model)
+                    body: JSON.stringify({
+                        shippingCosts: model
+                    })
                 });
 
             const responseData = await response.json();

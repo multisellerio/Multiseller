@@ -1,10 +1,11 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace MultiSellerIo.Dal.Entity
 {
-    public class BaseEntity
+    public abstract class BaseEntity
     {
-        public BaseEntity()
+        protected BaseEntity()
         {
             Created = DateTimeOffset.UtcNow;
             Updated = DateTimeOffset.UtcNow;
@@ -12,5 +13,15 @@ namespace MultiSellerIo.Dal.Entity
         public long Id { get; set; }
         public DateTimeOffset Created { get; set; }
         public DateTimeOffset Updated { get; set; }
+
+        public virtual void PrepareSave(EntityState state)
+        {
+            if (state == EntityState.Added)
+            {
+                Created = DateTimeOffset.UtcNow;
+            }
+
+            Updated = DateTimeOffset.UtcNow;
+        }
     }
 }
