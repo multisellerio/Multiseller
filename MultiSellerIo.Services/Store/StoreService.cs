@@ -91,6 +91,17 @@ namespace MultiSellerIo.Services.Store
                     currentStore.ShippingCosts.Add(shippingCost);
                 }
 
+                var removingShippingCosts = currentStoreShippingCosts.Where(currentStoreShippingCost =>
+                    !shippingCosts.Any(s =>
+                        s.ShippingCostType == currentStoreShippingCost.ShippingCostType &&
+                        s.CityId == currentStoreShippingCost.CityId &&
+                        s.CountryId == currentStoreShippingCost.CountryId)).ToList();
+
+                foreach (var removingShippingCost in removingShippingCosts)
+                {
+                    currentStoreShippingCosts.Remove(removingShippingCost);
+                }
+
                 await _unitOfWork.SaveChangesAsync();
 
                 return currentStore;

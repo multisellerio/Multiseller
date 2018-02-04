@@ -81,7 +81,9 @@ class SettingsComponents extends React.Component<SettingsProps, ISettingsState> 
     }
 
     onSubmitShippingForm(data: IShippingFormData) {
+        console.log(data);
         let shippingData = this.toShippingData(data);
+        console.log(shippingData);
         this.props.updateShipping(shippingData);
     }
 
@@ -107,9 +109,7 @@ class SettingsComponents extends React.Component<SettingsProps, ISettingsState> 
         let additionalShippingInformation = _.find(store.shippingCosts, { shippingCostType: 999, countryId: null, cityId: null });
 
 
-        let shippingCosts: IShippingCostModel[] = _.filter(
-            _.filter(store.shippingCosts, { shippingCostType: 1, countryId: null, cityId: null }),
-            { shippingCostType: 999, countryId: null, cityId: null });
+        let shippingCosts: IShippingCostModel[] = _.filter(store.shippingCosts, { shippingCostType: 3 });
 
         let additionalShippings: IAdditionalShippingFormData[] = _.map(shippingCosts,
             (shippingCost: IShippingCostModel) => {

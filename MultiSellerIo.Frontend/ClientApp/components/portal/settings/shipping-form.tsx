@@ -66,6 +66,7 @@ interface IShippingDetailsItemProps {
 
 interface IShippingDetailsItemState {
     cities: ICityModel[];
+    stateId?: number;
 }
 
 class ShippingDetailsItemComponent extends React.Component<IShippingDetailsItemProps, IShippingDetailsItemState> {
@@ -73,7 +74,8 @@ class ShippingDetailsItemComponent extends React.Component<IShippingDetailsItemP
     constructor(props: IShippingDetailsItemProps) {
         super(props);
         this.state = {
-            cities: []
+            cities: [],
+            stateId: null,
         }
         this.onChangeState = this.onChangeState.bind(this);
     }
@@ -81,18 +83,36 @@ class ShippingDetailsItemComponent extends React.Component<IShippingDetailsItemP
     componentWillMount(): void {
         const value = this.props.value;
         if (value && value.stateId !== 0) {
-            this.onChangeState(value.stateId, false);
+            this.setState({
+                stateId: value.stateId
+            }, () => {
+                this.onChangeState(value.stateId, false, false);
+            });
         }
     }
 
-    onChangeState(stateId: number, withCityChange: boolean) {
+    componentWillReceiveProps(nextProps: IShippingDetailsItemProps): void {
+        const value = this.props.value;
+        if (value && value.stateId !== 0 && this.state.stateId !== value.stateId) {
+            this.setState({
+                stateId: value.stateId
+            }, () => {
+                this.onChangeState(value.stateId, false, false);
+            });
+        }
+    }
+
+    onChangeState(stateId: number, withCityChange: boolean, withPriceChange: boolean) {
         if (withCityChange) {
             this.props.change(`${this.props.item}.cityId`, 0);
         }
-        this.props.change(`${this.props.item}.price`, 0);
+        if (withPriceChange) {
+            this.props.change(`${this.props.item}.price`, 0);
+        }
         this.props.getCities(stateId).then((cities) => {
             this.setState({
-                cities: cities
+                cities: cities,
+                stateId: stateId,
             });
         });
     }
@@ -124,7 +144,7 @@ class ShippingDetailsItemComponent extends React.Component<IShippingDetailsItemP
 
         return <tr>
             <td>
-                <Field placeholder={`Select a district`} name={`${this.props.item}.stateId`} style={{ width: '70px' }} hideLabel={true} component={AntdSelectComponent} showSearch={true} options={stateOptions} onSelectChange={(stateId) => this.onChangeState(stateId, true)} filterOption={(value, option) => {
+                <Field placeholder={`Select a district`} name={`${this.props.item}.stateId`} style={{ width: '70px' }} hideLabel={true} component={AntdSelectComponent} showSearch={true} options={stateOptions} onSelectChange={(stateId) => this.onChangeState(stateId, true, true)} filterOption={(value, option) => {
                     return option.props.title && option.props.title.toLowerCase().includes(value.toLowerCase());
                 }} />
             </td>
@@ -224,8 +244,8 @@ class ShippingForm extends React.Component<IShippingFormProps & IAdditionalFormP
 
                     <div className="row">
                         <Field name="id" component="input" type="hidden" />
-                        <Field name="srilanka" component={InputNumberComponent} label="Sri Lanka" precision={2} formatter={value => { return `Rs. ${value && typeof value.replace === "function" ? value.replace(/\Rs.\s?|(,*)/g, '') : value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }}  col="col-md-3" />
-                        <Field name="additionalItem" component={InputNumberComponent} label="Additional Item" precision={2} formatter={value => { return `Rs. ${value && typeof value.replace === "function" ? value.replace(/\Rs.\s?|(,*)/g, '') : value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }}  col="col-md-3" />
+                        <Field name="srilanka" component={InputNumberComponent} label="Sri Lanka" precision={2} formatter={value => { return `Rs. ${value && typeof value.replace === "function" ? value.replace(/\Rs.\s?|(,*)/g, '') : value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }} col="col-md-3" />
+                        <Field name="additionalItem" component={InputNumberComponent} label="Additional Item" precision={2} formatter={value => { return `Rs. ${value && typeof value.replace === "function" ? value.replace(/\Rs.\s?|(,*)/g, '') : value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }} col="col-md-3" />
                     </div>
 
                     <hr />
@@ -252,3 +272,4 @@ const form = reduxForm<IShippingFormData, IAdditionalFormProps>({
 
 
 export { form as ShippingForm }
+
