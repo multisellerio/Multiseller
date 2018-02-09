@@ -39,6 +39,30 @@ export const InputComponent: React.StatelessComponent<TextInputProps> = (field: 
     </div>;
 };
 
+// PASSWORD COMPONENT
+
+export const PasswordComponent: React.StatelessComponent<TextInputProps> = (field: TextInputProps) => {
+
+    const { input, label, col, hideLabel } = field;
+
+    if (hideLabel) {
+        return <div className={field.meta.touched && field.meta.error ? "has-error has-danger" : ""}>
+                   <Input type="password" {...input}/>
+                   {field.meta.touched &&
+                       field.meta.error &&
+                       <span className="form-control-feedback">{field.meta.error}</span>}
+               </div>;
+    }
+
+    return <div className={col}>
+               <div className={field.meta.touched && field.meta.error ? "form-group has-error has-danger" : "form-group"}>
+                   <label>{label}</label>
+                   <Input type="password" {...input}/>
+                   {field.meta.touched && field.meta.error && <span className="form-control-feedback">{field.meta.error}</span>}
+               </div>
+           </div>;
+};
+
 //INPUT NUMBER COMPONENT
 
 type InputNumberProps = {

@@ -2,7 +2,7 @@
 import {
     ILoginRequest, ILoginResponse, IRegisterRequest, IUser,
     IExternalSigninMeta, IResetPasswordRequest, IEmailConfirmationRequest,
-    IUpdateUserRequest
+    IUpdateUserRequest, IChangePasswordRequest
 } from "../../models/account-models";
 
 export const UserService = {
@@ -261,6 +261,32 @@ export const UserService = {
             }
 
             return responseData as IUser;
+
+        } catch (err) {
+            throw err;
+        }
+    },
+
+    changePassword: async (request: IChangePasswordRequest): Promise<void> => {
+        try {
+
+            let token = getToken();
+
+            const response = await fetch(API_URL + "account/change-password",
+                {
+                    method: "post",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + token,
+                    },
+                    body: JSON.stringify(request)
+                });
+
+            if (response.status === 400) {
+                const responseData = await response.json();
+                throw new Error(responseData.error);
+            }
 
         } catch (err) {
             throw err;

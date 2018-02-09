@@ -8,7 +8,7 @@ import { Alert, Button } from "antd";
 import { ApplicationState } from "../../../store";
 import * as AccountState from "../../../store/account";
 
-import { InputComponent, Field } from "../../shared/util/form-components";
+import { InputComponent, Field, PasswordComponent } from "../../shared/util/form-components";
 
 interface ILoginFormData {
     username: string;
@@ -54,7 +54,7 @@ class Form extends React.Component<ILoginFormProps & IAdditionalLoginFormProps, 
 
         return <form onSubmit={handleSubmit}>
             <Field type="text" name="username" component={InputComponent} label="Username" col="col-md-12" />
-            <Field type="password" name="password" component={InputComponent} label="Password" col="col-md-12" />
+            <Field type="password" name="password" component={PasswordComponent} label="Password" col="col-md-12" />
             <div className="col-md-12">
                 <div className="row">
                     <div className="col-md-6">

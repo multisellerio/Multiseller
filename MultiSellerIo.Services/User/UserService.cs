@@ -25,6 +25,7 @@ namespace MultiSellerIo.Services.User
         Task ResetPassword(string email, string token, string password);
         long GetUserId(ClaimsPrincipal user);
         Task ForgotPassword(string returnUrl, string email);
+        Task ChangePassword(Dal.Entity.User user, string currentPassword, string newPassword);
         Task SendEmailConfirmationEmail(Dal.Entity.User user, string returnUrl);
         Task ConfirmEmail(string email, string token);
         Task<Dal.Entity.User> GetUser(ClaimsPrincipal user);
@@ -259,6 +260,17 @@ namespace MultiSellerIo.Services.User
             {
                 throw new ServiceException(GenerateMessage(resetPasswordResult));
             }
+        }
+
+        public async Task ChangePassword(Dal.Entity.User user, string currentPassword, string newPassword)
+        {
+            var changePasswordResult = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+            
+            if (!changePasswordResult.Succeeded)
+            {
+                throw new ServiceException(GenerateMessage(changePasswordResult));
+            }
+
         }
 
         public async Task<bool> IsInRole(Dal.Entity.User user, string role)

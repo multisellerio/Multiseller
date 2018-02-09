@@ -62,6 +62,14 @@ class AccountForm extends React.Component<IAccountFormProps & IAdditionalFormPro
             errors.username = "Username is required";
         }
 
+        if (!values.firstName) {
+            errors.firstName = "Firstname is required";
+        }
+
+        if (!values.lastName) {
+            errors.lastName = "Lastname is required";
+        }
+
         if (!values.email) {
             errors.email = "Email is required";
         }

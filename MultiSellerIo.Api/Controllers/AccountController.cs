@@ -116,7 +116,7 @@ namespace MultiSellerIo.Api.Controllers
         [Route("api/account/send-email-confirmation")]
         [HttpPost]
         public async Task<IActionResult> SendEmailConfirmation([FromServices]string uiHost)
-        { 
+        {
             var retrunUrl = $"{uiHost}/email-confirm";
             var user = await _userService.GetUser(User);
             await _userService.SendEmailConfirmationEmail(user, retrunUrl);
@@ -149,6 +149,21 @@ namespace MultiSellerIo.Api.Controllers
         public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordBindingModel model)
         {
             await _userService.ResetPassword(model.Email, model.Token, model.Password);
+            return Ok();
+        }
+
+        [Route("api/account/change-password")]
+        [HttpPost]
+        [ModelValidation]
+        public async Task<IActionResult> ChangePassword([FromBody]ChangePasswordBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var currentUser = await _userService.GetUser(User);
+            await _userService.ChangePassword(currentUser, model.CurrentPassword, model.NewPassword);
             return Ok();
         }
 

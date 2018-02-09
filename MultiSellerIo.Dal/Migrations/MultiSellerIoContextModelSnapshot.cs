@@ -245,8 +245,6 @@ namespace MultiSellerIo.Dal.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<bool>("IsDeleted");
-
                     b.Property<string>("Meta");
 
                     b.Property<string>("Name");
@@ -319,7 +317,8 @@ namespace MultiSellerIo.Dal.Migrations
 
                     b.Property<long?>("ProductId");
 
-                    b.Property<int>("Quantity");
+                    b.Property<int>("Quantity")
+                        .IsConcurrencyToken();
 
                     b.Property<string>("Sku");
 

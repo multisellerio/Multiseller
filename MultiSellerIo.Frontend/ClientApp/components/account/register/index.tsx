@@ -6,7 +6,7 @@ import { ApplicationState } from "../../../store";
 import * as AccountState from "../../../store/account";
 
 import { Alert } from "../../shared/util/alert";
-import { InputComponent, SelectComponent, Field } from "../../shared/util/form-components";
+import { InputComponent, SelectComponent, Field, PasswordComponent } from "../../shared/util/form-components";
 
 interface IRegisterFormData {
     firstName: string;
@@ -87,8 +87,8 @@ class Form extends React.Component<IRegisterFormProps, {}> {
             <Field type="text" name="username" component={InputComponent} label="Username" col="col-md-6" />
             <Field name="gender" component={SelectComponent} label="Gender" options={this.genderOptions} col="col-md-6" />
             <Field type="email" name="email" component={InputComponent} label="Email" col="col-md-12" />
-            <Field type="password" name="password" component={InputComponent} label="Password" col="col-md-6" />
-            <Field type="password" name="confirmationPassword" component={InputComponent} label="Confirmation Password" col="col-md-6" />
+            <Field type="password" name="password" component={PasswordComponent} label="Password" col="col-md-6" />
+            <Field type="password" name="confirmationPassword" component={PasswordComponent} label="Confirmation Password" col="col-md-6" />
             <div className="col-md-12 text-center">
                 <button className="btn btn-primary margin-bottom-none submit-button" type="submit">Register</button>
             </div>

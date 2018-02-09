@@ -97,7 +97,7 @@ namespace MultiSellerIo.Services.Product
                 throw new ServiceException("Invalid product attribute id");
             }
 
-            productAttribute.IsDeleted = true;
+            //productAttribute.IsDeleted = true;
             _unitOfWork.ProductAttributeRepository.Update(productAttribute);
             await _unitOfWork.SaveChangesAsync();
         }

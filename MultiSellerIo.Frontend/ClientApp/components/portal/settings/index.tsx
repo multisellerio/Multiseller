@@ -13,6 +13,7 @@ import { IStoreModel, IShippingCostModel, ShippingCostType } from '../../../mode
 import { animateScroll } from 'react-scroll';
 import { AccountForm, IAccountFormData } from './account-form';
 import { StoreForm, IStoreFormData } from './store-form';
+import { ChangePasswordForm, IChangePasswordFormData } from './change-password-form';
 import { ShippingForm, formName as ShippingFormName, IShippingFormData, IAdditionalShippingFormData } from './shipping-form';
 
 import * as Api from "../../../api";
@@ -41,7 +42,7 @@ class SettingsComponents extends React.Component<SettingsProps, ISettingsState> 
         this.onSubmitAccountForm = this.onSubmitAccountForm.bind(this);
         this.onSubmitStoreForm = this.onSubmitStoreForm.bind(this);
         this.onSubmitShippingForm = this.onSubmitShippingForm.bind(this);
-
+        this.onSubmitChangePasswordForm = this.onSubmitChangePasswordForm.bind(this);
     }
 
     componentWillMount(): void {
@@ -81,13 +82,19 @@ class SettingsComponents extends React.Component<SettingsProps, ISettingsState> 
     }
 
     onSubmitShippingForm(data: IShippingFormData) {
-        console.log(data);
         let shippingData = this.toShippingData(data);
-        console.log(shippingData);
         this.props.updateShipping(shippingData);
     }
 
-    private toShippingFormData(store: IStoreModel) : IShippingFormData {
+    onSubmitChangePasswordForm(data: IChangePasswordFormData) {
+        this.props.changePassword({
+            currentPassword: data.currentPassword,
+            newPassword: data.newPassword,
+            confirmationPassword: data.confirmPassword
+        });
+    }
+
+    private toShippingFormData(store: IStoreModel): IShippingFormData {
 
         if (store == null) {
             return {
@@ -121,14 +128,14 @@ class SettingsComponents extends React.Component<SettingsProps, ISettingsState> 
             });
 
         return {
-            srilanka: sriLankaShippingInformation? `Rs. ${sriLankaShippingInformation.cost}` : 'Rs. 0',
-            additionalItem: additionalShippingInformation? `Rs. ${additionalShippingInformation.cost}` : 'Rs. 0',
+            srilanka: sriLankaShippingInformation ? `Rs. ${sriLankaShippingInformation.cost}` : 'Rs. 0',
+            additionalItem: additionalShippingInformation ? `Rs. ${additionalShippingInformation.cost}` : 'Rs. 0',
             additionalShippings: additionalShippings
         }
     }
 
     private toShippingData(data: IShippingFormData): IShippingCostModel[] {
-        
+
         if (data == null) {
             return null;
         }
@@ -198,6 +205,10 @@ class SettingsComponents extends React.Component<SettingsProps, ISettingsState> 
                                         />
                                     </div>}
                                     <AccountForm loading={false} editing={false} saving={this.props.settings.profile.saving} initialValues={profile} onSubmit={this.onSubmitAccountForm} />
+                                </Card>}
+                                <br />
+                                {!this.props.settings.profile.loading && <Card type={"inner"} title={"Change Password"}>
+                                    <ChangePasswordForm onSubmit={this.onSubmitChangePasswordForm} loading={this.props.settings.changePassword.loading} editing={false} />
                                 </Card>}
                             </TabPane>
                             <TabPane tab={<span><Icon type="shop" />Store</span>} key="2">

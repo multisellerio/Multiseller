@@ -46,6 +46,19 @@ class StoreForm extends React.Component<IStoreFormProps & IAdditionalFormProps, 
     public static validate(values: IStoreFormData): FormErrors<IStoreFormData> {
 
         const errors: FormErrors<IStoreFormData> = {};
+
+        if (!values.storeName) {
+            errors.storeName = "Store name is required";
+        }
+
+        if (!values.shippingInformation) {
+            errors.shippingInformation = "Shipping informations is required";
+        }
+
+        if (!values.paymentAndRefundPolicies) {
+            errors.paymentAndRefundPolicies = "Payment and Refund policies required";
+        }
+
         return errors;
     }
 

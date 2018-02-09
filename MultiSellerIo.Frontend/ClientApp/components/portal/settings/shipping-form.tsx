@@ -104,7 +104,7 @@ class ShippingDetailsItemComponent extends React.Component<IShippingDetailsItemP
 
     onChangeState(stateId: number, withCityChange: boolean, withPriceChange: boolean) {
         if (withCityChange) {
-            this.props.change(`${this.props.item}.cityId`, 0);
+            this.props.change(`${this.props.item}.cityId`, null);
         }
         if (withPriceChange) {
             this.props.change(`${this.props.item}.price`, 0);
@@ -144,12 +144,12 @@ class ShippingDetailsItemComponent extends React.Component<IShippingDetailsItemP
 
         return <tr>
             <td>
-                <Field placeholder={`Select a district`} name={`${this.props.item}.stateId`} style={{ width: '70px' }} hideLabel={true} component={AntdSelectComponent} showSearch={true} options={stateOptions} onSelectChange={(stateId) => this.onChangeState(stateId, true, true)} filterOption={(value, option) => {
+                <Field placeholder={`Select a district`} name={`${this.props.item}.stateId`} componentStyle={{ minWidth: '200px' }} hideLabel={true} component={AntdSelectComponent} showSearch={true} options={stateOptions} onSelectChange={(stateId) => this.onChangeState(stateId, true, true)} filterOption={(value, option) => {
                     return option.props.title && option.props.title.toLowerCase().includes(value.toLowerCase());
                 }} />
             </td>
             <td>
-                <Field placeholder={`Select a city`} name={`${this.props.item}.cityId`} style={{ width: '70px' }} hideLabel={true} component={AntdSelectComponent} showSearch={true} options={citiesOptions} filterOption={(value, option) => {
+                <Field placeholder={`Select a city`} name={`${this.props.item}.cityId`} componentStyle={{ minWidth: '200px' }} hideLabel={true} component={AntdSelectComponent} showSearch={true} options={citiesOptions} filterOption={(value, option) => {
                     return option.props.title && option.props.title.toLowerCase().includes(value.toLowerCase());
                 }} />
             </td>
@@ -221,8 +221,43 @@ class ShippingForm extends React.Component<IShippingFormProps & IAdditionalFormP
 
         const errors: FormErrors<IShippingFormData> = {};
 
+        if (!values.srilanka) {
+            errors.srilanka = "Sri lanka shipping price is required";
+        }
+
+        if (!values.additionalItem) {
+            errors.srilanka = "Additional item shipping price is required";
+        }
+
+        if (values.additionalShippings != null && values.additionalShippings.length > 0) {
+
+            let additionalShippingErrorsArray = [];
+
+            values.additionalShippings.forEach((additionalShipping: IAdditionalShippingFormData, index: number) => {
+
+                let additionalShippingErrors = {
+                    stateId: null,
+                    cityId: null,
+                    price: null
+                };
+
+                if (!additionalShipping.stateId) {
+                    additionalShippingErrors.stateId = "State is required";
+                }
+
+                if (!additionalShipping.price) {
+                    additionalShippingErrors.price = "Price is required";
+                }
+
+                additionalShippingErrorsArray.push(additionalShippingErrors);
+            });
+
+            errors.additionalShippings = additionalShippingErrorsArray;
+        }
+
         return errors;
     }
+
 
     componentWillMount(): void {
 
@@ -239,7 +274,7 @@ class ShippingForm extends React.Component<IShippingFormProps & IAdditionalFormP
         const { handleSubmit, change } = this.props;
 
         return <div>
-            <div>
+            <div >
                 <form onSubmit={handleSubmit}>
 
                     <div className="row">
@@ -258,9 +293,9 @@ class ShippingForm extends React.Component<IShippingFormProps & IAdditionalFormP
                     </div>
 
                 </form>
-            </div>
+            </div >
 
-        </div>;
+        </div >;
     }
 
 }

@@ -8,6 +8,5 @@ namespace MultiSellerIo.Dal.Entity
 
         //Metadata for attribue values
         public string Meta { get; set; }
-
     }
 }

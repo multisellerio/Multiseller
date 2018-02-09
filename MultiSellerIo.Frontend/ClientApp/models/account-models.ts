@@ -67,3 +67,9 @@ export interface IUpdateUserRequest {
     gender: Gender;
     profileImage: string;
 }
+
+export interface IChangePasswordRequest {
+    currentPassword: string;
+    newPassword: string;
+    confirmationPassword: string;
+}

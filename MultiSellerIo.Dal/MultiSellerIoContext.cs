@@ -54,9 +54,6 @@ namespace MultiSellerIo.Dal
                 .HasForeignKey<Store>(store => store.UserId)
                 .IsRequired(true);
 
-            // remove isDeleted true items when querying
-            builder.Entity<ProductAttribute>().HasQueryFilter(item => EF.Property<bool>(item, "IsDeleted") == false);
-
             base.OnModelCreating(builder);
         }
 

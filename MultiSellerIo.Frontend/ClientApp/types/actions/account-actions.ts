@@ -30,6 +30,10 @@ export const REQUEST_EMAIL_CONFIRMATION: string = "REQUEST_EMAIL_CONFIRMATION";
 export const EMAIL_CONFIRMATION_SUCCESSFULLY: string = "EMAIL_CONFIRMATION_SUCCESSFULLY";
 export const EMAIL_CONFIRMATION_UNSUCCESSFULLY: string = "EMAIL_CONFIRMATION_UNSUCCESSFULLY";
 
+export const REQUEST_CHANGE_PASSWORD: string = "REQUEST_CHANGE_PASSWORD";
+export const CHANGE_PASSWORD_SUCCESSFULLY: string = "CHANGE_PASSWORD_SUCCESSFULLY";
+export const CHANGE_PASSWORD_UNSUCCESSFULLY: string = "CHANGE_PASSWORD_UNSUCCESSFULLY";
+
 export const SET_TOKEN = "SET_TOKEN";
 
 export const SET_EXTERNAL_LOGIN = "SET_EXTERNAL_LOGIN";
@@ -179,5 +183,22 @@ export interface IEmailConfirmationSuccess extends Action {
 
 export interface IEmailConfirmationUnsuccess extends Action {
     type: typeof EMAIL_CONFIRMATION_UNSUCCESSFULLY;
+    payload: string;
+}
+
+/*************************
+ *** CHANGE PASSWORD
+ *************************/
+
+export interface IRequestChangePassword extends Action {
+    type: typeof REQUEST_CHANGE_PASSWORD;
+}
+
+export interface IChangePasswordSuccessfully extends Action {
+    type: typeof CHANGE_PASSWORD_SUCCESSFULLY;
+}
+
+export interface IChangePasswordUnsuccessfully extends Action {
+    type: typeof CHANGE_PASSWORD_UNSUCCESSFULLY;
     payload: string;
 }

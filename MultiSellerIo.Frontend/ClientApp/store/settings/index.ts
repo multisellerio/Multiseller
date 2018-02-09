@@ -3,7 +3,7 @@ import { push, RouterAction } from "react-router-redux";
 import { Reducer } from "redux";
 import { UserService } from "../../api/user";
 import { StoreService } from "../../api/store";
-import { IUser, IUpdateUserRequest } from '../../models/account-models';
+import { IUser, IUpdateUserRequest, IChangePasswordRequest } from '../../models/account-models';
 import { IStoreModel, IShippingCostModel } from '../../models/store-models';
 import {
     REQUEST_PROFILE, RECEIVED_PROFILE_SUCCESSFULLY, RECEIVED_PROFILE_UNSUCCESSFULLY,
@@ -17,11 +17,18 @@ import {
     REQUEST_UPDATE_SHIPPING, UPDATE_SHIPPING_SUCCESSFULLY, UPDATE_SHIPPING_UNSUCCESSFULL,
     IRequestUpdateShipping, IUpdateShippingSuccessfully, IUpdateShippingUnsuccessfully
 } from "../../types/actions/settings-actions";
-import { GET_CURRENT_USER_SUCCESSFULLY } from "../../types/actions/account-actions";
+import {
+    GET_CURRENT_USER_SUCCESSFULLY,
+    IChangePasswordSuccessfully, IChangePasswordUnsuccessfully, IRequestChangePassword,
+    CHANGE_PASSWORD_SUCCESSFULLY, CHANGE_PASSWORD_UNSUCCESSFULLY, REQUEST_CHANGE_PASSWORD
+} from "../../types/actions/account-actions";
 import { CallBackMessageType } from "../../models/common-models";
 import { DISPLAY_MESSAGE } from "../../types/actions/common-actions";
 import { AppThunkAction } from ".././";
 import * as _ from 'lodash';
+import { reset } from 'redux-form';
+
+import { formName as ShippingFormName } from '../../components/portal/settings/change-password-form';
 
 /*************************
  *** STORE
@@ -41,9 +48,15 @@ export interface IStoreState {
     error: string;
 }
 
+export interface IChangePasswordState {
+    loading: boolean;
+    error: string;
+}
+
 export interface ISettingsState {
     profile: IProfileState,
     store: IStoreState,
+    changePassword: IChangePasswordState,
 }
 
 /*************************
@@ -55,6 +68,7 @@ type KnownAction = IRequestProfile | IRequestProfileSuccessfully | IRequestProfi
     | IRequestStore | IReceivedStoreSuccessfully | IReceivedStoreUnsuccesfully
     | IRequestUpdateStore | IUpdateStoreSuccessfully | IUpdateStoreUnsuccessfully
     | IRequestUpdateShipping | IUpdateShippingSuccessfully | IUpdateShippingUnsuccessfully
+    | IRequestChangePassword | IChangePasswordSuccessfully | IChangePasswordUnsuccessfully
     | RouterAction;
 
 export const actionCreator = {
@@ -82,10 +96,10 @@ export const actionCreator = {
             var result = await UserService.updateProfile(request);
             dispatch({ type: PROFILE_UPDATE_SUCCESFULLY, payload: result });
             dispatch({ type: GET_CURRENT_USER_SUCCESSFULLY, payload: result });
-            dispatch({ type: DISPLAY_MESSAGE, payload: { message: 'Profile updated successfully', type: CallBackMessageType.Success }});
+            dispatch({ type: DISPLAY_MESSAGE, payload: { message: 'Profile updated successfully', type: CallBackMessageType.Success } });
         } catch (err) {
             dispatch({ type: PROFILE_UPDATE_UNSUCCESSFULLY, payload: err.message });
-            dispatch({ type: DISPLAY_MESSAGE, payload: { message: err.message, type: CallBackMessageType.Error }});
+            dispatch({ type: DISPLAY_MESSAGE, payload: { message: err.message, type: CallBackMessageType.Error } });
         }
 
     },
@@ -99,7 +113,7 @@ export const actionCreator = {
             dispatch({ type: RECEIVED_STORE_SUCCESSFULLY, payload: result });
         } catch (err) {
             dispatch({ type: RECEIVED_STORE_UNSUCCESSFULLY, payload: err.message });
-            dispatch({ type: DISPLAY_MESSAGE, payload: { message: err.message, type: CallBackMessageType.Error }});
+            dispatch({ type: DISPLAY_MESSAGE, payload: { message: err.message, type: CallBackMessageType.Error } });
         }
 
     },
@@ -111,10 +125,10 @@ export const actionCreator = {
         try {
             var result = await StoreService.updateStore(store);
             dispatch({ type: UPDATE_STORE_SUCCESSFULLY, payload: result });
-            dispatch({ type: DISPLAY_MESSAGE, payload: { message: 'Store updated successfully', type: CallBackMessageType.Success }});
+            dispatch({ type: DISPLAY_MESSAGE, payload: { message: 'Store updated successfully', type: CallBackMessageType.Success } });
         } catch (err) {
             dispatch({ type: UPDATE_STORE_UNSUCCESSFULLY, payload: err.message });
-            dispatch({ type: DISPLAY_MESSAGE, payload: { message: err.message, type: CallBackMessageType.Error }});
+            dispatch({ type: DISPLAY_MESSAGE, payload: { message: err.message, type: CallBackMessageType.Error } });
         }
 
 
@@ -126,11 +140,27 @@ export const actionCreator = {
 
         try {
             var result = await StoreService.updateShipping(shippings);
-            dispatch({ type: DISPLAY_MESSAGE, payload: { message: 'Shipping details updated successfully', type: CallBackMessageType.Success }});
+            dispatch({ type: DISPLAY_MESSAGE, payload: { message: 'Shipping details updated successfully', type: CallBackMessageType.Success } });
             dispatch({ type: UPDATE_SHIPPING_SUCCESSFULLY, payload: result });
         } catch (err) {
             dispatch({ type: UPDATE_SHIPPING_UNSUCCESSFULL, payload: err.message });
-            dispatch({ type: DISPLAY_MESSAGE, payload: { message: err.message, type: CallBackMessageType.Error }});
+            dispatch({ type: DISPLAY_MESSAGE, payload: { message: err.message, type: CallBackMessageType.Error } });
+        }
+
+    },
+
+    changePassword: (changePasswordRequest: IChangePasswordRequest): AppThunkAction<KnownAction> => async (dispatch, getState) => {
+
+        dispatch({ type: REQUEST_CHANGE_PASSWORD });
+
+        try {
+            await UserService.changePassword(changePasswordRequest);
+            dispatch({ type: CHANGE_PASSWORD_SUCCESSFULLY });
+            dispatch({ type: DISPLAY_MESSAGE, payload: { message: 'Your password has been updated', type: CallBackMessageType.Success } });
+            dispatch(reset(ShippingFormName));
+        } catch (err) {
+            dispatch({ type: CHANGE_PASSWORD_UNSUCCESSFULLY, payload: err.message });
+            dispatch({ type: DISPLAY_MESSAGE, payload: { message: err.message, type: CallBackMessageType.Error } });
         }
 
     }
@@ -146,6 +176,10 @@ const unloadedState: ISettingsState = {
         saving: false,
         data: null,
         error: null
+    },
+    changePassword: {
+        loading: false,
+        error: null,
     },
     store: {
         loading: false,
@@ -221,7 +255,7 @@ export const reducer: Reducer<ISettingsState> = (state: ISettingsState, incoming
                     loading: false,
                     saving: false,
                     data: state.profile.data,
-                    error: profileUpdateUnsuccessfullyAction.payload
+                    error: null
                 }
             }
         case REQUEST_STORE:
@@ -286,6 +320,31 @@ export const reducer: Reducer<ISettingsState> = (state: ISettingsState, incoming
                     saving: false,
                     data: state.store.data,
                     error: updateStoreUnsuccessAction.payload
+                }
+            }
+        case REQUEST_CHANGE_PASSWORD:
+            return {
+                ...state,
+                changePassword: {
+                    loading: true,
+                    error: null
+                }
+            }
+        case CHANGE_PASSWORD_SUCCESSFULLY:
+            return {
+                ...state,
+                changePassword: {
+                    loading: false,
+                    error: null
+                }
+            }
+        case CHANGE_PASSWORD_UNSUCCESSFULLY:
+            let changePasswordUnsuccessfullyAction = action as IChangePasswordUnsuccessfully;
+            return {
+                ...state,
+                changePassword: {
+                    loading: false,
+                    error: changePasswordUnsuccessfullyAction.payload
                 }
             }
     }
