@@ -115,14 +115,13 @@ class SettingsComponents extends React.Component<SettingsProps, ISettingsState> 
         let sriLankaShippingInformation = _.find(store.shippingCosts, { shippingCostType: 1, countryId: null, cityId: null });
         let additionalShippingInformation = _.find(store.shippingCosts, { shippingCostType: 999, countryId: null, cityId: null });
 
-
         let shippingCosts: IShippingCostModel[] = _.filter(store.shippingCosts, { shippingCostType: 3 });
 
         let additionalShippings: IAdditionalShippingFormData[] = _.map(shippingCosts,
             (shippingCost: IShippingCostModel) => {
                 return {
                     stateId: shippingCost.stateId,
-                    cityId: shippingCost.cityId,
+                    cityId: shippingCost.cityId == null? -1 : shippingCost.cityId,
                     price: `Rs. ${shippingCost.cost}`
                 }
             });
@@ -164,7 +163,8 @@ class SettingsComponents extends React.Component<SettingsProps, ISettingsState> 
             (additionalShipping: IAdditionalShippingFormData) => {
                 return {
                     cost: Number(additionalShipping.price.replace("Rs. ", "").replace(",", "")),
-                    cityId: additionalShipping.cityId,
+                    cityId: additionalShipping.cityId === -1 ? null: additionalShipping.cityId,
+                    stateId: additionalShipping.stateId,
                     countryId: null,
                     id: 0,
                     shippingCostType: ShippingCostType.City

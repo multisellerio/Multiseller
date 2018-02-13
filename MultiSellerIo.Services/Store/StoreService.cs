@@ -79,6 +79,7 @@ namespace MultiSellerIo.Services.Store
                 {
                     var currentShippingCost = currentStoreShippingCosts.SingleOrDefault(s =>
                         s.ShippingCostType == shippingCost.ShippingCostType &&
+                        s.StateId == shippingCost.StateId &&
                         s.CityId == shippingCost.CityId && s.CountryId == shippingCost.CountryId
                     );
 
@@ -94,6 +95,7 @@ namespace MultiSellerIo.Services.Store
                 var removingShippingCosts = currentStoreShippingCosts.Where(currentStoreShippingCost =>
                     !shippingCosts.Any(s =>
                         s.ShippingCostType == currentStoreShippingCost.ShippingCostType &&
+                        s.StateId == currentStoreShippingCost.StateId &&
                         s.CityId == currentStoreShippingCost.CityId &&
                         s.CountryId == currentStoreShippingCost.CountryId)).ToList();
 

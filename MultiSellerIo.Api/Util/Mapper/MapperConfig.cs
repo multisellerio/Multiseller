@@ -77,8 +77,7 @@ namespace MultiSellerIo.Api.Util.Mapper
                 config.CreateMap<City, CityBindingModel>();
                 config.CreateMap<CityBindingModel, City>();
 
-                config.CreateMap<ShippingCost, ShippingCostBindingModel>()
-                    .ForMember(dest => dest.StateId, opt => opt.MapFrom(src => src.City != null ? src.City.StateId : (long?) null));
+                config.CreateMap<ShippingCost, ShippingCostBindingModel>();
                 config.CreateMap<ShippingCostBindingModel, ShippingCost>();
 
                 config.CreateMap<StoreBindingModel, Store>();

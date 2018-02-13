@@ -230,7 +230,7 @@ export const AntdSelectComponent: React.StatelessComponent<AntdSelectProps> = (f
                 onChange={(value) => { selectOnChange(value); }}>
                 {
                     options.map((option, index) => {
-                        return <Option title={option.name} value={option.value}>{option.child ? option.child : option.name}</Option>;
+                        return <Option key={index} title={option.name} value={option.value}>{option.child ? option.child : option.name}</Option>;
                     })
                 }
             </Select>
@@ -250,7 +250,7 @@ export const AntdSelectComponent: React.StatelessComponent<AntdSelectProps> = (f
                     onChange={(value) => { selectOnChange(value); }}>
                 {
                     options.map((option, index) => {
-                        return <Option title={option.name} value={option.value}>{option.child ? option.child : option.name}</Option>;
+                        return <Option key={index} title={option.name} value={option.value}>{option.child ? option.child : option.name}</Option>;
                     })
                 }
             </Select>

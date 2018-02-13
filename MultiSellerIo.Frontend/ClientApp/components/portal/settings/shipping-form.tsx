@@ -131,7 +131,7 @@ class ShippingDetailsItemComponent extends React.Component<IShippingDetailsItemP
 
         citiesOptions.push({
             name: 'All Cities',
-            value: 'all'
+            value: -1
         });
 
         citiesOptions = citiesOptions.concat(_.map(this.state.cities,

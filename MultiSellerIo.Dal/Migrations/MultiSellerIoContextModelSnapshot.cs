@@ -392,6 +392,8 @@ namespace MultiSellerIo.Dal.Migrations
 
                     b.Property<int>("ShippingCostType");
 
+                    b.Property<long?>("StateId");
+
                     b.Property<long>("StoreId");
 
                     b.Property<DateTimeOffset>("Updated");
@@ -401,6 +403,8 @@ namespace MultiSellerIo.Dal.Migrations
                     b.HasIndex("CityId");
 
                     b.HasIndex("CountryId");
+
+                    b.HasIndex("StateId");
 
                     b.HasIndex("StoreId");
 
@@ -646,6 +650,10 @@ namespace MultiSellerIo.Dal.Migrations
                     b.HasOne("MultiSellerIo.Dal.Entity.Country", "Country")
                         .WithMany()
                         .HasForeignKey("CountryId");
+
+                    b.HasOne("MultiSellerIo.Dal.Entity.State", "State")
+                        .WithMany()
+                        .HasForeignKey("StateId");
 
                     b.HasOne("MultiSellerIo.Dal.Entity.Store", "Store")
                         .WithMany("ShippingCosts")
