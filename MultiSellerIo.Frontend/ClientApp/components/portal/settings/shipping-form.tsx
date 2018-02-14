@@ -10,6 +10,7 @@ import { UtilServices } from "../../../api/util";
 import { ICityModel, IStateModel } from "../../../models/util-models";
 
 import * as _ from "lodash";
+import { convertToCurrency } from '../../../util/common/currency';
 
 export const formName: string = "Shipping-form";
 
@@ -154,7 +155,7 @@ class ShippingDetailsItemComponent extends React.Component<IShippingDetailsItemP
                 }} />
             </td>
             <td>
-                <Field name={`${this.props.item}.price`} style={{ width: '30px' }} hideLabel={true} precision={2} component={InputNumberComponent} formatter={value => { return `Rs. ${value && typeof value.replace === "function" ? value.replace(/\Rs.\s?|(,*)/g, '') : value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }} />
+                <Field name={`${this.props.item}.price`} style={{ width: '30px' }} hideLabel={true} precision={2} component={InputNumberComponent} formatter={convertToCurrency} />
             </td>
             <td>
                 <Popconfirm placement="topRight" title="Are you sure delete this shipping detail?" okText="Delete" onConfirm={() => { this.props.remove() }} cancelText="Cancel">
@@ -279,8 +280,8 @@ class ShippingForm extends React.Component<IShippingFormProps & IAdditionalFormP
 
                     <div className="row">
                         <Field name="id" component="input" type="hidden" />
-                        <Field name="srilanka" component={InputNumberComponent} label="Sri Lanka" precision={2} formatter={value => { return `Rs. ${value && typeof value.replace === "function" ? value.replace(/\Rs.\s?|(,*)/g, '') : value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }} col="col-md-3" />
-                        <Field name="additionalItem" component={InputNumberComponent} label="Additional Item" precision={2} formatter={value => { return `Rs. ${value && typeof value.replace === "function" ? value.replace(/\Rs.\s?|(,*)/g, '') : value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }} col="col-md-3" />
+                        <Field name="srilanka" component={InputNumberComponent} label="Sri Lanka" precision={2} formatter={convertToCurrency} col="col-md-3" />
+                        <Field name="additionalItem" component={InputNumberComponent} label="Additional Item" precision={2} formatter={convertToCurrency} col="col-md-3" />
                     </div>
 
                     <hr />

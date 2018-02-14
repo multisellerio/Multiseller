@@ -6,6 +6,7 @@ import * as ProductState from "../../../../store/products";
 import { Alert } from "antd";
 import { ProductForm, IProductFormData, formName as ProductFormName } from '../product-form';
 import * as _ from 'lodash';
+import { currentyToNumeric } from '../../../../util/common/currency';
 
 type AddProductProps =
     { products: ProductState.IProductsState, formValues: IProductFormData }
@@ -35,8 +36,7 @@ class AddProductComponents extends React.Component<AddProductProps, {}> {
                     sku: variant.sku,
                     compareAtPrice: 0,
                     barcode: null,
-                    //Todo this currency is coming to backend
-                    price: Number(variant.price.replace("Rs. ", "").replace(",", "")),
+                    price: currentyToNumeric(variant.price),
                     quantity: variant.quantity,
                     defaultImage: variant.defaultImage,
                     productVariantSpecificationAttributeMappings: _.map(variant.attributes, (attribute) => {

@@ -1,6 +1,7 @@
 ﻿import { IProductFormData, IProductImage, IProductVairation, IProductVariationAttribute } from "../../components/portal/products/product-form";
 import { IProduct, IProductVariant, IProductCategory, IProductVariantSpecificationAttributeMapping } from "../../models/product-models";
 import * as _ from "lodash";
+import { numberToCurrency } from '../common/currency';
 
 const productUtil = {
 
@@ -99,7 +100,7 @@ const productUtil = {
                     sku: productVariant.sku,
                     upc: null,
                     quantity: productVariant.quantity,
-                    price: `Rs. ${productVariant.price}`,
+                    price: numberToCurrency(productVariant.price),
                     defaultImage: productVariant.defaultImage,
                     attributes: attributes
                 }

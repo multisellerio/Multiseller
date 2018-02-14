@@ -7,6 +7,7 @@ import * as ProductState from "../../../../store/products";
 import { Alert, Spin } from "antd";
 import { ProductForm, IProductFormData, formName as ProductFormName } from '../product-form';
 import * as _ from 'lodash';
+import { currentyToNumeric } from '../../../../util/common/currency';
 
 interface IEditParameters {
     id: number;
@@ -45,8 +46,7 @@ class EditProductComponent extends React.Component<EditProductProps, IEditProduc
                     sku: variant.sku,
                     compareAtPrice: 0,
                     barcode: null,
-                    //Todo this currency is coming to backend
-                    price: Number(variant.price.replace("Rs. ", "").replace(",", "")),
+                    price: currentyToNumeric(variant.price),
                     quantity: variant.quantity,
                     defaultImage: variant.defaultImage,
                     productVariantSpecificationAttributeMappings: _.map(variant.attributes, (attribute) => {

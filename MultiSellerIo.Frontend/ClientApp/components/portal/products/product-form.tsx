@@ -16,6 +16,8 @@ import * as Api from "../../../api";
 
 import * as _ from "lodash";
 
+import { convertToCurrency } from '../../../util/common/currency';
+
 export const formName: string = "product-form";
 
 export interface IProductFormData {
@@ -235,7 +237,7 @@ const renderProductVariant: React.StatelessComponent<IProductVariantFieldArray> 
                                 <Field style={{ width: '100px' }} precision={2} name={`${variant}.price`} min={0}
                                     onFocus={(event) => event.target.select()}
                                     component={InputNumberComponent}
-                                    formatter={value => { return `Rs. ${value && typeof value.replace === "function" ? value.replace(/\Rs.\s?|(,*)/g, '') : value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }}
+                                    formatter={convertToCurrency}
                                     hideLabel={true} />
                             </td>
                             <td>

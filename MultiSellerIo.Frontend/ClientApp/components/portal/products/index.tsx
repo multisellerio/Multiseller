@@ -8,6 +8,7 @@ import * as ProductState from "../../../store/products";
 import { Alert, Spin, Pagination, Popconfirm, Input, Icon } from "antd";
 import { IProductListModel } from "../../../models/product-models";
 import * as _ from 'lodash';
+import { numberToCurrency } from '../../../util/common/currency';
 
 import { animateScroll } from 'react-scroll';
 
@@ -122,7 +123,7 @@ class ProductsComponent extends React.Component<ProductsProps, IProductComponent
                         <div className="product-item"><Link className="product-thumb" to={`/portal/selling/products/edit-product/${product.id}`}><img src={imageUrl} alt="Product" /></Link>
                             <div className="product-info">
                                 <h6 className="product-title"><Link to={`/portal/selling/products/edit-product/${product.id}`}>{product.title}</Link></h6>
-                                <div className="text-lg text-medium text-muted">Rs. {product.price.toFixed(2)}</div>
+                                <div className="text-lg text-medium text-muted">{numberToCurrency(product.price)}</div>
                                 <div>Availability: &nbsp;
                                     {product.quantity > 0 && <div className="d-inline text-success">In Stock</div>}
                                     {product.quantity === 0 && <div className="d-inline text-warning">No Stock</div>}

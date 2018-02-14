@@ -17,6 +17,7 @@ import { ChangePasswordForm, IChangePasswordFormData } from './change-password-f
 import { ShippingForm, formName as ShippingFormName, IShippingFormData, IAdditionalShippingFormData } from './shipping-form';
 
 import * as Api from "../../../api";
+import { currentyToNumeric, numberToCurrency } from '../../../util/common/currency';
 
 const TabPane = Tabs.TabPane;
 
@@ -98,16 +99,16 @@ class SettingsComponents extends React.Component<SettingsProps, ISettingsState> 
 
         if (store == null) {
             return {
-                srilanka: 'Rs. 0',
-                additionalItem: 'Rs. 0',
+                srilanka: numberToCurrency(0),
+                additionalItem: numberToCurrency(0),
                 additionalShippings: []
             }
         }
 
         if (store.shippingInformation == null || store.shippingInformation.length === 0) {
             return {
-                srilanka: 'Rs. 0',
-                additionalItem: 'Rs. 0',
+                srilanka: numberToCurrency(0),
+                additionalItem: numberToCurrency(0),
                 additionalShippings: []
             }
         }
@@ -122,13 +123,13 @@ class SettingsComponents extends React.Component<SettingsProps, ISettingsState> 
                 return {
                     stateId: shippingCost.stateId,
                     cityId: shippingCost.cityId == null? -1 : shippingCost.cityId,
-                    price: `Rs. ${shippingCost.cost}`
+                    price: numberToCurrency(shippingCost.cost)
                 }
             });
 
         return {
-            srilanka: sriLankaShippingInformation ? `Rs. ${sriLankaShippingInformation.cost}` : 'Rs. 0',
-            additionalItem: additionalShippingInformation ? `Rs. ${additionalShippingInformation.cost}` : 'Rs. 0',
+            srilanka: sriLankaShippingInformation ? numberToCurrency(sriLankaShippingInformation.cost) : numberToCurrency(0),
+            additionalItem: additionalShippingInformation ? numberToCurrency(additionalShippingInformation.cost) : numberToCurrency(0),
             additionalShippings: additionalShippings
         }
     }
@@ -143,7 +144,7 @@ class SettingsComponents extends React.Component<SettingsProps, ISettingsState> 
 
         //Sri lanka shipping
         additionalShippings.push({
-            cost: Number(data.srilanka.replace("Rs. ", "").replace(",", "")),
+            cost: currentyToNumeric(data.srilanka),
             cityId: null,
             countryId: null,
             id: 0,
@@ -152,7 +153,7 @@ class SettingsComponents extends React.Component<SettingsProps, ISettingsState> 
 
         //additional shipping
         additionalShippings.push({
-            cost: Number(data.additionalItem.replace("Rs. ", "").replace(",", "")),
+            cost: currentyToNumeric(data.additionalItem),
             cityId: null,
             countryId: null,
             id: 0,
@@ -162,7 +163,7 @@ class SettingsComponents extends React.Component<SettingsProps, ISettingsState> 
         let otherItems = _.map(data.additionalShippings,
             (additionalShipping: IAdditionalShippingFormData) => {
                 return {
-                    cost: Number(additionalShipping.price.replace("Rs. ", "").replace(",", "")),
+                    cost: currentyToNumeric(additionalShipping.price),
                     cityId: additionalShipping.cityId === -1 ? null: additionalShipping.cityId,
                     stateId: additionalShipping.stateId,
                     countryId: null,
