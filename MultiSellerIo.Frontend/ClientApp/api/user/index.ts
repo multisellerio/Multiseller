@@ -1,4 +1,4 @@
-﻿import { API_URL, getToken } from "../";
+﻿import { API_URL, getToken, handleApiResponseError } from "../";
 import {
     ILoginRequest, ILoginResponse, IRegisterRequest, IUser,
     IExternalSigninMeta, IResetPasswordRequest, IEmailConfirmationRequest,
@@ -20,12 +20,9 @@ export const UserService = {
                     method: "post",
                 });
 
+            await handleApiResponseError(response);
+
             const responseData = await response.json();
-
-            if (response.status === 400) {
-                throw new Error(responseData.error);
-            }
-
             return responseData as IUser;
 
         } catch (err) {
@@ -47,12 +44,9 @@ export const UserService = {
 
                 });
 
+            await handleApiResponseError(response);
+
             const responseData = await response.json();
-
-            if (response.status === 400) {
-                throw new Error(responseData.error);
-            }
-
             return responseData as ILoginResponse;
 
         } catch (err) {
@@ -73,12 +67,9 @@ export const UserService = {
                     },
                 });
 
+            await handleApiResponseError(response);
+
             const responseData = await response.json();
-
-            if (response.status === 400) {
-                throw new Error(responseData.error);
-            }
-
             return responseData as IUser;
 
         } catch (err) {
@@ -100,12 +91,9 @@ export const UserService = {
                     },
                 });
 
+            await handleApiResponseError(response);
+
             const responseData = await response.json();
-
-            if (response.status === 400) {
-                throw new Error(responseData.error);
-            }
-
             return responseData as IUser;
 
         } catch (err) {
@@ -125,12 +113,9 @@ export const UserService = {
                     },
                 });
 
+            await handleApiResponseError(response);
+
             const responseData = await response.json();
-
-            if (response.status === 400) {
-                throw new Error(responseData.error);
-            }
-
             return responseData as IExternalSigninMeta;
 
         } catch (err) {
@@ -154,10 +139,7 @@ export const UserService = {
                     }),
                 });
 
-            if (response.status !== 200) {
-                const responseData = await response.json();
-                throw new Error(responseData.error);
-            }
+            await handleApiResponseError(response);
 
         } catch (err) {
             throw err;
@@ -178,10 +160,7 @@ export const UserService = {
                     body: JSON.stringify(request),
                 });
 
-            if (response.status !== 200) {
-                const responseData = await response.json();
-                throw new Error(responseData.error);
-            }
+            await handleApiResponseError(response);
 
         } catch (err) {
             throw err;
@@ -203,10 +182,7 @@ export const UserService = {
                     }
                 });
 
-            if (response.status !== 200) {
-                const responseData = await response.json();
-                throw new Error(responseData.error);
-            }
+            await handleApiResponseError(response);
 
         } catch (err) {
             throw err;
@@ -227,10 +203,7 @@ export const UserService = {
                     body: JSON.stringify(request),
                 });
 
-            if (response.status !== 200) {
-                const responseData = await response.json();
-                throw new Error(responseData.error);
-            }
+            await handleApiResponseError(response);
 
         } catch (err) {
             throw err;
@@ -254,12 +227,9 @@ export const UserService = {
                     body: JSON.stringify(request)
                 });
 
+            await handleApiResponseError(response);
+
             const responseData = await response.json();
-
-            if (response.status === 400) {
-                throw new Error(responseData.error);
-            }
-
             return responseData as IUser;
 
         } catch (err) {
@@ -283,10 +253,7 @@ export const UserService = {
                     body: JSON.stringify(request)
                 });
 
-            if (response.status === 400) {
-                const responseData = await response.json();
-                throw new Error(responseData.error);
-            }
+            await handleApiResponseError(response);
 
         } catch (err) {
             throw err;

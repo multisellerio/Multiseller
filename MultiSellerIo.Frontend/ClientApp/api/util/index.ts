@@ -1,4 +1,4 @@
-﻿import { API_URL, getToken } from "../";
+﻿import { API_URL, getToken, handleApiResponseError } from "../";
 import { IStateModel, ICityModel, ICountryModel } from "../../models/util-models";
 
 export const UtilServices = {
@@ -18,12 +18,9 @@ export const UtilServices = {
                     method: "get"
                 });
 
+            await handleApiResponseError(response);
+
             const responseData = await response.json();
-
-            if (response.status !== 200) {
-                throw new Error(responseData.error);
-            }
-
             return responseData as IStateModel[];
 
         } catch (err) {
@@ -47,12 +44,9 @@ export const UtilServices = {
                     method: "get"
                 });
 
+            await handleApiResponseError(response);
+
             const responseData = await response.json();
-
-            if (response.status !== 200) {
-                throw new Error(responseData.error);
-            }
-
             return responseData as ICountryModel[];
 
         } catch (err) {
@@ -75,12 +69,9 @@ export const UtilServices = {
                     method: "get"
                 });
 
+            await handleApiResponseError(response);
+
             const responseData = await response.json();
-
-            if (response.status !== 200) {
-                throw new Error(responseData.error);
-            }
-
             return responseData as ICityModel[];
 
         } catch (err) {

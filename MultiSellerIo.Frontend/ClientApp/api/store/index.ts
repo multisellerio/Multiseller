@@ -1,4 +1,4 @@
-﻿import { API_URL, getToken } from "../";
+﻿import { API_URL, getToken, handleApiResponseError } from "../";
 import { IStoreModel, IShippingCostModel } from "../../models/store-models";
 
 export const StoreService = {
@@ -22,12 +22,9 @@ export const StoreService = {
                 return null;
             }
 
+            await handleApiResponseError(response);
+
             const responseData = await response.json();
-
-            if (response.status !== 200) {
-                throw new Error(responseData.error);
-            }
-
             return responseData as IStoreModel;
 
         } catch (err) {
@@ -51,12 +48,9 @@ export const StoreService = {
                     body: JSON.stringify(model)
                 });
 
+            await handleApiResponseError(response);
+
             const responseData = await response.json();
-
-            if (response.status !== 200) {
-                throw new Error(responseData.error);
-            }
-
             return responseData as IStoreModel;
 
         } catch (err) {
@@ -81,12 +75,9 @@ export const StoreService = {
                     })
                 });
 
+            await handleApiResponseError(response);
+
             const responseData = await response.json();
-
-            if (response.status !== 200) {
-                throw new Error(responseData.error);
-            }
-
             return responseData as IStoreModel;
 
         } catch (err) {

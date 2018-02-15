@@ -1,4 +1,4 @@
-﻿import { API_URL, getToken } from "../";
+﻿import { API_URL, getToken, handleApiResponseError } from "../";
 import { IProductMetaData, IProduct, IProductList, IProductListRequest, IProductQuery, IProductSearchResult } from "../../models/product-models";
 
 export const ProductService = {
@@ -16,12 +16,9 @@ export const ProductService = {
                     method: "get"
                 });
 
+            await handleApiResponseError(response);
+
             const responseData = await response.json();
-
-            if (response.status !== 200) {
-                throw new Error(responseData.error);
-            }
-
             return responseData as IProductMetaData;
 
         } catch (err) {
@@ -44,12 +41,9 @@ export const ProductService = {
                     body: JSON.stringify(product)
                 });
 
+            await handleApiResponseError(response);
+
             const responseData = await response.json();
-
-            if (response.status !== 200) {
-                throw new Error(responseData.error);
-            }
-
             return responseData as IProduct;
 
         } catch (err) {
@@ -73,12 +67,9 @@ export const ProductService = {
                     body: JSON.stringify(product)
                 });
 
+            await handleApiResponseError(response);
+
             const responseData = await response.json();
-
-            if (response.status !== 200) {
-                throw new Error(responseData.error);
-            }
-
             return responseData as IProduct;
 
         } catch (err) {
@@ -109,12 +100,9 @@ export const ProductService = {
                     method: "get"
                 });
 
+            await handleApiResponseError(response);
+
             const responseData = await response.json();
-
-            if (response.status !== 200) {
-                throw new Error(responseData.error);
-            }
-
             return responseData as IProductList;
 
         } catch (err) {
@@ -136,12 +124,9 @@ export const ProductService = {
                     method: "get"
                 });
 
+            await handleApiResponseError(response);
+
             const responseData = await response.json();
-
-            if (response.status !== 200) {
-                throw new Error(responseData.error);
-            }
-
             return responseData as IProduct;
 
         } catch (err) {
@@ -164,11 +149,7 @@ export const ProductService = {
                     method: "delete"
                 });
 
-
-            if (response.status !== 200) {
-                const responseData = await response.json();
-                throw new Error(responseData.error);
-            }
+            await handleApiResponseError(response);
 
         } catch (err) {
             throw err;
@@ -213,12 +194,9 @@ export const ProductService = {
                     method: "get"
                 });
 
+            await handleApiResponseError(response);
+
             const responseData = await response.json();
-
-            if (response.status !== 200) {
-                throw new Error(responseData.error);
-            }
-
             return responseData as IProductSearchResult;
 
         } catch (err) {

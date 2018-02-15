@@ -30,3 +30,26 @@ export const setToken = (token: string) => {
 export const getToken = () => {
     return currentToken;
 }
+
+export const handleApiResponseError = async (response: Response) => {
+
+    //Handle the internal server error
+    if (response.status === 500) {
+        const responseData = await response.json();
+        throw new Error(responseData.error);
+    }
+
+    //Handle the 
+    if (response.status === 400) {
+        const responseData = await response.json();
+        throw new Error(responseData.error);
+    }
+
+    //Unexpected issues
+    if (response.status !== 200 && response.status !== 201) {
+        throw new Error('Unexpected error, please try again');
+    }
+
+    //Todo other implementation
+
+}
