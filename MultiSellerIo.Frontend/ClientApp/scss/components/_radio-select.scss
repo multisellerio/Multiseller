@@ -1,0 +1,34 @@
+﻿$radio-select-item-size: 45px;
+
+.radio-select {
+    display: flex;
+    flex-wrap: wrap;
+
+    .radio-select-item {
+        margin: 5px;
+        border: 1px solid $gray-darker;
+        height: $radio-select-item-size;
+        width: $radio-select-item-size;
+        border-radius: $radio-select-item-size;
+        cursor: pointer;
+        flex: 0 0 auto;
+        color: $gray-darker;
+        overflow: hidden;
+
+        p {
+            text-align: center;
+            line-height: $radio-select-item-size;
+            font-weight: $font-weight-headings;
+        }
+
+        :hover {
+            color: $white-color;
+            background-color: $gray-darker;
+        }
+
+        &.selected {
+            color: $white-color;
+            background-color: $gray-darker;
+        }
+    }
+}

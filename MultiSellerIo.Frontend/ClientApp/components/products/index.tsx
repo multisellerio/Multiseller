@@ -3,7 +3,7 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { parse } from 'qs';
 
-import { RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, Link } from 'react-router-dom';
 
 import { Button, Spin } from "antd";
 
@@ -180,14 +180,16 @@ class Products extends React.Component<ProductsProps, IProductsState> {
 
                 return <div key={product.id} className="grid-item">
                     <div className="product-card">
-                        <a className="product-thumb"><img src={imageUrl} alt="Product" /></a>
-                        <h3 className="product-title"><a><b>{product.title}</b></a>
-                        </h3>
-                        <h4 className="product-price">Rs. {product.price}</h4>
-                        <div className="product-buttons">
-                            <Button shape="circle" icon="heart-o" /> &nbsp;
+                        <Link className="product-thumb" to={`/product/${product.categorySlug}/${product.slug}/${product.id}`}>
+                            <img src={imageUrl} alt="Product" />
+                            <h3 className="product-title"><b>{product.title}</b>
+                            </h3>
+                            <h4 className="product-price">Rs. {product.price}</h4>
+                            <div className="product-buttons">
+                                <Button shape="circle" icon="heart-o" /> &nbsp;
                             <Button>Add to Cart</Button>
-                        </div>
+                            </div>
+                        </Link>
                     </div>
                 </div>;
             });
@@ -284,7 +286,7 @@ class Products extends React.Component<ProductsProps, IProductsState> {
                         maxPrice={maxPrice} minPrice={minPrice} currentMinPrice={currentMinPrice} currentMaxPrice={currentMaxPrice} />
                 </div>
             </div>
-            { this.state.showScrollToTopButton && <div className="scroll-to-top-btn visible" onClick={this.scrollToTop}><i className="icon-arrow-up"></i></div>}
+            {this.state.showScrollToTopButton && <div className="scroll-to-top-btn visible" onClick={this.scrollToTop}><i className="icon-arrow-up"></i></div>}
         </div>;
     }
 

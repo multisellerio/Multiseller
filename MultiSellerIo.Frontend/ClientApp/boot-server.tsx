@@ -16,10 +16,12 @@ export default createServerRenderer((params) => {
         const token = params.data.token;
         setToken(token);
 
+        const isAuthorize: boolean = token != null;
+
         const initialState = {
             account: {
-                isAuthorize: false,
-                token,
+                isAuthorize: isAuthorize, 
+                token: token,
                 isLoading: false,
                 errorMessage: null,
                 user: null,
@@ -57,8 +59,10 @@ export default createServerRenderer((params) => {
 
         // Prepare Redux store with in-memory history, and dispatch a navigation event
         // corresponding to the incoming URL
+        const basename = params.baseUrl.substring(0, params.baseUrl.length - 1); // Remove trailing slash
+        const urlAfterBasename = params.url.substring(basename.length);
         const store = configureStore(createMemoryHistory(), initialState);
-        store.dispatch(replace(params.location));
+        store.dispatch(replace(urlAfterBasename));
 
         // Prepare an instance of the application and perform an inital render that will
         // cause any async tasks (e.g., data access) to begin

@@ -40,6 +40,16 @@ export interface IProductMetaData {
     productAttributes: IProductAttribute[];
 }
 
+export interface IProductDetailsAttribute {
+    productAttribute: IProductAttribute;
+    group: boolean;
+    values: IProductDetailsAttributeValue[];
+}
+
+export interface IProductDetailsAttributeValue {
+    values: IProductAttributeValue[];
+}
+
 export interface IProductImage {
     id: number;
     name: string;
@@ -82,6 +92,7 @@ export interface IProductListModel {
     slug: string;
     categoryId: number;
     categoryName: string;
+    categorySlug: string;
     title: string;
     description: string;
     vendor: string;

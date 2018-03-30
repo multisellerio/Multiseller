@@ -103,6 +103,7 @@ namespace MultiSellerIo.Services.Product
                     Id = product.Id,
                     CategoryId = product.CategoryId,
                     CategoryName = product.Category.Name,
+                    CategorySlug = product.Category.Slug,
                     Slug = product.Slug,
                     Title = product.Title,
                     Description = product.Description,
