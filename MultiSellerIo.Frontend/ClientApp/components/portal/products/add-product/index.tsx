@@ -38,7 +38,7 @@ class AddProductComponents extends React.Component<AddProductProps, {}> {
                     barcode: null,
                     price: currentyToNumeric(variant.price),
                     quantity: variant.quantity,
-                    defaultImage: variant.defaultImage,
+                    defaultImage: null,
                     productVariantSpecificationAttributeMappings: _.map(variant.attributes, (attribute) => {
                         return {
                             id: 0,

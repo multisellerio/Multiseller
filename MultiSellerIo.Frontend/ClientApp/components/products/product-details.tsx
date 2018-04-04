@@ -141,18 +141,6 @@ class ProductDetails extends React.Component<ProductsProps, IProductDetailsState
                     <p>{this.props.currentProductDetailsData.product.description}</p>
                     <div className="row margin-top-1x">
                         {this.renderProductAttirbutes()}
-                        <div className="col-sm-3">
-                            <div className="form-group">
-                                <label>Quantity</label>
-                                <select className="form-control" id="quantity">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                </select>
-                            </div>
-                        </div>
                     </div>
                     <div className="pt-1 mb-2"><span className="text-medium">SKU:</span> #21457832</div>
                     <div className="padding-bottom-1x mb-2"><span className="text-medium">Categories:&nbsp;</span><a className="navi-link" href="#">Men’s shoes,</a><a className="navi-link" href="#"> Snickers,</a><a className="navi-link" href="#"> Sport shoes</a></div>

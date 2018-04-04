@@ -106,7 +106,6 @@ namespace MultiSellerIo.Services.Product
 
                 attribute.ProductAttributeId = updatedAttributeValue.ProductAttributeId;
                 attribute.IsRequired = updatedAttributeValue.IsRequired;
-                attribute.IsGroup = updatedAttributeValue.IsGroup;
                 attribute.AttributeType = updatedAttributeValue.AttributeType;
                 attribute.Updated = DateTimeOffset.Now;
 

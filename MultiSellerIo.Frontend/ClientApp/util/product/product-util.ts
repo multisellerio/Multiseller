@@ -42,7 +42,7 @@ const productUtil = {
     getCategory(categoryId: number, categories: IProductCategory[]): number[] {
 
         let allCategories = this.getAllCategories(categories);
-        let category = _.find(allCategories, { id: categoryId });
+        let category: IProductCategory = _.find(allCategories, { id: categoryId });
 
         if (category == null) {
             return [];
@@ -198,82 +198,41 @@ const productUtil = {
                                 return pa.productAttribute.id === productAttribute.id;
                             });
 
-                        //If attribute is not a group value attribute
-                        if (!categoryAttribute.isGroup) {
+                        let existsValueInNotGroupedAttribute = (productDetailsAttributeValues: IProductDetailsAttributeValue[], attributeValue: number): boolean => {
+                            return _.find(productDetailsAttributeValues,
+                                (productDetailsAttributeValue: IProductDetailsAttributeValue) => {
+                                    let productAttributeValues = productDetailsAttributeValue.values;
+                                    return _.find(productAttributeValues,
+                                        (productAttributeValue: IProductAttributeValue) => productAttributeValue.id === attributeValue);
+                                }) != null;
+                        }
 
-                            let existsValueInNotGroupedAttribute = (values: IProductDetailsAttributeValue[], attributeValue: number): boolean => {
-                                return _.find(values,
-                                    (value: IProductDetailsAttributeValue) => {
-                                        let attributeValues = value.values;
-                                        return _.includes(attributeValues, { id: attributeValue });
-                                    }) != null;
-                            }
+                        if (currentProductAttribute &&
+                            !existsValueInNotGroupedAttribute(currentProductAttribute.values, attributeMapping.productAttributeValues[0])) {
 
-                            if (currentProductAttribute &&
-                                existsValueInNotGroupedAttribute(currentProductAttribute.values, attributeMapping.productAttributeValues[0])) {
+                            //If value is not in current product attribute, add that value only
+                            let productAttributeValue = _.find(productAttribute.productAttributeValues,
+                                { id: attributeMapping.productAttributeValues[0] });
+                            currentProductAttribute.values.push({
+                                values: [productAttributeValue]
+                            });
 
-                                //If value is not in current product attribute, add that value only
-                                let productAttributeValue = _.find(productAttribute.productAttributeValues,
-                                    { id: attributeMapping.productAttributeValues[0] });
-                                currentProductAttribute.values[0].values.push(productAttributeValue);
+                        } else if (!currentProductAttribute) {
 
-                            } else if (!currentProductAttribute) {
-
-                                //If attribute not exists in product details attribute collection
-                                let productAttributeValue = _.find(productAttribute.productAttributeValues,
-                                    { id: attributeMapping.productAttributeValues[0] });
-                                productAttributes.push({
-                                    productAttribute: productAttribute,
-                                    group: categoryAttribute.isGroup,
-                                    values: [
-                                        {
-                                            values: [productAttributeValue]
-                                        }]
-                                });
-                            }
-                        } else {
-
-                            const existsValueInGroupedAttribute = (values: IProductDetailsAttributeValue[], attValues: number[]): boolean => {
-                                return _.find(values,
-                                    (value: IProductDetailsAttributeValue) => {
-                                        let attributeValues = value.values;
-                                        let ids = _.map(attributeValues,
-                                            (attVal) => {
-                                                return attVal.id;
-                                            });
-                                        return _.isMatch(ids.sort(), attValues.sort());
-                                    }) != null;
-                            };
-
-                            if (currentProductAttribute && !existsValueInGroupedAttribute(currentProductAttribute.values, attributeMapping.productAttributeValues)) {
-                                //If attribute is there but value is not there
-                                let productAttributeValues = _.filter(productAttribute.productAttributeValues,
-                                    (attVal: IProductAttributeValue) => _.includes(attributeMapping.productAttributeValues, attVal.id));
-
-                                currentProductAttribute.values.push({
-                                    values: productAttributeValues
-                                });
-
-                            } else if (!currentProductAttribute) {
-                                //If attribute not exists in product details attribute collection
-                                let productAttributeValues = _.filter(productAttribute.productAttributeValues,
-                                    (attVal: IProductAttributeValue) => _.includes(attributeMapping.productAttributeValues, attVal.id));
-
-                                productAttributes.push({
-                                    productAttribute: productAttribute,
-                                    group: categoryAttribute.isGroup,
-                                    values: [
-                                        {
-                                            values: productAttributeValues
-                                        }]
-                                });
-                            }
+                            //If attribute not exists in product details attribute collection
+                            let productAttributeValue = _.find(productAttribute.productAttributeValues,
+                                { id: attributeMapping.productAttributeValues[0] });
+                            //productAttributes.push({
+                            //    productAttribute: productAttribute,
+                            //    values: [
+                            //        {
+                            //            values: [productAttributeValue]
+                            //        }]
+                            //});
                         }
 
                     });
             });
-
-        console.log(productAttributes);
 
         return productAttributes;
     },

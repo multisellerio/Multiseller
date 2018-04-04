@@ -21,7 +21,6 @@ export enum CategoryAttributeType {
 export interface ICategoryAttribute {
     productAttribute: IProductAttribute;
     isRequired: boolean;
-    isGroup: boolean;
     attributeType: CategoryAttributeType;
 }
 

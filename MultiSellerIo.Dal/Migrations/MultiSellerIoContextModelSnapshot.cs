@@ -3,9 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Storage.Internal;
-using MultiSellerIo.Core.Enum;
 using MultiSellerIo.Dal;
 using System;
 
@@ -136,8 +133,6 @@ namespace MultiSellerIo.Dal.Migrations
                     b.Property<long>("CategoryId");
 
                     b.Property<DateTimeOffset>("Created");
-
-                    b.Property<bool>("IsGroup");
 
                     b.Property<bool>("IsRequired");
 
