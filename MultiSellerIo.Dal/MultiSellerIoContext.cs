@@ -53,7 +53,7 @@ namespace MultiSellerIo.Dal
                 .WithOne(user => user.Store)
                 .HasForeignKey<Store>(store => store.UserId)
                 .IsRequired(true);
-
+  
             base.OnModelCreating(builder);
         }
 

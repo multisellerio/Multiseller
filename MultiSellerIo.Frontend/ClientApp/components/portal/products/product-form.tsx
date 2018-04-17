@@ -1,4 +1,5 @@
 ﻿import * as React from "React";
+import { Dispatch } from "redux";
 import { FormErrors, reduxForm, InjectedFormProps, arrayPush, arrayRemoveAll, ErrorOther } from "redux-form";
 
 import {
@@ -36,7 +37,7 @@ export interface IProductImage {
 }
 
 interface IProductFormProps extends InjectedFormProps<IProductFormData, {}> {
-    dispatch?: any;
+    dispatch?: Dispatch<any>;
 }
 
 interface IAdditionalFormProps {
@@ -80,7 +81,7 @@ interface IProductFormState {
 interface IProductVariantFieldArray {
     files: any;
     change: any;
-    variantCategories: any;
+    variantCategories: ICategoryAttribute[];
     fields: any;
     meta: any;
 }
@@ -717,7 +718,7 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
                         }}
                         label={labelName}
                         placeholder={`Select ${labelName}`}
-                        name={`${categoryAttribute.productAttribute.name}`}
+                        name={`${categoryAttribute.productAttribute.id}`}
                         mode={null}
                         col='col-md-12'
                         options={options} />;

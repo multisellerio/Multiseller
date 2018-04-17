@@ -41,7 +41,6 @@ export interface IProductMetaData {
 
 export interface IProductDetailsAttribute {
     productAttribute: IProductAttribute;
-    group: boolean;
     values: IProductDetailsAttributeValue[];
 }
 

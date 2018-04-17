@@ -66,33 +66,9 @@ namespace MultiSellerIo.Api.Util.Mapper
                                     }).ToList()).ToList();
                     });
 
-                config.CreateMap<ProductBindingModel, Product>()
-                    .ForMember(dest => dest.AttributeValues, option => option.Ignore())
-                    .AfterMap((src, dest) =>
-                    {
-                        if (src.ProductAttributeValues == null)
-                        {
-                            return;
-                        }
-
-                        dest.AttributeValues = src.ProductAttributeValues.Select(productAttributeValue => new ProductAttributeValue()
-                        {
-                            Id = productAttributeValue
-                        }).ToList();
-                    });
-
-                config.CreateMap<Product, ProductBindingModel>()
-                    .ForMember(dest => dest.ProductAttributeValues, option => option.Ignore())
-                    .AfterMap((src, dest) =>
-                    {
-                        if (src.AttributeValues == null)
-                        {
-                            return;
-                        }
-
-                        dest.ProductAttributeValues = src.AttributeValues.Select(attributeValue => attributeValue.Id).ToArray();
-                    });
-
+                config.CreateMap<ProductBindingModel, Product>();
+                config.CreateMap<Product, ProductBindingModel>();
+                    
                 config.CreateMap<CountryBindingModel, Country>();
                 config.CreateMap<Country, CountryBindingModel>();
 

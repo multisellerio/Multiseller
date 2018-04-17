@@ -222,13 +222,13 @@ const productUtil = {
                             //If attribute not exists in product details attribute collection
                             let productAttributeValue = _.find(productAttribute.productAttributeValues,
                                 { id: attributeMapping.productAttributeValues[0] });
-                            //productAttributes.push({
-                            //    productAttribute: productAttribute,
-                            //    values: [
-                            //        {
-                            //            values: [productAttributeValue]
-                            //        }]
-                            //});
+                            productAttributes.push({
+                                productAttribute: productAttribute,
+                                values: [
+                                    {
+                                        values: [productAttributeValue]
+                                    }]
+                            });
                         }
 
                     });
