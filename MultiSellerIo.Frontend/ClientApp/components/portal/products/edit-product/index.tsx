@@ -33,7 +33,6 @@ class EditProductComponent extends React.Component<EditProductProps, IEditProduc
     }
 
     private onSubmit(productFormData: IProductFormData) {
-        console.log(productFormData);
         this.props.updateProduct({
             id: productFormData.id,
             categoryId: productFormData.category[productFormData.category.length - 1],

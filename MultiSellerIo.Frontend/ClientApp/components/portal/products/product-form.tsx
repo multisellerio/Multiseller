@@ -29,6 +29,7 @@ export interface IProductFormData {
     vendor: string;
     images: IProductImage[];
     productVariants: IProductVairation[];
+    attributes: IProductAttribute[];
 }
 
 export interface IProductImage {
@@ -60,6 +61,12 @@ export interface IProductVairation {
     upc: string,
     price: string,
     attributes: IProductVariationAttribute[],
+}
+
+export interface IProductAttribute {
+    id: number,
+    name: string,
+    value: number,
 }
 
 export interface IProductVariationAttribute {
@@ -190,8 +197,8 @@ const renderProductVariant: React.StatelessComponent<IProductVariantFieldArray> 
                             const labelName = `${categoryAttribute.productAttribute.name}`;
 
                             return <td key={index}>
-                                <Field component="input" type="hidden" name={`${variant}.attributes[${index}].attributeId`} value={categoryAttribute.productAttribute.id} />
-                                <Field component="input" type="hidden" name={`${variant}.attributes[${index}].name`} value={categoryAttribute.productAttribute.name} />
+                                <Field component="input" type="hidden" name={`${variant}.attributes[${index}].attributeId`} />
+                                <Field component="input" type="hidden" name={`${variant}.attributes[${index}].name`} />
                                 <Field
                                     component={AntdSelectComponent}
                                     filterOption={(value, option) => {
@@ -677,52 +684,59 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
     private renderSimpleAttributes(categoryAttributes: ICategoryAttribute[]) {
 
         return _.map(categoryAttributes,
-            (categoryAttribute: ICategoryAttribute) => {
-                if (categoryAttribute.attributeType === CategoryAttributeType.Simple) {
+            (categoryAttribute: ICategoryAttribute, index: number) => {
 
-                    let options;
+                if (categoryAttribute.attributeType !== CategoryAttributeType.Simple) {
+                    return null;
+                }
 
-                    if (categoryAttribute.productAttribute.meta != null &&
-                        categoryAttribute.productAttribute.meta.component === 'color') {
+                let options;
 
-                        let valueName = categoryAttribute.productAttribute.meta.valueName;
+                if (categoryAttribute.productAttribute.meta != null &&
+                    categoryAttribute.productAttribute.meta.component === 'color') {
 
-                        options = _.map(categoryAttribute.productAttribute.productAttributeValues,
-                            (productAttributeValue: IProductAttributeValue) => {
-                                let color = productAttributeValue.meta[valueName];
-                                let value = productAttributeValue.value;
-                                return {
-                                    name: value,
-                                    child: <div key={productAttributeValue.id} className="select-color-option"><Badge dot={true} style={{ backgroundColor: color, boxShadow: `${color} 0px 0px 0px 14px inset` }}></Badge><span className="color-name">{
-                                        value}</span></div>,
-                                    value: productAttributeValue.id
-                                }
-                            });
+                    let valueName = categoryAttribute.productAttribute.meta.valueName;
 
-                    } else {
-
-                        options = _.map(categoryAttribute.productAttribute.productAttributeValues, (productAttributeValue: IProductAttributeValue) => {
+                    options = _.map(categoryAttribute.productAttribute.productAttributeValues,
+                        (productAttributeValue: IProductAttributeValue) => {
+                            let color = productAttributeValue.meta[valueName];
+                            let value = productAttributeValue.value;
                             return {
-                                name: productAttributeValue.value,
+                                name: value,
+                                child: <div key={productAttributeValue.id} className="select-color-option"><Badge dot={true} style={{ backgroundColor: color, boxShadow: `${color} 0px 0px 0px 14px inset` }}></Badge><span className="color-name">{
+                                    value}</span></div>,
                                 value: productAttributeValue.id
                             }
                         });
-                    }
 
-                    let labelName = categoryAttribute.productAttribute.name;
+                } else {
 
-                    return <Field
+                    options = _.map(categoryAttribute.productAttribute.productAttributeValues, (productAttributeValue: IProductAttributeValue) => {
+                        return {
+                            name: productAttributeValue.value,
+                            value: productAttributeValue.id
+                        }
+                    });
+                }
+
+                let labelName = categoryAttribute.productAttribute.name;
+
+                return <div>
+                    <Field component="input" name={`attributes[${index}].id`} value={categoryAttribute.productAttribute.id} />
+                    <Field component="input" name={`attributes[${index}].name`} value={categoryAttribute.productAttribute.name} />
+                    <Field
                         component={AntdSelectComponent}
                         filterOption={(value, option) => {
                             return option.props.title && option.props.title.toLowerCase().includes(value.toLowerCase());
                         }}
                         label={labelName}
                         placeholder={`Select ${labelName}`}
-                        name={`${categoryAttribute.productAttribute.id}`}
+                        name={`attributes[${index}].value`}
                         mode={null}
                         col='col-md-12'
-                        options={options} />;
-                }
+                        options={options} />
+                </div>;
+
             });
     }
 

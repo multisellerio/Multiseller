@@ -124,7 +124,8 @@ const productUtil = {
             description: product.description,
             vendor: product.vendor,
             images: images,
-            productVariants: productVariants
+            productVariants: productVariants,
+            attributes: []
         }
 
     },
