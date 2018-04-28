@@ -125,7 +125,7 @@ namespace MultiSellerIo.Api
                 {
                     options.ClientId = googleConfig["ClientId"];
                     options.ClientSecret = googleConfig["ClientSecret"];
-                 })
+                })
                 .AddTwitter(options =>
                 {
                     options.ConsumerKey = twitterConfig["ConsumerKey"];
@@ -176,7 +176,7 @@ namespace MultiSellerIo.Api
             app.UseAuthentication();
 
             app.UseHangfireServer();
-            app.UseHangfireDashboard(options:new DashboardOptions()
+            app.UseHangfireDashboard(options: new DashboardOptions()
             {
                 Authorization = Enumerable.Empty<IDashboardAuthorizationFilter>()
             });

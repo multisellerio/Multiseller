@@ -33,7 +33,7 @@
     "less-vars-to-js": "1.2.0",
     "lodash": "4.17.4",
     "node-noop": "1.0.0",
-    "node-sass": "^4.7.2",
+    "node-sass": "^4.9.0",
     "qs": "^6.5.1",
     "react": "15.5.4",
     "react-circle-color-picker": "1.0.9",
