@@ -14,6 +14,8 @@ interface ILayoutState {
 
 export default class Layout extends React.Component<ILayoutProps, ILayoutState> {
 
+    static isPrivate = true;
+
     componentWillReceiveProps(nextProps: {readonly [P in "path"]: ILayoutProps[P]}, nextContext): void {
         this.setState({
             selectedKeys: this.props.path.split('/'),

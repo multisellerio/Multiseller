@@ -21,7 +21,6 @@ export enum CategoryAttributeType {
 export interface ICategoryAttribute {
     productAttribute: IProductAttribute;
     isRequired: boolean;
-    isGroup: boolean;
     attributeType: CategoryAttributeType;
 }
 
@@ -38,6 +37,15 @@ export interface IProductCategory {
 export interface IProductMetaData {
     categories: IProductCategory[];
     productAttributes: IProductAttribute[];
+}
+
+export interface IProductDetailsAttribute {
+    productAttribute: IProductAttribute;
+    values: IProductDetailsAttributeValue[];
+}
+
+export interface IProductDetailsAttributeValue {
+    values: IProductAttributeValue[];
 }
 
 export interface IProductImage {
@@ -82,6 +90,7 @@ export interface IProductListModel {
     slug: string;
     categoryId: number;
     categoryName: string;
+    categorySlug: string;
     title: string;
     description: string;
     vendor: string;

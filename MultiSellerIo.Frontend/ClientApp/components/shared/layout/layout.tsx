@@ -39,21 +39,23 @@ class Layout extends React.Component<LayoutProps, {}> {
         const { isAuthorize, user } = this.props;
 
         return <div>
-            <TopBar />
-            <Header logOff={this.logOff} isAuthorize={isAuthorize} username={user ? user.username : null} />
-            <div className="offcanvas-wrapper">
-                {this.props.user != null && !this.props.user.emailConfirmed && this.props.emailConfirmationRequestState.message == null && this.props.emailConfirmationState.message == null &&
-                    <div className="container margin-bottom-1x">
-                        <Alert type="warning" message="Email Not Yet Confirmed." description={<div><p>You have not yet confirmed your email address.</p><Button type="primary" loading={this.props.emailConfirmationRequestState.isLoading} onClick={this.sendEmailConfirmation}>Send Activation Mail</Button></div>} />
-                    </div>
-                }
-                {this.props.user != null && !this.props.user.emailConfirmed && this.props.emailConfirmationRequestState.message != null && this.props.emailConfirmationState.message == null &&
-                    <div className="container margin-bottom-1x">
-                        <Alert type={this.props.emailConfirmationRequestState.success ? "success" : "error"} message={this.props.emailConfirmationRequestState.success ? "Success" : "Error"} description={this.props.emailConfirmationRequestState.message} />
-                    </div>
-                }
-                {this.props.children}
-                <Footer />
+            <div className="container">
+                <TopBar />
+                <Header logOff={this.logOff} isAuthorize={isAuthorize} username={user ? user.username : null} />
+                <div className="offcanvas-wrapper">
+                    {this.props.user != null && !this.props.user.emailConfirmed && this.props.emailConfirmationRequestState.message == null && this.props.emailConfirmationState.message == null &&
+                        <div className="container margin-bottom-1x">
+                            <Alert type="warning" message="Email Not Yet Confirmed." description={<div><p>You have not yet confirmed your email address.</p><Button type="primary" loading={this.props.emailConfirmationRequestState.isLoading} onClick={this.sendEmailConfirmation}>Send Activation Mail</Button></div>} />
+                        </div>
+                    }
+                    {this.props.user != null && !this.props.user.emailConfirmed && this.props.emailConfirmationRequestState.message != null && this.props.emailConfirmationState.message == null &&
+                        <div className="container margin-bottom-1x">
+                            <Alert type={this.props.emailConfirmationRequestState.success ? "success" : "error"} message={this.props.emailConfirmationRequestState.success ? "Success" : "Error"} description={this.props.emailConfirmationRequestState.message} />
+                        </div>
+                    }
+                    {this.props.children}
+                    <Footer />
+                </div>
             </div>
             <Message />
         </div>;

@@ -14,6 +14,7 @@ namespace MultiSellerIo.Dal.Entity
         public string Vendor { get; set; }
         public virtual List<ProductImage> Images { get; set; }
         public string DefaultImage { get; set; }
+
         //Variants
         public virtual List<ProductVariant> ProductVariants { get; set; }
         //Soft delete

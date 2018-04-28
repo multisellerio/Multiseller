@@ -56,7 +56,6 @@ namespace MultiSellerIo.Api.Models
         public long ProductAttributeId { get; set; }
         public ProductAttributeBindingModel ProductAttribute { get; set; }
         public bool IsRequired { get; set; }
-        public bool IsGroup { get; set; }
         public CateogryAttributeType AttributeType { get; set; }
     }
 
@@ -104,6 +103,7 @@ namespace MultiSellerIo.Api.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public string Vendor { get; set; }
+        public long[] ProductAttributeValues { get; set; }
         public virtual List<ProductImageBindingModel> Images { get; set; }
 
         //Variants

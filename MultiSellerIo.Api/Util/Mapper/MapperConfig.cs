@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using MultiSellerIo.Api.Models;
 using MultiSellerIo.Dal.Entity;
 using MultiSellerIo.Services.User.Core;
@@ -67,7 +68,7 @@ namespace MultiSellerIo.Api.Util.Mapper
 
                 config.CreateMap<ProductBindingModel, Product>();
                 config.CreateMap<Product, ProductBindingModel>();
-
+                    
                 config.CreateMap<CountryBindingModel, Country>();
                 config.CreateMap<Country, CountryBindingModel>();
 

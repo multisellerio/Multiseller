@@ -25,6 +25,11 @@ export const REQUEST_DELETE_PRODUCT: string = "REQUEST_DELETE_PRODUCT";
 export const DELETE_SUCCESSFULLY_PRODUCT: string = "DELETE_SUCCESSFULLY_PRODUCT";
 export const DELETE_UNSUCCESSFULLY_PRODUCT: string = "DELETE_UNSUCCESSFULLY_PRODUCT";
 
+export const REQUEST_PRODUCT_DETAILS: string = "REQUEST_PRODUCT_DETAILS";
+export const RECEIVED_PRODUCT_DETAILS_SUCCESSFULLY: string = "RECEIVED_PRODUCT_DETAILS_SUCCESSFULLY";
+export const RECEIVED_PRODUCT_DETAILS_UNSUCCESSFULLY: string = "RECEIVED_PRODUCT_DETAILS_UNSUCCESSFULLY";
+
+
 /*************************
  *** PRODUCTS METADATA ACTIONS
  *************************/
@@ -132,6 +137,24 @@ export interface IDeleteProductSuccessfully extends Action {
 
 export interface IDeleteProductUnsuccessfully extends Action {
     type: typeof DELETE_UNSUCCESSFULLY_PRODUCT,
+    payload: string,
+}
+
+/*************************
+ *** REQUEST_PRODUCT_DETAILS
+ *************************/
+
+export interface IRequestProductDetails extends Action {
+    type: typeof REQUEST_PRODUCT_DETAILS,
+}
+
+export interface IReceivedProductDetailsSuccessfully extends Action {
+    type: typeof RECEIVED_PRODUCT_DETAILS_SUCCESSFULLY,
+    payload: IProduct,
+}
+
+export interface IReceivedProductDetailsUnSuccessfully extends Action {
+    type: typeof RECEIVED_PRODUCT_DETAILS_UNSUCCESSFULLY,
     payload: string,
 }
 

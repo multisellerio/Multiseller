@@ -103,7 +103,11 @@ export const ProductService = {
             await handleApiResponseError(response);
 
             const responseData = await response.json();
-            return responseData as IProductList;
+            let productList = responseData as IProductList;
+
+            productList.searchText = productRequest.searchText;
+
+            return productList;
 
         } catch (err) {
             throw err;

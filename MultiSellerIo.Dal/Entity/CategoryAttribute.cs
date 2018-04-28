@@ -10,6 +10,5 @@ namespace MultiSellerIo.Dal.Entity
         public virtual ProductAttribute ProductAttribute { get; set; }
         public bool IsRequired { get; set; }
         public CateogryAttributeType AttributeType { get; set; }
-        public bool IsGroup { get; set; }
     }
 }

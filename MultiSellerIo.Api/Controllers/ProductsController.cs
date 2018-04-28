@@ -73,6 +73,7 @@ namespace MultiSellerIo.Api.Controllers
 
         [HttpGet]
         [Route("GetById/{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(long id)
         {
             var product = await _productService.GetById(id);

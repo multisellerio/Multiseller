@@ -48,7 +48,7 @@ class EditProductComponent extends React.Component<EditProductProps, IEditProduc
                     barcode: null,
                     price: currentyToNumeric(variant.price),
                     quantity: variant.quantity,
-                    defaultImage: variant.defaultImage,
+                    defaultImage: null,
                     productVariantSpecificationAttributeMappings: _.map(variant.attributes, (attribute) => {
                         return {
                             id: 0,

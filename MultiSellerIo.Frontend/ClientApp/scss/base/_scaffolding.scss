@@ -9,20 +9,23 @@ html * {
 }
 
 body {
-  background: {
-    position: center;
-    color: $body-bg;
-    repeat: no-repeat;
-    size: cover;
-  }
-  color: $body-color;
-  font: {
-    family: $font-family-base;
-    size: $font-size-sm;
-    weight: $font-weight-base;
-  }
-  text-transform: $text-transform-base;
-  line-height: $line-height-base;
+    background: {
+        position: center;
+        color: $gray-lighter;
+        repeat: no-repeat;
+        size: cover;
+    }
+
+    color: $body-color;
+
+    font: {
+        family: $font-family-base;
+        size: $font-size-sm;
+        weight: $font-weight-base;
+    }
+
+    text-transform: $text-transform-base;
+    line-height: $line-height-base;
 }
 
 // Links

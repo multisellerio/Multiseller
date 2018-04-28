@@ -2,6 +2,7 @@
 import { connect } from 'react-redux';
 import { Redirect, Route, RouteComponentProps, RouteProps, withRouter } from "react-router-dom";
 import { ApplicationState } from "../../store";
+import { getToken } from '../../api';
 
 type RouteComponent = React.StatelessComponent<RouteComponentProps<{}>> | React.ComponentClass<any>
 
@@ -11,13 +12,15 @@ interface IAdditionalPrivateRouteProps {
 
 const PrivateRoute: React.StatelessComponent<RouteProps & IAdditionalPrivateRouteProps> = ({ component, isAuthorize, ...rest }) => {
 
-    const renderFn = (Component?: RouteComponent) => (props: RouteProps) => {
+    const renderFn = (isAuth: boolean, Component?: RouteComponent) => (props: RouteProps) => {
         
         if (!component) {
             return null;
         }
 
-        if (isAuthorize) {
+        let token = getToken();
+
+        if (token != null) {
             return <Component {...props}/>;
         }
 
@@ -31,7 +34,7 @@ const PrivateRoute: React.StatelessComponent<RouteProps & IAdditionalPrivateRout
         return <Redirect {...redirectProps}/>;
     }
 
-    return <Route {...rest} render={renderFn(component)}/>;
+    return <Route {...rest} render={renderFn(isAuthorize, component)}/>;
 }
 
 function mapStateToProps(state: ApplicationState) {

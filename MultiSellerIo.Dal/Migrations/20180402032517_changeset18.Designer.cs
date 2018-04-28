@@ -3,15 +3,19 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage.Internal;
+using MultiSellerIo.Core.Enum;
 using MultiSellerIo.Dal;
 using System;
 
 namespace MultiSellerIo.Dal.Migrations
 {
     [DbContext(typeof(MultiSellerIoContext))]
-    partial class MultiSellerIoContextModelSnapshot : ModelSnapshot
+    [Migration("20180402032517_changeset18")]
+    partial class changeset18
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

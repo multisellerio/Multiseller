@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MultiSellerIo.Common.Pagination;
 using MultiSellerIo.Common.String;
+using MultiSellerIo.Common.Util;
 using MultiSellerIo.Core.Exception;
 using MultiSellerIo.Dal.Repository;
 using MultiSellerIo.Services.Product.Core;
@@ -102,6 +103,7 @@ namespace MultiSellerIo.Services.Product
                     Id = product.Id,
                     CategoryId = product.CategoryId,
                     CategoryName = product.Category.Name,
+                    CategorySlug = product.Category.Slug,
                     Slug = product.Slug,
                     Title = product.Title,
                     Description = product.Description,
@@ -159,6 +161,8 @@ namespace MultiSellerIo.Services.Product
             //If product is invalid, throw service exceptions
             ValidateProduct(product);
 
+            await GenerateProductSlug(product);
+
             await _unitOfWork.ProductRepository.Add(product);
             await _unitOfWork.SaveChangesAsync();
             return await GetById(product.Id);
@@ -168,6 +172,13 @@ namespace MultiSellerIo.Services.Product
         {
 
             var currentProduct = await GetById(product.Id);
+
+            //Generate slug if title is changed
+            if (currentProduct.Title != product.Title || string.IsNullOrEmpty(currentProduct.Slug))
+            {
+                await GenerateProductSlug(product);
+                currentProduct.Slug = product.Slug;
+            }
 
             currentProduct.CategoryId = product.CategoryId;
             currentProduct.Title = product.Title;
@@ -220,7 +231,6 @@ namespace MultiSellerIo.Services.Product
                     attributeMapping => updatedProductVariant.ProductVariantSpecificationAttributeMappings.All(
                         currentAttributeMapping => attributeMapping.ProductAttributeValueId != currentAttributeMapping.ProductAttributeValueId));
             });
-
 
             //If product is invalid, throw service exceptions
             ValidateProduct(currentProduct);
@@ -277,6 +287,20 @@ namespace MultiSellerIo.Services.Product
                 throw new ServiceException("Product must have at least one variant");
             }
 
+        }
+
+        private async Task GenerateProductSlug(Dal.Entity.Product product)
+        {
+            var generatedSlug = SlugExtenstions.ToUrlSlug(product.Title);
+            var slug = generatedSlug;
+
+            if (await _unitOfWork.ProductRepository.GetAll().AnyAsync(p => p.Slug == generatedSlug))
+            {
+                var existsSlugCount = await _unitOfWork.ProductRepository.GetAll().CountAsync(p => p.Slug == generatedSlug);
+                slug = SlugExtenstions.ToUrlSlug($"{product.Title}-{existsSlugCount}");
+            }
+
+            product.Slug = slug;
         }
     }
 }

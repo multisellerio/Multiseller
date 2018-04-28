@@ -25,6 +25,12 @@ namespace MultiSellerIo.FrontEnd.Controllers
             }
 
             var token = Request.Cookies["ms-token"];
+
+            if(string.IsNullOrEmpty(token) || string.IsNullOrWhiteSpace(token))
+            {
+                token = null;
+            }
+
             ViewBag.Token = token;
             ViewBag.Api = _configuration["ApiUrl"];
             ViewBag.Cdn = _configuration["CdnUrl"];

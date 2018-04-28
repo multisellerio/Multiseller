@@ -1,7 +1,6 @@
 import * as React from "react";
-import { Route } from "react-router-dom";
-
-import PrivateRoute from './util/routes/private-route';
+import { Route } from 'react-router-dom';
+import AuthRoute from './util/routes/auth-route';
 
 import ExternalLogin from "./components/external-login";
 import EmailConfirm from "./components/email-confirm";
@@ -10,6 +9,7 @@ import Register from "./components/account/register";
 import ResetPassword from "./components/account/reset-password";
 import ForgetPassword from "./components/account/reset-password/forget";
 import Products from "./components/products";
+import ProductDetails from "./components/products/product-details";
 import Home from "./components/home/home";
 import Portal from "./components/portal";
 import Layout from "./components/shared/layout/layout";
@@ -25,5 +25,6 @@ export const routes =
         <Route path="/products/:category" component={Products} />
         <Route path="/account/register" component={Register} />
         <Route path="/account/login" component={Login} />
-        <PrivateRoute path="/portal" component={Portal} />
+        <Route exact path="/product/:category/:productslug/:id" component={ProductDetails} />
+        <AuthRoute path="/portal" component={Portal} />
     </Layout>;

@@ -15,7 +15,9 @@ import {
     UPDATE_PRODUCT, UPDATE_PRODUCT_SUCCESSFULLY, UPDATE_PRODUCT_UNSUCCESSFULLY,
     IUpdateProduct, IUpdateProductSuccessfully, IUpdateProductUnsuccessfully,
     REQUEST_DELETE_PRODUCT, DELETE_SUCCESSFULLY_PRODUCT, DELETE_UNSUCCESSFULLY_PRODUCT,
-    IRequestDeleteProduct, IDeleteProductSuccessfully, IDeleteProductUnsuccessfully
+    IRequestDeleteProduct, IDeleteProductSuccessfully, IDeleteProductUnsuccessfully,
+    REQUEST_PRODUCT_DETAILS, RECEIVED_PRODUCT_DETAILS_SUCCESSFULLY, RECEIVED_PRODUCT_DETAILS_UNSUCCESSFULLY,
+    IRequestProductDetails, IReceivedProductDetailsSuccessfully, IReceivedProductDetailsUnSuccessfully
 } from "../../types/actions/product-actions";
 import { IProductFormData } from '../../components/portal/products/product-form';
 import ProductUtil from '../../util/product/product-util';
@@ -45,10 +47,17 @@ interface ICurrentProductList {
     error: string;
 }
 
+interface ICurrentProductDetails {
+    product: IProduct,
+    loading: boolean;
+    error: string;
+}
+
 export interface IProductsState {
     meta: IMetaData;
     currentProductData: ICurrentProductData;
     productListData: ICurrentProductList;
+    currentProductDetailsData: ICurrentProductDetails;
 }
 
 /*************************
@@ -62,6 +71,7 @@ type KnownAction = IRequestProductsMetadata | IReceivedProductsMetaDataSuccessfu
     | IFetchProduct | IFetchProductSuccessfully | IFetchProductUnSuccessfully
     | IUpdateProduct | IUpdateProductSuccessfully | IUpdateProductUnsuccessfully
     | IRequestDeleteProduct | IDeleteProductSuccessfully | IDeleteProductUnsuccessfully
+    | IRequestProductDetails | IReceivedProductDetailsSuccessfully | IReceivedProductDetailsUnSuccessfully
     | RouterAction;
 
 export const actionCreator = {
@@ -69,26 +79,7 @@ export const actionCreator = {
     getMetaData: (): AppThunkAction<KnownAction> => async (dispatch, getState) => {
 
         let state = getState();
-
-        if (state.products.meta.metaData != null) {
-            return;
-        }
-
-        dispatch({ type: REQUEST_PRODUCTS_METADATA, payload: null });
-
-        const getMetaDataTask = async () => {
-            try {
-
-                const metadata = await ProductService.getMetaData();
-                dispatch({ type: RECEIVED_PRODUCTS_METADATA_SUCCESSFULLY, payload: metadata });
-
-            } catch (err) {
-                dispatch({ type: RECEIVED_PRODUCTS_METADATA_UNSUCCESSFULLY, payload: err.message });
-            }
-        };
-
-        addTask(getMetaDataTask());
-
+        addTask(actionCreator._getMetaDataTask(dispatch, state)());
     },
 
     addProduct: (product: IProduct): AppThunkAction<KnownAction> => async (dispatch, getState) => {
@@ -153,19 +144,43 @@ export const actionCreator = {
 
     getProduct: (id: number): AppThunkAction<KnownAction> => async (dispatch, getState) => {
 
+        let state = getState();
+
         dispatch({ type: FETCH_PRODUCT, payload: null });
 
         const getProductTask = async () => {
             try {
 
-                const metadata = await ProductService.getMetaData();
-                dispatch({ type: RECEIVED_PRODUCTS_METADATA_SUCCESSFULLY, payload: metadata });
+                await actionCreator._getMetaDataTask(dispatch, state)();
 
                 const product = await ProductService.getProduct(id);
                 dispatch({ type: FETCH_PRODUCT_SUCCESSFULLY, payload: product });
 
             } catch (err) {
                 dispatch({ type: FETCH_PRODUCT_UNSUCCESSFULLY, payload: err.message });
+            }
+        }
+
+        addTask(getProductTask());
+
+    },
+
+    getProductDetails: (id: number): AppThunkAction<KnownAction> => async (dispatch, getState) => {
+
+        let state = getState();
+
+        dispatch({ type: REQUEST_PRODUCT_DETAILS });
+
+        const getProductTask = async () => {
+            try {
+
+                await actionCreator._getMetaDataTask(dispatch, state)();
+
+                const product = await ProductService.getProduct(id);
+                dispatch({ type: RECEIVED_PRODUCT_DETAILS_SUCCESSFULLY, payload: product });
+
+            } catch (err) {
+                dispatch({ type: RECEIVED_PRODUCT_DETAILS_UNSUCCESSFULLY, payload: err.message });
             }
         }
 
@@ -208,8 +223,31 @@ export const actionCreator = {
 
     navigateToProductsPage: (searchText: string, page: number, pageSize: number): AppThunkAction<KnownAction> => async (dispatch, getState) => {
         dispatch(push(`/portal/selling/products?search=${searchText}&page=${page}&pageSize=${pageSize}`));
-    }
+    },
 
+    //Private function
+
+    _getMetaDataTask(dispatch, state): () => Promise<void> {
+
+        if (state.products.meta.metaData != null) {
+            return async () => { };
+        }
+
+        dispatch({ type: REQUEST_PRODUCTS_METADATA, payload: null });
+
+        const getMetaDataTask = async () => {
+            try {
+
+                const metadata = await ProductService.getMetaData();
+                dispatch({ type: RECEIVED_PRODUCTS_METADATA_SUCCESSFULLY, payload: metadata });
+
+            } catch (err) {
+                dispatch({ type: RECEIVED_PRODUCTS_METADATA_UNSUCCESSFULLY, payload: err.message });
+            }
+        };
+
+        return getMetaDataTask;
+    }
 };
 
 /*************************
@@ -230,6 +268,11 @@ const unloadedState: IProductsState = {
     },
     productListData: {
         productList: null,
+        loading: false,
+        error: null
+    },
+    currentProductDetailsData: {
+        product: null,
         loading: false,
         error: null
     }
@@ -428,6 +471,39 @@ export const reducer: Reducer<IProductsState> = (state: IProductsState, incoming
                     productList: state.productListData ? state.productListData.productList : null,
                     loading: false,
                     error: null
+                }
+            }
+        case REQUEST_PRODUCT_DETAILS:
+            return {
+                ...state,
+                currentProductDetailsData: {
+                    product: null,
+                    error: null,
+                    loading: true,
+                }
+            }
+        case RECEIVED_PRODUCT_DETAILS_SUCCESSFULLY:
+
+            let receivedProductDetailsSuccessfully = action as IReceivedProductDetailsSuccessfully;
+
+            return {
+                ...state,
+                currentProductDetailsData: {
+                    product: receivedProductDetailsSuccessfully.payload,
+                    error: null,
+                    loading: false,
+                }
+            }
+        case RECEIVED_PRODUCT_DETAILS_UNSUCCESSFULLY:
+
+            let receivedProductDetailsUnsuccessfully = action as IReceivedProductDetailsUnSuccessfully;
+
+            return {
+                ...state,
+                currentProductDetailsData: {
+                    product: null,
+                    error: receivedProductDetailsUnsuccessfully.payload,
+                    loading: false,
                 }
             }
     }

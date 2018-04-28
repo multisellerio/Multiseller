@@ -1,5 +1,5 @@
 ﻿import * as React from "React";
-import { WrappedFieldProps, Field, GenericField, GenericFieldArray, FieldArray } from "redux-form";
+import { WrappedFieldProps, Field, GenericField, FieldArray } from "redux-form";
 import { Cascader, Select, InputNumber, Input } from "antd";
 
 const Option = Select.Option;
