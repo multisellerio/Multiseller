@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage.Internal;
+using MultiSellerIo.Core.Enum;
 using MultiSellerIo.Dal;
 using System;
 
@@ -293,6 +296,28 @@ namespace MultiSellerIo.Dal.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductImages");
+                });
+
+            modelBuilder.Entity("MultiSellerIo.Dal.Entity.ProductSpecificationAttributeMapping", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTimeOffset>("Created");
+
+                    b.Property<long>("ProductAttributeValueId");
+
+                    b.Property<long>("ProductId");
+
+                    b.Property<DateTimeOffset>("Updated");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductAttributeValueId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductSpecificationAttributeMapping");
                 });
 
             modelBuilder.Entity("MultiSellerIo.Dal.Entity.ProductVariant", b =>
@@ -612,6 +637,19 @@ namespace MultiSellerIo.Dal.Migrations
                 {
                     b.HasOne("MultiSellerIo.Dal.Entity.Product", "Product")
                         .WithMany("Images")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("MultiSellerIo.Dal.Entity.ProductSpecificationAttributeMapping", b =>
+                {
+                    b.HasOne("MultiSellerIo.Dal.Entity.ProductAttributeValue", "ProductAttributeValue")
+                        .WithMany()
+                        .HasForeignKey("ProductAttributeValueId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("MultiSellerIo.Dal.Entity.Product", "Product")
+                        .WithMany("ProductSpecificationAttributes")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

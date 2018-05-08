@@ -15,8 +15,12 @@ namespace MultiSellerIo.Dal.Entity
         public virtual List<ProductImage> Images { get; set; }
         public string DefaultImage { get; set; }
 
+        //Product Attributes - For Simple Attribute
+        public virtual List<ProductSpecificationAttributeMapping> ProductSpecificationAttributes { get; set; }
+
         //Variants
         public virtual List<ProductVariant> ProductVariants { get; set; }
+
         //Soft delete
         public bool IsDeleted { get; set; }
     }

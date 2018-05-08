@@ -66,7 +66,7 @@ export interface IProductVairation {
 export interface IProductAttribute {
     id: number,
     name: string,
-    value: number,
+    value: number[],
 }
 
 export interface IProductVariationAttribute {
@@ -438,9 +438,14 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
         }
 
         if (!selectedOptions || selectedOptions.length === 0) {
+
             this.setState({
                 categoryAttributes: [],
+            }, () => {
+                //Remove all the current simple attributes
+                this.props.change('attributes', []);
             });
+
             return;
         }
 
@@ -449,6 +454,24 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
 
         this.setState({
             categoryAttributes: attributes,
+        }, () => {
+
+            //Set simple attributes
+            let productAttributes: IProductAttribute[] = [];
+
+            _.map(this.state.categoryAttributes, (categoryAttribute: ICategoryAttribute) => {
+
+                if (categoryAttribute.attributeType === CategoryAttributeType.Simple) {
+                    productAttributes.push({
+                        id: categoryAttribute.productAttribute.id,
+                        name: categoryAttribute.productAttribute.name,
+                        value: null
+                    });
+                }
+            });
+
+            this.props.change('attributes', productAttributes);
+
         });
     }
 

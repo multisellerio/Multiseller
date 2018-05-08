@@ -209,6 +209,15 @@ namespace MultiSellerIo.Services.Product
                 product.Id != 0 && product.ProductVariants.All(updatedProductVariant =>
                     updatedProductVariant.Id != productVariant.Id));
 
+            //Update product attributes
+            currentProduct.ProductSpecificationAttributes.AddRange(product.ProductSpecificationAttributes.Where(
+                attributeMapping => currentProduct.ProductSpecificationAttributes.All(
+                    currentAttributeMapping => attributeMapping.ProductAttributeValueId != currentAttributeMapping.ProductAttributeValueId)));
+
+            currentProduct.ProductSpecificationAttributes.RemoveAll(
+                attributeMapping => product.ProductSpecificationAttributes.All(
+                    currentAttributeMapping => attributeMapping.ProductAttributeValueId != currentAttributeMapping.ProductAttributeValueId));
+
             //Update product variants
             currentProduct.ProductVariants.ForEach(productVariant =>
             {
@@ -245,6 +254,8 @@ namespace MultiSellerIo.Services.Product
             var currentProduct = await _unitOfWork.ProductRepository.GetAll()
                 .Where(product => product.Id == id && !product.IsDeleted)
                 .Include(product => product.Images)
+                .Include(product => product.ProductSpecificationAttributes)
+                .ThenInclude(specificationAttribute => specificationAttribute.ProductAttributeValue)
                 .Include(product => product.ProductVariants)
                 .ThenInclude(productVariant => productVariant.ProductVariantSpecificationAttributeMappings)
                 .ThenInclude(attributeMapping => attributeMapping.ProductAttributeValue)

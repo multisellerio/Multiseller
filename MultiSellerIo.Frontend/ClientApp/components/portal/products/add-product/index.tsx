@@ -47,7 +47,8 @@ class AddProductComponents extends React.Component<AddProductProps, {}> {
                         }
                     })
                 }
-            })
+            }),
+            productAttributeValues: []
         });
     }
 

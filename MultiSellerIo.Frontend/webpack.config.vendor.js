@@ -19,7 +19,6 @@ module.exports = (env) => {
             vendor: [
                 'bootstrap',
                 'bootstrap/dist/css/bootstrap.css',
-                'react-image-gallery/styles/css/image-gallery.css',
                 'tether',
                 'domain-task',
                 'event-source-polyfill',

@@ -67,8 +67,12 @@ namespace MultiSellerIo.Api.Models
 
     public class ProductVariantSpecificationAttributeMappingBindingModel
     {
-        public long Id { get; set; }
         public long ProductVariantId { get; set; }
+        public long[] ProductAttributeValues { get; set; }
+    }
+
+    public class ProductSpecificationAttributeMappingBindingModel
+    {
         public long[] ProductAttributeValues { get; set; }
     }
 
@@ -105,10 +109,10 @@ namespace MultiSellerIo.Api.Models
         public string Vendor { get; set; }
         public long[] ProductAttributeValues { get; set; }
         public virtual List<ProductImageBindingModel> Images { get; set; }
-
         //Variants
         public virtual List<ProductVariantBindingModel> ProductVariants { get; set; }
 
     }
 
 }
+

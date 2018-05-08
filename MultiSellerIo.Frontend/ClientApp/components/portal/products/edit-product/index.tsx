@@ -5,7 +5,7 @@ import { RouteComponentProps } from "react-router-dom";
 import { ApplicationState } from "../../../../store";
 import * as ProductState from "../../../../store/products";
 import { Alert, Spin } from "antd";
-import { ProductForm, IProductFormData, formName as ProductFormName } from '../product-form';
+import { ProductForm, IProductFormData, formName as ProductFormName, IProductAttribute } from '../product-form';
 import * as _ from 'lodash';
 import { currentyToNumeric } from '../../../../util/common/currency';
 
@@ -33,6 +33,16 @@ class EditProductComponent extends React.Component<EditProductProps, IEditProduc
     }
 
     private onSubmit(productFormData: IProductFormData) {
+
+        let attributes: number[] = [];
+
+        _.forEach(productFormData.attributes, (attribute: IProductAttribute) => {
+            if (attribute.value == null) {
+                return;
+            }
+            attributes = [...attributes, ...attribute.value];
+        });
+
         this.props.updateProduct({
             id: productFormData.id,
             categoryId: productFormData.category[productFormData.category.length - 1],
@@ -57,7 +67,8 @@ class EditProductComponent extends React.Component<EditProductProps, IEditProduc
                         }
                     })
                 }
-            })
+            }),
+            productAttributeValues: attributes
         });
     }
 
