@@ -389,7 +389,7 @@ export const reducer: Reducer<IProductsState> = (state: IProductsState, incoming
             return {
                 ...state,
                 currentProductData: {
-                    product: ProductUtil.toProductFormData(fetchProductAction.payload, state.meta.metaData.categories),
+                    product: ProductUtil.toProductFormData(state.meta.metaData, fetchProductAction.payload),
                     error: null,
                     loading: false,
                     dataLoading: false,

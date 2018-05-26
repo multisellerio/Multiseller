@@ -1,8 +1,8 @@
-﻿import { IProductFormData, IProductImage, IProductVairation, IProductVariationAttribute } from "../../components/portal/products/product-form";
+﻿import { IProductFormData, IProductImage, IProductVairation, IProductVariationAttribute, IProductAttribute as FormProductAttribute } from "../../components/portal/products/product-form";
 import {
     IProduct, IProductVariant, IProductCategory, IProductVariantSpecificationAttributeMapping,
     IProductAttribute, IProductAttributeValue, IProductMetaData, IProductDetailsAttribute,
-    ICategoryAttribute, IProductDetailsAttributeValue
+    ICategoryAttribute, IProductDetailsAttributeValue, CategoryAttributeType
 } from "../../models/product-models";
 import * as _ from "lodash";
 import { numberToCurrency } from '../common/currency';
@@ -76,7 +76,7 @@ const productUtil = {
         return category;
     },
 
-    toProductFormData(product: IProduct, categories: IProductCategory[]): IProductFormData {
+    toProductFormData(metaData: IProductMetaData, product: IProduct): IProductFormData {
 
         let images: IProductImage[] = _.map(product.images,
             (image) => {
@@ -88,7 +88,7 @@ const productUtil = {
 
             });
 
-        let category = this.getCategory(product.categoryId, categories);
+        let category = this.getCategory(product.categoryId, metaData.categories);
 
         let productVariants: IProductVairation[] = _.map(product.productVariants,
             (productVariant: IProductVariant) => {
@@ -117,6 +117,27 @@ const productUtil = {
 
             });
 
+        let productCategory = this.getCategoryById(product.categoryId, metaData);
+
+        let attributes = _.map(_.filter(productCategory.categoryAttributes, (categoryAttribute: ICategoryAttribute) => {
+            return categoryAttribute.attributeType === CategoryAttributeType.Simple;
+        }), (categoryAttribute: ICategoryAttribute) => {
+
+            var allProductAttributeValues: number[] = _.map(categoryAttribute.productAttribute.productAttributeValues,
+                (productAttributeValue) => {
+                    return productAttributeValue.id;
+                });
+
+            var attributeValues = _.intersection(allProductAttributeValues, product.productAttributeValues);
+
+            return {
+                id: categoryAttribute.productAttribute.id,
+                name: categoryAttribute.productAttribute.name,
+                value: attributeValues
+            }
+
+        });
+
         return {
             id: product.id,
             title: product.title,
@@ -125,7 +146,7 @@ const productUtil = {
             vendor: product.vendor,
             images: images,
             productVariants: productVariants,
-            attributes: []
+            attributes: attributes
         }
 
     },

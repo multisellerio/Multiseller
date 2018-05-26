@@ -78,14 +78,14 @@ class ProductsComponent extends React.Component<ProductsProps, IProductComponent
     }
 
     scrollToTop(): void {
-        //if (window) {
-        //    animateScroll.scrollToTop({
-        //        duration: 500,
-        //        delay: 0,
-        //        smooth: true,
-        //        offset: 50
-        //    });
-        //}
+        if (window) {
+            animateScroll.scrollToTop({
+                duration: 500,
+                delay: 0,
+                smooth: true,
+                offset: 50
+            });
+        }
     }
 
     private showTotal(total: number): string {

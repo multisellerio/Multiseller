@@ -364,7 +364,7 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
     componentWillMount(): void {
 
         if (this.props.editing && this.props.initialValues) {
-            this.selectCategory(this.props.initialValues.category, this.props.initialValues.category, false);
+            this.selectCategory(this.props.initialValues.category, this.props.initialValues.category, true);
             let files = _.map(this.props.initialValues.images,
                 (image) => {
                     return {
@@ -431,9 +431,9 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
         });
     }
 
-    public selectCategory(value, selectedOptions, removeVariants) {
+    public selectCategory(value, selectedOptions, initial) {
 
-        if (removeVariants) {
+        if (!initial) {
             this.props.dispatch(arrayRemoveAll(formName, 'productVariants'));
         }
 
@@ -455,6 +455,10 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
         this.setState({
             categoryAttributes: attributes,
         }, () => {
+
+            if (initial) {
+                return;
+            }
 
             //Set simple attributes
             let productAttributes: IProductAttribute[] = [];
@@ -500,7 +504,7 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
                         <br />
                         <div className="row">
                             <Field name="id" component="input" type="hidden" />
-                            <Field name="category" searchPromptText="Select category" showSearch={true} component={SelectCascader} label="Category" options={categories} onChange={(value, option) => this.selectCategory(value, option, true)} col="col-md-6" allowClear={false} />
+                            <Field name="category" searchPromptText="Select category" showSearch={true} component={SelectCascader} label="Category" options={categories} onChange={(value, option) => this.selectCategory(value, option, false)} col="col-md-6" allowClear={false} />
                             <Field name="vendor" component={InputComponent} label="Vendor" col="col-md-6" />
                             <Field type="text" name="title" component={InputComponent} label="Title" col="col-md-12" />
                             <Field name="description" rows="4" cols="50" component={TextAreaComponent} label="Description" col="col-md-12" />
@@ -744,9 +748,9 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
 
                 let labelName = categoryAttribute.productAttribute.name;
 
-                return <div>
-                    <Field component="input" name={`attributes[${index}].id`} value={categoryAttribute.productAttribute.id} />
-                    <Field component="input" name={`attributes[${index}].name`} value={categoryAttribute.productAttribute.name} />
+                return <div className="col-md-12">
+                    <Field component="hidden" name={`attributes[${index}].id`} value={categoryAttribute.productAttribute.id} />
+                    <Field component="hidden" name={`attributes[${index}].name`} value={categoryAttribute.productAttribute.name} />
                     <Field
                         component={AntdSelectComponent}
                         filterOption={(value, option) => {
@@ -756,8 +760,8 @@ class ProductForm extends React.Component<IProductFormProps & IAdditionalFormPro
                         placeholder={`Select ${labelName}`}
                         name={`attributes[${index}].value`}
                         mode={null}
-                        col='col-md-12'
                         options={options} />
+
                 </div>;
 
             });
