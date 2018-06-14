@@ -15,6 +15,7 @@ namespace MultiSellerIo.Services.Product.Core
         public decimal? PriceMax { get; set; }
         public string Category { get; set; }
         public long[] AttributeValues { get; set; }
+        public long[] SpecificationAttirbuteValues { get; set; }
         public string[] Vendors { get; set; }
 
         public bool IsFilterByPrice()
@@ -25,6 +26,11 @@ namespace MultiSellerIo.Services.Product.Core
         public bool IsFilterByAttributes()
         {
             return AttributeValues != null && AttributeValues.Any();
+        }
+
+        public bool IsFilterBySpecificationAttributes()
+        {
+            return SpecificationAttirbuteValues != null && SpecificationAttirbuteValues.Any();
         }
 
         public bool IsVendorFilter()
@@ -87,12 +93,24 @@ namespace MultiSellerIo.Services.Product.Core
             {
                 var attributeValues = AttributeValues;
 
-                Expression<Func<Dal.Entity.Product, bool>> attributeQuery =
-                    product => product.ProductVariants.Any(variant => attributeValues.All(attributeValue =>
+                Expression<Func<Dal.Entity.Product, bool>> attributeQueryForVariant =
+                    product => product.ProductVariants.Any(variant => attributeValues.Any(attributeValue =>
                         variant.ProductVariantSpecificationAttributeMappings.Any(variantSpecification =>
                             variantSpecification.ProductAttributeValueId == attributeValue)));
 
-                productQuery = productQuery.And(attributeQuery);
+                productQuery = productQuery.And(attributeQueryForVariant);
+            }
+
+            if (IsFilterBySpecificationAttributes())
+            {
+                var specificationAttributeValue = SpecificationAttirbuteValues;
+
+                Expression<Func<Dal.Entity.Product, bool>> attributeQueryForSpecification =
+                    product => product.ProductSpecificationAttributes.Any(specification => specificationAttributeValue.Any(
+                        attributeValue =>
+                            specification.ProductAttributeValueId == attributeValue));
+
+                productQuery = productQuery.And(attributeQueryForSpecification);
             }
 
             return productQuery;

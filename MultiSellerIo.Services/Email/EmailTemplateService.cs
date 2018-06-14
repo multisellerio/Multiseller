@@ -39,7 +39,7 @@ namespace MultiSellerIo.Services.Email
 
         public async Task<EmailContent> GetEmailContent(string type, IDictionary<string, string> values)
         {
-            var template = await _unitOfWork.EmailTemplateRepository.GetAll()
+            var template = await _unitOfWork.EmailTemplateRepository.GetAllAsQueryable()
                 .FirstOrDefaultAsync(entity => entity.Type == type);
 
             if (template == null)

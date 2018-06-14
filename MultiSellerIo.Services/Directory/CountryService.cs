@@ -27,11 +27,11 @@ namespace MultiSellerIo.Services.Directory
         {
             if (string.IsNullOrEmpty(name))
             {
-                return await _unitOfWork.CountriesRepository.GetAll()
+                return await _unitOfWork.CountriesRepository.GetAllAsQueryable()
                     .ToListAsync();
             }
 
-            return await _unitOfWork.CountriesRepository.GetAll()
+            return await _unitOfWork.CountriesRepository.GetAllAsQueryable()
                 .Where(country => country.CountryName.Contains(name.ToLower()))
                 .ToListAsync();
         }
@@ -40,12 +40,12 @@ namespace MultiSellerIo.Services.Directory
         {
             if (string.IsNullOrEmpty(name))
             {
-                return await _unitOfWork.CitiesRepository.GetAll()
+                return await _unitOfWork.CitiesRepository.GetAllAsQueryable()
                     .Where(city => city.StateId == stateId)
                     .ToListAsync();
             }
 
-            return await _unitOfWork.CitiesRepository.GetAll()
+            return await _unitOfWork.CitiesRepository.GetAllAsQueryable()
                 .Where(city => city.StateId == stateId && city.CityName.Contains(name.ToLower()))
                 .ToListAsync();
         }
@@ -54,12 +54,12 @@ namespace MultiSellerIo.Services.Directory
         {
             if (string.IsNullOrEmpty(name))
             {
-                return await _unitOfWork.StatesRepository.GetAll()
+                return await _unitOfWork.StatesRepository.GetAllAsQueryable()
                     .Where(state => state.CountryId == countryId)
                     .ToListAsync();
             }
 
-            return await _unitOfWork.StatesRepository.GetAll()
+            return await _unitOfWork.StatesRepository.GetAllAsQueryable()
                 .Where(state => state.CountryId == countryId && state.StateName.Contains(name.ToLower()))
                 .ToListAsync();
         }

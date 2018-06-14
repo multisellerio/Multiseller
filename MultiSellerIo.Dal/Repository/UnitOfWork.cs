@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage;
 using MultiSellerIo.Dal.Entity;
 using MultiSellerIo.Dal.Repository.Core;
+using Remotion.Linq.Clauses;
 
 namespace MultiSellerIo.Dal.Repository
 {
@@ -16,6 +18,7 @@ namespace MultiSellerIo.Dal.Repository
         IRepository<City> CitiesRepository { get; }
         IRepository<State> StatesRepository { get; }
         IRepository<Country> CountriesRepository { get; }
+        EntityEntry<T> Entry<T>(T entity) where T : class;
         Task<int> SaveChangesAsync();
     }
 
@@ -65,6 +68,11 @@ namespace MultiSellerIo.Dal.Repository
 
         public IRepository<Country> CountriesRepository => _countiresRepository ??
                                                      new GenericRepository<Country>(_context);
+
+        public EntityEntry<T> Entry<T>(T entity) where T : class
+        {
+            return _context.Entry(entity);
+        }
 
         public async Task<int> SaveChangesAsync()
         {

@@ -18,6 +18,7 @@ namespace MultiSellerIo.Services.Product
         Task<Category> AddCategoryAsync(Category category);
         Task DeleteAsync(long id);
         Task<Category> EditCategoriesAsync(Category category);
+        Task<Category> GetBySlug(string slug);
     }
 
     public class ProductCategoryService : IProductCategoryService
@@ -32,37 +33,32 @@ namespace MultiSellerIo.Services.Product
 
         public async Task<List<Category>> GetCategoriesAsync()
         {
-           // return await _cacheService.GetFromCacheIfExists("product-categories", async () =>
-           // {
-                //Load all the categories
-                await _unitOfWork.CategoryRepository.GetAll()
-                    .Include(category => category.CategoryAttributes)
-                    .ThenInclude(categoryAttribute => categoryAttribute.ProductAttribute)
-                    .ToListAsync();
+            await _unitOfWork.CategoryRepository.GetAllAsQueryable()
+                .Include(category => category.CategoryAttributes)
+                .ThenInclude(categoryAttribute => categoryAttribute.ProductAttribute)
+                .ToListAsync();
 
-                return await _unitOfWork.CategoryRepository.GetAll()
-                .Where(category => category.ParentCategoryId == null)
-                    .ToListAsync();
-          //  });
+            return await _unitOfWork.CategoryRepository.GetAllAsQueryable()
+            .Where(category => category.ParentCategoryId == null)
+                .ToListAsync();
         }
 
         public async Task<List<Category>> GetAllCategoriesAsync()
         {
-            // return await _cacheService.GetFromCacheIfExists("product-categories", async () =>
-            // {
-            //Load all the categories
-           return await _unitOfWork.CategoryRepository.GetAll()
-                .Include(category => category.CategoryAttributes)
-                .ThenInclude(categoryAttribute => categoryAttribute.ProductAttribute)
-                .ToListAsync();
-            //  });
+            return await _unitOfWork.CategoryRepository.GetAllAsQueryable()
+                 .Include(category => category.CategoryAttributes)
+                 .ThenInclude(categoryAttribute => categoryAttribute.ProductAttribute)
+                 .ToListAsync();
         }
 
         public async Task<Category> GetByIdAsync(long id)
         {
-            var category = await _unitOfWork.CategoryRepository.GetAll()
+            var category = await _unitOfWork.CategoryRepository.GetAllAsQueryable()
                 .Where(m => m.Id == id)
-                .Include(pa => pa.CategoryAttributes).FirstOrDefaultAsync();
+                .Include(pa => pa.CategoryAttributes)
+                .ThenInclude(ca => ca.ProductAttribute)
+                .ThenInclude(pa => pa.ProductAttributeValues)
+                .FirstOrDefaultAsync();
 
             if (category == null)
             {
@@ -70,6 +66,24 @@ namespace MultiSellerIo.Services.Product
             }
 
             return category;
+        }
+
+        public async Task<Category> GetBySlug(string slug)
+        {
+            var categorySlug = slug.ToLower();
+
+            var entity = await _unitOfWork.CategoryRepository
+                .GetAllAsQueryable()
+                .Include(category => category.CategoryAttributes)
+                .ThenInclude(categoryAttribute => categoryAttribute.ProductAttribute)
+                .FirstOrDefaultAsync(category => category.Slug == categorySlug);
+
+            if (entity == null)
+            {
+                throw new ServiceException($"Unable to find category");
+            }
+
+            return entity;
         }
 
         public async Task<Category> AddCategoryAsync(Category category)

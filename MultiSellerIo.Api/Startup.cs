@@ -92,6 +92,7 @@ namespace MultiSellerIo.Api
             services.AddScoped<IProductAttributeService, ProductAttributeService>();
             services.AddScoped<IProductCategoryService, ProductCategoryService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IProductAttributeSeparateService, ProductAttributeSeparateService>();
 
             services.AddScoped<IStoreService, StoreService>();
 

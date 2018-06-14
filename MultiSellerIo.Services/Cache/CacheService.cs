@@ -39,6 +39,12 @@ namespace MultiSellerIo.Services.Cache
         {
             var data = await getDataAction();
 
+            if (data == null)
+            {
+                //If data not exists, we dont need to store in cache
+                return default(T);
+            }
+
             await _distributedCache.SetStringAsync(key, JsonConvert.SerializeObject(data, new JsonSerializerSettings
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore

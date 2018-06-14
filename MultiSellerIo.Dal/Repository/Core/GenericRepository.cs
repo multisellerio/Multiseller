@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace MultiSellerIo.Dal.Repository.Core
 {
@@ -25,7 +28,12 @@ namespace MultiSellerIo.Dal.Repository.Core
             return await _dbSet.FindAsync(id);
         }
 
-        public IQueryable<T> GetAll()
+        public EntityEntry<T> Entry(T entity)
+        {
+            return _context.Entry(entity);
+        }
+
+        public IQueryable<T> GetAllAsQueryable()
         {
             return _dbSet;
         }
@@ -33,11 +41,6 @@ namespace MultiSellerIo.Dal.Repository.Core
         public void Update(T entity)
         {
             _context.Update(entity);
-        }
-
-        public void SetCurrentValues(T entity, object valueObject)
-        {
-            _context.Entry(entity).CurrentValues.SetValues(valueObject);
         }
 
         public EntityState GetState(T entity)
@@ -50,5 +53,11 @@ namespace MultiSellerIo.Dal.Repository.Core
             var entity = await Get(id);
             _dbSet.Remove(entity);
         }
+
+        public void SetCurrentValues(T entity, object valueObject)
+        {
+            _context.Entry(entity).CurrentValues.SetValues(valueObject);
+        }
+
     }
 }

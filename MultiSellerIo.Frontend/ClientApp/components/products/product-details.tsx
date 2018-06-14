@@ -81,6 +81,7 @@ class ProductDetails extends React.Component<ProductsProps, IProductDetailsState
                     }
 
                     return <div className="col-sm-12">
+                        <p className="text-gray-dark text-normal text-capitalize text-bold">Select Size</p>
                         <ReactRadioSelect options={options} onChange={onChange} />
                     </div>;
                 }
@@ -139,12 +140,11 @@ class ProductDetails extends React.Component<ProductsProps, IProductDetailsState
                     <h4 className="text-normal">{this.props.currentProductDetailsData.product.title}</h4><span className="h5 d-block">
                         {numberToCurrency(this.props.currentProductDetailsData.product.productVariants[0].price)}</span>
                     <p>{this.props.currentProductDetailsData.product.description}</p>
-                    <div className="row margin-top-1x">
+                    <hr className="mb-3"/>
+                    <div className="row margin-top-1x margin-bottom-1x">
                         {this.renderProductAttirbutes()}
                     </div>
-                    <div className="pt-1 mb-2"><span className="text-medium">SKU:</span> #21457832</div>
-                    <div className="padding-bottom-1x mb-2"><span className="text-medium">Categories:&nbsp;</span><a className="navi-link" href="#">Men’s shoes,</a><a className="navi-link" href="#"> Snickers,</a><a className="navi-link" href="#"> Sport shoes</a></div>
-                    <hr className="mb-3" />
+                    <hr className="mb-1" />
                     <div className="d-flex flex-wrap justify-content-between">
                         <div className="entry-share mt-2 mb-2"><span className="text-muted">Share:</span>
                             <div className="share-links"><a className="social-button shape-circle sb-facebook" href="#" data-toggle="tooltip" data-placement="top" title="Facebook"><i className="socicon-facebook"></i></a><a className="social-button shape-circle sb-twitter" href="#" data-toggle="tooltip" data-placement="top" title="Twitter"><i className="socicon-twitter"></i></a><a className="social-button shape-circle sb-instagram" href="#" data-toggle="tooltip" data-placement="top" title="Instagram"><i className="socicon-instagram"></i></a><a className="social-button shape-circle sb-google-plus" href="#" data-toggle="tooltip" data-placement="top" title="Google +"><i className="socicon-googleplus"></i></a></div>

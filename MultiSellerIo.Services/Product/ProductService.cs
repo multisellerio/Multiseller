@@ -24,44 +24,38 @@ namespace MultiSellerIo.Services.Product
     public class ProductService : IProductService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IProductCategoryService _productCategoryService;
 
-        public ProductService(IUnitOfWork unitOfWork)
+        public ProductService(IUnitOfWork unitOfWork, IProductCategoryService categoryService)
         {
             _unitOfWork = unitOfWork;
+            _productCategoryService = categoryService;
         }
 
         public async Task<ProductSearchResult> SearchProductAsync(SearchProductCriteria criteria)
         {
-
-            var categorySlug = criteria.Category.ToLower();
-            var category = await _unitOfWork.CategoryRepository.GetAll().Where(c => c.Slug.ToLower() == categorySlug)
-                .FirstOrDefaultAsync();
-
-            if (category == null)
-            {
-                throw new ServiceException("Unable to find category");
-            }
+            var category = await _productCategoryService.GetBySlug(criteria.Category);
 
             var productQuery = criteria.GenerateQuery();
 
-            var count = await _unitOfWork.ProductRepository.GetAll()
+            var count = await _unitOfWork.ProductRepository.GetAllAsQueryable()
                 .CountAsync(productQuery);
 
             var metaQuery = criteria.GenerateQueryForMeta();
 
-            var maxPrice = await _unitOfWork.ProductRepository.GetAll()
+            var maxPrice = await _unitOfWork.ProductRepository.GetAllAsQueryable()
                 .Where(metaQuery)
                 .Include(product => product.Category)
                 .Include(product => product.ProductVariants)
                 .MaxAsync(product => product.ProductVariants.Max(variant => variant.Price));
 
-            var minPrice = await _unitOfWork.ProductRepository.GetAll()
+            var minPrice = await _unitOfWork.ProductRepository.GetAllAsQueryable()
                 .Where(metaQuery)
                 .Include(product => product.Category)
                 .Include(product => product.ProductVariants)
                 .MinAsync(product => product.ProductVariants.Min(variant => variant.Price));
 
-            var vendors = await _unitOfWork.ProductRepository.GetAll()
+            var vendors = await _unitOfWork.ProductRepository.GetAllAsQueryable()
                 .Where(metaQuery)
                 .Include(product => product.Category)
                 .Select(product => product.Vendor)
@@ -69,16 +63,26 @@ namespace MultiSellerIo.Services.Product
                 .Select(vendor => vendor.ToTitleCase())
                 .ToListAsync();
 
-            var productAttributes = await _unitOfWork.ProductRepository.GetAll()
+            var productAttributes = await _unitOfWork.ProductRepository.GetAllAsQueryable()
                 .Where(metaQuery)
                 .Include(product => product.Category)
                 .Include(product => product.ProductVariants)
-                .ThenInclude(productVariant => productVariant.ProductVariantSpecificationAttributeMappings)
                 .SelectMany(product => product.ProductVariants.SelectMany(variant =>
                     variant.ProductVariantSpecificationAttributeMappings.Select(variantSpecification =>
                         variantSpecification.ProductAttributeValueId)))
                 .Distinct()
                 .ToListAsync();
+
+            var productSpecificationAttribute = await _unitOfWork.ProductRepository.GetAllAsQueryable()
+                .Where(metaQuery)
+                .Include(product => product.ProductSpecificationAttributes)
+                .SelectMany(product =>
+                    product.ProductSpecificationAttributes.Select(productSpecification =>
+                        productSpecification.ProductAttributeValueId))
+                .Distinct()
+                .ToListAsync();
+
+            var allAttributeValues = productAttributes.Concat(productSpecificationAttribute).Distinct();
 
             var productMeta = new ProductFilterMeta
             {
@@ -87,11 +91,11 @@ namespace MultiSellerIo.Services.Product
                 SearchText = criteria.SearchText,
                 CategoryId = category.Id,
                 CategoryName = category.Name,
-                AttributeValues = productAttributes.ToArray(),
+                AttributeValues = allAttributeValues.ToArray(),
                 Vendors = vendors.ToArray()
             };
 
-            var result = await _unitOfWork.ProductRepository.GetAll()
+            var result = await _unitOfWork.ProductRepository.GetAllAsQueryable()
                 .Where(productQuery)
                 .Skip((criteria.Page - 1) * criteria.PageSize)
                 .Take(criteria.PageSize)
@@ -127,11 +131,11 @@ namespace MultiSellerIo.Services.Product
         {
             var productQuery = query.GenerateQuery();
 
-            var count = await _unitOfWork.ProductRepository.GetAll()
+            var count = await _unitOfWork.ProductRepository.GetAllAsQueryable()
                 .Where(productQuery)
                 .CountAsync();
 
-            var result = await _unitOfWork.ProductRepository.GetAll()
+            var result = await _unitOfWork.ProductRepository.GetAllAsQueryable()
                 .Where(productQuery)
                 .Skip((query.Page - 1) * query.PageSize)
                 .Take(query.PageSize)
@@ -251,7 +255,7 @@ namespace MultiSellerIo.Services.Product
 
         public async Task<Dal.Entity.Product> GetById(long id)
         {
-            var currentProduct = await _unitOfWork.ProductRepository.GetAll()
+            var currentProduct = await _unitOfWork.ProductRepository.GetAllAsQueryable()
                 .Where(product => product.Id == id && !product.IsDeleted)
                 .Include(product => product.Images)
                 .Include(product => product.ProductSpecificationAttributes)
@@ -305,9 +309,9 @@ namespace MultiSellerIo.Services.Product
             var generatedSlug = SlugExtenstions.ToUrlSlug(product.Title);
             var slug = generatedSlug;
 
-            if (await _unitOfWork.ProductRepository.GetAll().AnyAsync(p => p.Slug == generatedSlug))
+            if (await _unitOfWork.ProductRepository.GetAllAsQueryable().AnyAsync(p => p.Slug == generatedSlug))
             {
-                var existsSlugCount = await _unitOfWork.ProductRepository.GetAll().CountAsync(p => p.Slug == generatedSlug);
+                var existsSlugCount = await _unitOfWork.ProductRepository.GetAllAsQueryable().CountAsync(p => p.Slug == generatedSlug);
                 slug = SlugExtenstions.ToUrlSlug($"{product.Title}-{existsSlugCount}");
             }
 

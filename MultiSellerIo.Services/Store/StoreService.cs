@@ -29,7 +29,7 @@ namespace MultiSellerIo.Services.Store
         public async Task<Dal.Entity.Store> AddOrUpdateStore(Dal.Entity.Store store)
         {
             var storeUserId = store.UserId;
-            var storeExists = await _unitOfWork.StoreRepository.GetAll().AnyAsync(storeEntity => storeEntity.UserId == storeUserId);
+            var storeExists = await _unitOfWork.StoreRepository.GetAllAsQueryable().AnyAsync(storeEntity => storeEntity.UserId == storeUserId);
 
             if (storeExists)
             {
@@ -44,7 +44,7 @@ namespace MultiSellerIo.Services.Store
 
                 if (store.StoreName != currentStore.StoreName)
                 {
-                    if (await _unitOfWork.StoreRepository.GetAll()
+                    if (await _unitOfWork.StoreRepository.GetAllAsQueryable()
                         .Where(s => s.StoreName.ToLower() == store.StoreName.ToLower()).AnyAsync())
                     {
                         throw new ServiceException("Store name is already exists");
@@ -67,7 +67,7 @@ namespace MultiSellerIo.Services.Store
 
         public async Task<Dal.Entity.Store> AddOrUpdateShipping(long userId, List<ShippingCost> shippingCosts)
         {
-            var storeExists = await _unitOfWork.StoreRepository.GetAll().AnyAsync(storeEntity => storeEntity.UserId == userId);
+            var storeExists = await _unitOfWork.StoreRepository.GetAllAsQueryable().AnyAsync(storeEntity => storeEntity.UserId == userId);
 
             if (storeExists)
             {
@@ -114,7 +114,7 @@ namespace MultiSellerIo.Services.Store
 
         public async Task<Dal.Entity.Store> GetStoreByUserId(long userId)
         {
-            return await _unitOfWork.StoreRepository.GetAll()
+            return await _unitOfWork.StoreRepository.GetAllAsQueryable()
                 .Include(store => store.ShippingCosts)
                 .ThenInclude(shippingCost => shippingCost.City)
                 .FirstOrDefaultAsync(store => store.UserId == userId);

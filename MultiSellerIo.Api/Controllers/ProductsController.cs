@@ -21,15 +21,18 @@ namespace MultiSellerIo.Api.Controllers
         private readonly IProductCategoryService _productCategoryService;
         private readonly IProductService _productService;
         private readonly IUserService _userService;
+        private readonly IProductAttributeSeparateService _productAttributeSeparateService;
 
         public ProductsController(IProductAttributeService productAttributeService, 
             IProductCategoryService productCategoryService,
+            IProductAttributeSeparateService productAttributeSeparateService,
             IProductService productService, IUserService userService)
         {
             _productAttributeService = productAttributeService;
             _productCategoryService = productCategoryService;
             _productService = productService;
             _userService = userService;
+            _productAttributeSeparateService = productAttributeSeparateService;
         }
 
         [HttpGet]
@@ -57,11 +60,16 @@ namespace MultiSellerIo.Api.Controllers
         public async Task<IActionResult> Search(string[] vendors, long[] attributeValues,
             [FromQuery]ProductSearchBindingModel model)
         {
+            var category = await _productCategoryService.GetBySlug(model.Category);
+
+            var separatedAttributeValues = await _productAttributeSeparateService.SeparateAttributeValues(category.Id, attributeValues);
+
             var result = await _productService.SearchProductAsync(new SearchProductCriteria()
             {
                 PageSize = model.PageSize,
                 Page = model.Page,
-                AttributeValues = attributeValues,
+                AttributeValues = separatedAttributeValues.AttributeValues,
+                SpecificationAttirbuteValues = separatedAttributeValues.SpecificationAttributeValues,
                 Category = model.Category,
                 SearchText = model.SearchText,
                 PriceMin = model.PriceMin,

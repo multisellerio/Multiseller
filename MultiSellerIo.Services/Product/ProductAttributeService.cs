@@ -7,6 +7,8 @@ using MultiSellerIo.Services.Cache;
 using MultiSellerIo.Core.Exception;
 using System.Linq;
 using System;
+using MultiSellerIo.Core.Enum;
+using MultiSellerIo.Services.Product.Core;
 
 namespace MultiSellerIo.Services.Product
 {
@@ -21,6 +23,9 @@ namespace MultiSellerIo.Services.Product
 
     public class ProductAttributeService : IProductAttributeService
     {
+        private const string AttributesCacheKey = "product-attributes";
+        private const string AttributeCacheKey = "product-attribute";
+
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICacheService _cacheService;
         public ProductAttributeService(IUnitOfWork unitOfWork, ICacheService cacheService)
@@ -31,18 +36,25 @@ namespace MultiSellerIo.Services.Product
 
         public async Task<List<ProductAttribute>> GetProductAttributesAsync()
         {
-            return await _unitOfWork.ProductAttributeRepository.GetAll().Include(pa => pa.ProductAttributeValues)
-                .ToListAsync();
+            return await _cacheService.GetFromCacheIfExists(AttributesCacheKey, async () =>
+            {
+                return await _unitOfWork.ProductAttributeRepository.GetAllAsQueryable().Include(pa => pa.ProductAttributeValues)
+                    .ToListAsync();
+            });
         }
 
         public async Task<ProductAttribute> GetByIdAsync(long id)
         {
-            var productAttribute = await _unitOfWork.ProductAttributeRepository.GetAll().Where(m => m.Id == id).Include(pa => pa.ProductAttributeValues).FirstOrDefaultAsync();
+            var productAttribute = await _cacheService.GetFromCacheIfExists($"{AttributeCacheKey}-{id}", async () =>
+            {
+                return await _unitOfWork.ProductAttributeRepository.GetAllAsQueryable().Where(m => m.Id == id).Include(pa => pa.ProductAttributeValues).FirstOrDefaultAsync();
+            });
 
             if (productAttribute == null)
             {
                 throw new ServiceException($"Unable to find product attribute");
             }
+
             return productAttribute;
         }
 
@@ -50,6 +62,10 @@ namespace MultiSellerIo.Services.Product
         {
             await _unitOfWork.ProductAttributeRepository.Add(attribute);
             await _unitOfWork.SaveChangesAsync();
+
+            //Todo
+            //Remove current cache (product attributes)
+
             return attribute;
         }
 
@@ -85,6 +101,10 @@ namespace MultiSellerIo.Services.Product
 
             _unitOfWork.ProductAttributeRepository.Update(currentAttribute);
             await _unitOfWork.SaveChangesAsync();
+
+            //Todo
+            //Remove current cache
+
             return await GetByIdAsync(currentAttribute.Id);
         }
 
