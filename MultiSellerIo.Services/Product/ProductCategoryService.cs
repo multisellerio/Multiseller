@@ -36,6 +36,7 @@ namespace MultiSellerIo.Services.Product
             await _unitOfWork.CategoryRepository.GetAllAsQueryable()
                 .Include(category => category.CategoryAttributes)
                 .ThenInclude(categoryAttribute => categoryAttribute.ProductAttribute)
+                .ThenInclude(productAttribute => productAttribute.ProductAttributeValues)
                 .ToListAsync();
 
             return await _unitOfWork.CategoryRepository.GetAllAsQueryable()

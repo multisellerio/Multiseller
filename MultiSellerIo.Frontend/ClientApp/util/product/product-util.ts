@@ -200,8 +200,8 @@ const productUtil = {
 
     getAllVariations(metaData: IProductMetaData, product: IProduct): IProductDetailsAttribute[] {
         let productAttributes: IProductDetailsAttribute[] = [];
-        let categoryAttributes: ICategoryAttribute[] = this.getAttributes(metaData, product.categoryId);
 
+        //Todo handle the grouped product attributes (not need for now, the groupd attribute is not using in initial stage)
         _.each(product.productVariants,
             (productVariant: IProductVariant) => {
 
@@ -210,10 +210,6 @@ const productUtil = {
                         IProductVariantSpecificationAttributeMapping) => {
 
                         let productAttribute: IProductAttribute = this.getProductAttributeByAttributeValue(metaData, attributeMapping.productAttributeValues[0]);
-                        let categoryAttribute = _.find(categoryAttributes,
-                            (ca) => {
-                                return ca.productAttribute.id === productAttribute.id;
-                            });
 
                         let currentProductAttribute: IProductDetailsAttribute = _.find(productAttributes,
                             (pa) => {

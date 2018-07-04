@@ -3,9 +3,11 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { parse } from 'qs';
 
+import { Link } from 'react-router-dom';
+
 import { RouteComponentProps } from 'react-router-dom';
 
-import { Button, Spin, Breadcrumb } from "antd";
+import { Button, Spin, Breadcrumb, Select } from "antd";
 
 import { ApplicationState } from "../../store";
 import * as CatelogState from "../../store/catelog";
@@ -28,6 +30,7 @@ import * as _ from 'lodash';
 import * as Api from "../../api";
 
 const ButtonGroup = Button.Group;
+const Option = Select.Option;
 
 interface IProductDetailssRouteProps {
     category: string;
@@ -80,15 +83,43 @@ class ProductDetails extends React.Component<ProductsProps, IProductDetailsState
                         alert(id);
                     }
 
-                    return <div className="col-sm-12">
-                        <p className="text-gray-dark text-normal text-capitalize text-bold">Select Size</p>
+                    return <div className="col-sm-12 p-1">
+                        <p className="text-bold">{productDetailsAttribute.productAttribute.name} :</p>
                         <ReactRadioSelect options={options} onChange={onChange} />
+                    </div>;
+                }
+
+                if (productDetailsAttribute.productAttribute.productAttributeValues.length !== 0) {
+
+                    let options = _.map(productDetailsAttribute.values,
+                        (value) => {
+                            let attribute = value.values[0];
+                            return <Option value={attribute.id}>{attribute.value}</Option>;
+                        });
+
+                    return <div className="col-sm-12 p-1">
+                        <p className="text-bold">{productDetailsAttribute.productAttribute.name} :</p>
+                        <Select className={"w-50"} placeholder={`Select ${productDetailsAttribute.productAttribute.name}`}>{options}</Select>
                     </div>;
                 }
 
                 return null;
 
             });
+    }
+
+    renderCategoryBreadCrumb() {
+
+        var categories = ProductUtil.getCategory(this.props.currentProductDetailsData.product.categoryId,
+            this.props.meta.metaData.categories);
+
+        return <Breadcrumb>
+            {_.map(categories,
+                (categoryId) => {
+                    var category = ProductUtil.getCategoryById(categoryId, this.props.meta.metaData);
+                    return <Breadcrumb.Item><Link to={`/products/${category.slug}`}>{category.name}</Link></Breadcrumb.Item>;
+                })}
+        </Breadcrumb>;
     }
 
     public render() {
@@ -106,7 +137,6 @@ class ProductDetails extends React.Component<ProductsProps, IProductDetailsState
             </div>;
         }
 
-        this.renderProductAttirbutes();
 
         let images = _.map(this.props.currentProductDetailsData.product.images,
             (image: IProductImage) => {
@@ -121,12 +151,7 @@ class ProductDetails extends React.Component<ProductsProps, IProductDetailsState
         return <div className="container padding-bottom-3x mb-1">
             <div className="row">
                 <div className="col-md-12">
-                    <Breadcrumb>
-                        <Breadcrumb.Item>Home</Breadcrumb.Item>
-                        <Breadcrumb.Item><a href="">Application Center</a></Breadcrumb.Item>
-                        <Breadcrumb.Item><a href="">Application List</a></Breadcrumb.Item>
-                        <Breadcrumb.Item>An Application</Breadcrumb.Item>
-                    </Breadcrumb>
+                    {this.renderCategoryBreadCrumb()}
                 </div>
             </div>
             <div className="row margin-top-1x">
@@ -140,8 +165,8 @@ class ProductDetails extends React.Component<ProductsProps, IProductDetailsState
                     <h4 className="text-normal">{this.props.currentProductDetailsData.product.title}</h4><span className="h5 d-block">
                         {numberToCurrency(this.props.currentProductDetailsData.product.productVariants[0].price)}</span>
                     <p>{this.props.currentProductDetailsData.product.description}</p>
-                    <hr className="mb-3"/>
-                    <div className="row margin-top-1x margin-bottom-1x">
+                    <hr className="mb-3" />
+                    <div className="margin-top-1x margin-bottom-1x">
                         {this.renderProductAttirbutes()}
                     </div>
                     <hr className="mb-1" />

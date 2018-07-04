@@ -82,7 +82,7 @@ export interface IProduct {
     vendor: string;
     images: IProductImage[];
     productVariants: IProductVariant[];
-    productAttributeValues: number[]
+    productAttributeValues: number[];
 }
 
 export interface IProductListModel {

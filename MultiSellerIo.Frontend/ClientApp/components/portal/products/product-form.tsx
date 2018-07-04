@@ -194,6 +194,7 @@ const renderProductVariant: React.StatelessComponent<IProductVariantFieldArray> 
                                 });
                             }
 
+
                             const labelName = `${categoryAttribute.productAttribute.name}`;
 
                             return <td key={index}>
