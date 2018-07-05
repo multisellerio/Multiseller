@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 import { RouteComponentProps } from 'react-router-dom';
 
-import { Button, Spin, Breadcrumb, Select } from "antd";
+import { Button, Spin, Breadcrumb, Select, Icon } from "antd";
 
 import { ApplicationState } from "../../store";
 import * as CatelogState from "../../store/catelog";
@@ -39,7 +39,9 @@ interface IProductDetailssRouteProps {
 }
 
 interface IProductDetailsState {
-
+    selectedAttributes: number[];
+    price?: number;
+    variantExists: boolean;
 }
 
 type ProductsProps =
@@ -53,8 +55,15 @@ class ProductDetails extends React.Component<ProductsProps, IProductDetailsState
     constructor(props: ProductsProps) {
         super(props);
         this.state = {
-
+            selectedAttributes: [],
+            price: null,
+            variantExists: false,
         }
+
+        this.isAttributeContain = this.isAttributeContain.bind(this);
+        this.onChangeAttribute = this.onChangeAttribute.bind(this);
+        this.selectVariant = this.selectVariant.bind(this);
+
     }
 
     componentWillMount(): void {
@@ -66,7 +75,7 @@ class ProductDetails extends React.Component<ProductsProps, IProductDetailsState
     }
 
     renderProductAttirbutes() {
-        var allVariations = ProductUtil.getAllVariations(this.props.meta.metaData, this.props.currentProductDetailsData.product);
+        var allVariations = ProductUtil.getAllVariations(this.props.meta.metaData, this.props.currentProductDetailsData.product, this.state.selectedAttributes);
 
         return _.map(allVariations,
             (productDetailsAttribute: IProductDetailsAttribute) => {
@@ -79,13 +88,9 @@ class ProductDetails extends React.Component<ProductsProps, IProductDetailsState
                             return { id: attribute.id, value: attribute.value, selected: false };
                         });
 
-                    let onChange = (id: number) => {
-                        alert(id);
-                    }
-
                     return <div className="col-sm-12 p-1">
                         <p className="text-bold">{productDetailsAttribute.productAttribute.name} :</p>
-                        <ReactRadioSelect options={options} onChange={onChange} />
+                        <ReactRadioSelect options={options} onChange={this.onChangeAttribute} />
                     </div>;
                 }
 
@@ -99,13 +104,59 @@ class ProductDetails extends React.Component<ProductsProps, IProductDetailsState
 
                     return <div className="col-sm-12 p-1">
                         <p className="text-bold">{productDetailsAttribute.productAttribute.name} :</p>
-                        <Select className={"w-50"} placeholder={`Select ${productDetailsAttribute.productAttribute.name}`}>{options}</Select>
+                        <Select className={"w-50"} placeholder={`Select ${productDetailsAttribute.productAttribute.name}`}
+                            onChange={(value: string) => this.onChangeAttribute(parseInt(value))}>{options}</Select>
                     </div>;
                 }
 
                 return null;
 
             });
+    }
+
+    isAttributeContain(value: number): boolean {
+        return _.includes(this.state.selectedAttributes, value);
+    }
+
+    onChangeAttribute(value: number) {
+
+        var productAttribute = ProductUtil.getProductAttributeByAttributeValue(this.props.meta.metaData, value);
+        var currentSelectAttributeValue = _.find(productAttribute.productAttributeValues,
+            (attributeValue) => {
+                return this.isAttributeContain(attributeValue.id);
+            });
+
+        let selectedAttributes = this.state.selectedAttributes;
+
+        if (currentSelectAttributeValue) {
+            _.remove(selectedAttributes,
+                (value) => {
+                    return value === currentSelectAttributeValue.id;
+                });
+        }
+
+        selectedAttributes.push(value);
+
+        this.setState({
+            selectedAttributes: selectedAttributes
+        }, () => { this.selectVariant(); });
+
+    }
+
+    selectVariant() {
+        var productVariant = ProductUtil.getProductVariantInProductByAttributes(this.props.currentProductDetailsData.product,
+            this.state.selectedAttributes);
+        if (productVariant != null) {
+            this.setState({
+                price: productVariant.price,
+                variantExists: true
+            });
+        } else {
+            this.setState({
+                price: null,
+                variantExists: false
+            });
+        }
     }
 
     renderCategoryBreadCrumb() {
@@ -162,8 +213,11 @@ class ProductDetails extends React.Component<ProductsProps, IProductDetailsState
                     </div>
                 </div>
                 <div className="col-md-6">
-                    <h4 className="text-normal">{this.props.currentProductDetailsData.product.title}</h4><span className="h5 d-block">
-                        {numberToCurrency(this.props.currentProductDetailsData.product.productVariants[0].price)}</span>
+                    <h4 className="text-normal">{this.props.currentProductDetailsData.product.title
+                    }</h4>
+                    <span className="h5 d-block">
+                        {numberToCurrency(this.state.price | this.props.currentProductDetailsData.product.productVariants[0].price)
+                        }</span>
                     <p>{this.props.currentProductDetailsData.product.description}</p>
                     <hr className="mb-3" />
                     <div className="margin-top-1x margin-bottom-1x">
@@ -175,13 +229,16 @@ class ProductDetails extends React.Component<ProductsProps, IProductDetailsState
                             <div className="share-links"><a className="social-button shape-circle sb-facebook" href="#" data-toggle="tooltip" data-placement="top" title="Facebook"><i className="socicon-facebook"></i></a><a className="social-button shape-circle sb-twitter" href="#" data-toggle="tooltip" data-placement="top" title="Twitter"><i className="socicon-twitter"></i></a><a className="social-button shape-circle sb-instagram" href="#" data-toggle="tooltip" data-placement="top" title="Instagram"><i className="socicon-instagram"></i></a><a className="social-button shape-circle sb-google-plus" href="#" data-toggle="tooltip" data-placement="top" title="Google +"><i className="socicon-googleplus"></i></a></div>
                         </div>
                         <div className="sp-buttons mt-2 mb-2">
-                            <button className="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip" title="Whishlist"><i className="icon-heart"></i></button>
-                            <button className="btn btn-primary" data-toast data-toast-type="success" data-toast-position="topRight" data-toast-icon="icon-circle-check" data-toast-title="Product" data-toast-message="successfuly added to cart!"><i className="icon-bag"></i> Add to Cart</button>
+                            <Button type={"ghost"} shape="circle" icon="heart" size={"large"} />
+                            &nbsp;
+                            <Button size={"large"} type={"primary"} disabled={!this.state.variantExists}>
+                                <Icon type="shopping-cart" /> ADD TO CART
+                            </Button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div>;
     }
 
 }

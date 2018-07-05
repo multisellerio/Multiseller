@@ -198,10 +198,17 @@ const productUtil = {
         return attributes;
     },
 
-    getAllVariations(metaData: IProductMetaData, product: IProduct): IProductDetailsAttribute[] {
+    getProductVariantInProductByAttributes(product: IProduct, attributes: number[]): IProductVariant {
+        return _.find(product.productVariants,
+            (productVariant) => {
+                return productUtil.containAttributeValuesInProductVariant(productVariant, attributes);
+            });
+    },
+
+    getAllVariations(metaData: IProductMetaData, product: IProduct, selectedValues: number[]): IProductDetailsAttribute[] {
         let productAttributes: IProductDetailsAttribute[] = [];
 
-        //Todo handle the grouped product attributes (not need for now, the groupd attribute is not using in initial stage)
+        //Todo handle the grouped product attributes (not need for now, the groupd attribute is not using in initial stage)        
         _.each(product.productVariants,
             (productVariant: IProductVariant) => {
 
@@ -253,6 +260,14 @@ const productUtil = {
             });
 
         return productAttributes;
+    },
+
+    containAttributeValuesInProductVariant(productVarient: IProductVariant, attributeValues: number[]): boolean {
+        let productVariantAttributeValues = _.map(productVarient.productVariantSpecificationAttributeMappings,
+            (productVariantSpecificationAttributeMappings) => {
+                return productVariantSpecificationAttributeMappings.productAttributeValues[0];
+            });
+        return _.difference(productVariantAttributeValues, attributeValues).length === 0;
     },
 }
 
